@@ -18,3 +18,13 @@ And eu visito o perfil desse usuário
 When eu clico em "Seguindo"
 Then o botão muda para "Seguir"
 And eu paro de receber atualizações desse usuário.
+
+Scenario: Comentar em Postagens
+Given eu estou logado como "user"
+And eu sigo um usuário específico
+And eu vejo uma postagem desse usuário
+And eu vejo uma opção para "Adicionar um comentário"
+When eu clico em "Adicionar um comentário"
+And eu digito meu comentário
+And eu clico em "Enviar"
+Then meu comentário aparece sob a postagem do usuário.
