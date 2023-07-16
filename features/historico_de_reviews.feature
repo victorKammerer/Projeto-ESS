@@ -22,7 +22,7 @@ feature: Historico de reviews
         Given estou na página “Histórico de Reviews” do usuário "Maria Eduarda"
         And as seguintes categorias estão disponíveis: “Ação”, “Zumbi”, “RPG”
         When o usuário escolhe a categoria “Zumbi”
-        And clica no botão “Pesquisar”
+        And clica no botão “Zumbi”
         Then apenas os reviews relacionados à categoria “Zumbi” são exibidos.
 
     Scenario: Ordenação de reviews por data
@@ -30,7 +30,7 @@ feature: Historico de reviews
         When clico no botão “Ordenar por data”
         Then os reviews são reordenados do antigo para o mais novo
         And os reviews são exibidos em ordem cronológica
-        
+
      Scenario: Abrir review através do histórico do usuário
         Given estou na página "Histórico de Reviews" do usuário "Maria Eduarda"
         And eu vejo um review deste usuário sobre "Days Gone"
