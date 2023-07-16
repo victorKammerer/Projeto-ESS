@@ -19,15 +19,20 @@ feature: Historico de reviews
         Then uma mensagem de validação aparece na janela como confirmação
 
     Scenario: Pesquisa de reviews por categoria
-        Given estou na página “Histórico de Reviews”
+        Given estou na página “Histórico de Reviews” do usuário "Maria Eduarda"
         And as seguintes categorias estão disponíveis: “Ação”, “Zumbi”, “RPG”
         When o usuário escolhe a categoria “Zumbi”
         And clica no botão “Pesquisar”
         Then apenas os reviews relacionados à categoria “Zumbi” são exibidos.
 
     Scenario: Ordenação de reviews por data
-        Given estou na página “Histórico de Reviews”
+        Given estou na página “Histórico de Reviews” do usuário "Maria Eduarda"
         When clico no botão “Ordenar por data”
         Then os reviews são reordenados do antigo para o mais novo
         And os reviews são exibidos em ordem cronológica
-        
+
+     Scenario: Abrir review através do histórico do usuário
+        Given estou na página "Histórico de Reviews" do usuário "Maria Eduarda"
+        And eu vejo um review deste usuário sobre "Days Gone"
+        When eu clico na review em questão
+        Then eu vejo a página do review sobre o jogo "Days Gone".
