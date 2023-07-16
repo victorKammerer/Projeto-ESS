@@ -30,4 +30,5 @@ feature: Historico de reviews
         When clico no botão “Ordenar por data”
         Then os reviews são reordenados do antigo para o mais novo
         And os reviews são exibidos em ordem cronológica
+        And passo extra do roteiro
         
