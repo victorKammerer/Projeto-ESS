@@ -141,4 +141,4 @@ Scenario: Adicionar um comentário na review de um usuário
     When o usuário "João" seleciona a opção "Comentar" da review "Hollow Knight é um jogo muito bom"
     And o usuário "João" escreve o comentário "Concordo"
     And o usuário "João" seleciona a opção "Submeter"
-    Then o usuário "João" visualiza uma mensagem de sucesso
+    Then o usuário "João" visualiza uma mensagem de sucesso 
