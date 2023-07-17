@@ -103,3 +103,23 @@ Scenario: Recusar exclusão da conta
 	Then Aparece uma notificacao de confirmacao
 	When Recuso a exclusao da conta
 	Then Retorno para meu perfil
+
+Scenario: Editar minha conta com sucesso
+	Given Estou na tela principal do aplicativo
+	And Abro meu perfil
+	When Clico na opcao de edicao de conta
+	Then Aparece uma notificacao para confirmar a edicao da conta
+	When Confirmo a edicao
+	Then As informações presentes no meu perfil agora podem ser editadas
+	And Eu edito meu "Usuario"
+	When Salvo as informacoes
+	Then Minha conta agora mostra as informacoes editadas
+	And Retorno para tela de perfil
+
+Scenario: Não confirmar edição de conta
+	Given Estou na tela principal do aplicativo
+	And Abro meu perfil
+	When Clico na opcao de edicao de conta
+	Then Aparece uma notificacao para confirmar a edicao da conta
+	When Não confirmo a edicao
+	Then Retorno para tela de perfil
