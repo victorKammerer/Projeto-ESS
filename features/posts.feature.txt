@@ -28,9 +28,7 @@ And Seleciona o jogo “Hollow Knight”
 And Adiciona a avaliação “5/5”
 And O usuário “vko” escreve a legenda “melhor jogo já criado, muito bom!!”
 And Clica no botão “x”
-<<<<<<< HEAD
 Then A textfield é desselecionada.
-=======
-Then A textfieldl é desselecionada.
 
->>>>>>> dev
+adjusted.
+
