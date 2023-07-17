@@ -1,0 +1,4 @@
+Feature: Criar Posts
+As um usuário do site de “review de jogos”
+I want to Criar uma nova postagem
+So that eu possa mostrar minha opinião sobre jogos
