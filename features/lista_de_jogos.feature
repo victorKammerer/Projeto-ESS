@@ -135,3 +135,5 @@ Scenario: Ordenar a lista de jogos de um usuário por critério
 
 Scenario: Teste2
     Given Teste2
+Scenario: Teste
+    Given Teste
