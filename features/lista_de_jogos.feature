@@ -1,3 +1,8 @@
+Feature: Lista de jogos já finalizados, abandonados e desejados.
+As a usuário.
+I want to adicionar os jogos que já joguei, quero jogar ou abandonei em uma lista.
+So that I possa compartilhar minhas opiniões sobre um jogo e acompanhar as opiniões de quem eu me interesso.
+
 Scenario: Adicionar jogo como “Finalizou”, com nota e sem review
     Given o usuário "Davi" está em qualquer página do sistema
     When o usuário "Davi" seleciona a opção “Adicionar Jogo”
