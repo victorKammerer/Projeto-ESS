@@ -87,3 +87,19 @@ Scenario: Criar uma conta com senha invalida
 	And Confirmo a criacao da conta
 	Then Recebo uma notificacao que a senha nao e valida
 	And Continuo na tela de cadastro
+
+Scenario: Excluir minha conta com sucesso
+	Given Estou na tela principal do aplicativo
+	And Abro meu perfil
+	When Seleciono a opção de exclusão de conta
+	Then Aparece uma notificacao de confirmacao
+	When Confirmo a exclusao da conta
+	Then Vou para a pagina de "Inicio", sem estar conectado à conta
+	And Percebo uma mensagem de confirmação de exclusão
+Scenario: Recusar exclusão da conta
+	Given Estou na tela principal do aplicativo
+	And Abro meu perfil
+	When Seleciono a opção de exclusão de conta
+	Then Aparece uma notificacao de confirmacao
+	When Recuso a exclusao da conta
+	Then Retorno para meu perfil
