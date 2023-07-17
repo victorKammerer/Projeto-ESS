@@ -50,4 +50,15 @@ Scenario: Adicionar jogo como "Finalizou", com nota e com review, mas sem títul
     And o usuário "Davi" seleciona a opção "Submeter"
     Then o usuário "Davi" visualiza uma mensagem de erro 
     And o usuário "Davi" continua na página de adicionar jogo
-    Then something...
+
+Scenario: Adicionar jogo como “Abandonou”
+    Given o usuário "Davi" está em qualquer página do sistema
+    When o usuário "Davi" seleciona a opção “Adicionar Jogo”
+    And o usuário "Davi" escolhe o jogo "League of Legends"
+    And o usuário "Davi" seleciona a opção "Abandonou"
+    And o usuário "Davi" dá nota ao jogo
+    And o usuário "Davi" não escreve uma review
+    And o usuário "Davi" seleciona a opção "Submeter"
+    Then o usuário "Davi" visualiza uma mensagem de sucesso 
+    And o usuário "Davi" continua na página que estava inicialmente
+    And o jogo "League of Legends" está na lista de jogos do usuário "Davi" como "Abandonou"
