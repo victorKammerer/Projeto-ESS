@@ -36,3 +36,54 @@ Scenario: Criar uma conta com informações opcionais faltando
     And Confirmo a criacao da conta
     Then Recebo uma confirmacao que minha conta foi criada
     And Vou para página "Inicio" do aplicativo, com minha conta conectado
+
+Scenario: Criar uma conta com informações obrigatórias faltando
+	Given Estou na tela de cadastro
+	And Vejo varios espaços para preenchimento
+	When Preencho o campo de "Usuario"
+	And Preencho o campo de "Email"
+	And Preencho o campo de "Senha" com pelo menos 6 numeros e uma letra
+	And Clico no botão de continuar
+	Then Continuo na tela de cadastro
+	And Vejo mais espaços para preenchimento
+	When Deixo o campo de "Nome" em branco
+	And Preencho o campo de "Sobrenome"
+	And Preencho o campo de "Pronomes"
+	And Preencho o campo de "Bio"
+	And Confirmo a criacao da conta
+	Then Recebo uma notificacao que ha campos obrigatorios a serem preenchidos
+	And Continuo na tela de cadastro
+ 
+Scenario: Criar uma conta com alguma informação ja cadadastrada
+	Given Estou na tela de cadastro
+	And Vejo varios espaços para preenchimento
+	When Preencho o campo de "Usuario"
+	And Preencho o campo de "Email" com algum email já utilizado
+	And Preencho o campo de "Senha" com pelo menos 6 numeros e uma letra
+	And Clico no botão de continuar
+	Then Continuo na tela de cadastro
+	And Vejo mais espaços para preenchimento
+	When Preencho o campo de "Nome"
+	And Preencho o campo de "Sobrenome"
+	And Preencho o campo de "Pronomes"
+	And Preencho o campo de "Bio"
+	And Confirmo a criacao da conta
+	Then Recebo uma notificacao que ha campos com informacoes já cadastradas
+	And Continuo na tela de cadastro 
+
+Scenario: Criar uma conta com senha invalida
+	Given Estou na tela de cadastro
+	And Vejo varios espaços para preenchimento
+	When Preencho o campo de "Usuario"
+	And Preencho o campo de "Email"
+	And Preencho o campo de "Senha" apenas com numeros
+	And Clico no botão de continuar
+	Then Continuo na tela de cadastro
+	And Vejo mais espaços para preenchimento
+	When Preencho o campo de "Nome"
+	And Preencho o campo de "Sobrenome"
+	And Preencho o campo de "Pronomes"
+	And Preencho o campo de "Bio"
+	And Confirmo a criacao da conta
+	Then Recebo uma notificacao que a senha nao e valida
+	And Continuo na tela de cadastro
