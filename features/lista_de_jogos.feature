@@ -50,3 +50,4 @@ Scenario: Adicionar jogo como "Finalizou", com nota e com review, mas sem títul
     And o usuário "Davi" seleciona a opção "Submeter"
     Then o usuário "Davi" visualiza uma mensagem de erro 
     And o usuário "Davi" continua na página de adicionar jogo
+    Then something...
