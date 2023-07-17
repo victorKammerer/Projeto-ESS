@@ -38,3 +38,15 @@ Scenario: Editar uma entrada na lista de jogos, mas ultrapassando o limite de ca
     And o usuário "João" altera o título da review para "Hollow Knight é um jogo muuuu...ito bom" com mais de 120 caracteres
     And o usuário "João" seleciona a opção "Submeter"
     Then o usuário "João" visualiza uma mensagem de erro 
+    
+Scenario: Adicionar jogo como "Finalizou", com nota e com review, mas sem título
+    Given o usuário "Davi" está em qualquer página do sistema
+    When o usuário "Davi" seleciona a opção “Adicionar Jogo”
+    And o usuário "Davi"  escolhe o jogo "Hollow Knight"
+    And o usuário "Davi" seleciona a opção "Finalizado"
+    And o usuário "Davi" dá nota ao jogo
+    And o usuário "Davi" escreve uma review
+    And o usuário "Davi" não escreve um título para a review
+    And o usuário "Davi" seleciona a opção "Submeter"
+    Then o usuário "Davi" visualiza uma mensagem de erro 
+    And o usuário "Davi" continua na página de adicionar jogo
