@@ -133,7 +133,12 @@ Scenario: Ordenar a lista de jogos de um usuário por critério
     When o usuário "João" seleciona a opção "Nome"
     Then o usuário "João" visualiza os jogos do usuário "Davi" ordenados por nome
 
-Scenario: Teste2
-    Given Teste2
-Scenario: Teste
-    Given Teste
+
+Scenario: Adicionar um comentário na review de um usuário
+    Given o usuário "João" está na página da lista de jogos do usuário "Davi"
+    And o usuário "Davi" tem uma entrada na lista de jogos com o título "Hollow Knight"
+    And o usuário "Davi" escreveu uma review para o jogo "Hollow Knight"
+    When o usuário "João" seleciona a opção "Comentar" da review "Hollow Knight é um jogo muito bom"
+    And o usuário "João" escreve o comentário "Concordo"
+    And o usuário "João" seleciona a opção "Submeter"
+    Then o usuário "João" visualiza uma mensagem de sucesso
