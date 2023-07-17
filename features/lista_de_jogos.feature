@@ -22,4 +22,19 @@ Scenario: Adicionar jogo como “Finalizou”, sem dar nota e sem review
     Then o usuário "Davi" visualiza uma mensagem de erro 
     And o usuário "Davi" continua na página de adicionar jogo
 
+Scenario: Pesquisar um jogo na lista de jogos de um usuário, sem sucesso
+    Given o usuário "João" está na página da lista de jogos do usuário "Davi"
+    And o usuário "Davi" tem uma entrada na lista de jogos com o título "Hollow Knight"
+    When o usuário "João" pesquisa pelo jogo "League of Legends"
+    Then o usuário "João" não visualiza o jogo "League of Legends" na lista de jogos do usuário "Davi"
+    And o usuário "João" visualiza uma mensagem de erro 
+    And o usuário "João" continua na página da lista de jogos do usuário "Davi"
 
+Scenario: Editar uma entrada na lista de jogos, mas ultrapassando o limite de caracteres
+    Given o usuário "João" está na página da sua lista de jogos
+    And o usuário "João" tem uma entrada na lista de jogos com o título "Hollow Knight"
+    And o usuário "João" escreveu uma review para o jogo "Hollow Knight"
+    When o usuário "João" seleciona a opção “Editar” do jogo "amei esse"
+    And o usuário "João" altera o título da review para "Hollow Knight é um jogo muuuu...ito bom" com mais de 120 caracteres
+    And o usuário "João" seleciona a opção "Submeter"
+    Then o usuário "João" visualiza uma mensagem de erro 
