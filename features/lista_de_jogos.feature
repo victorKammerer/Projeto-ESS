@@ -86,6 +86,6 @@ Scenario: Adicionar jogo como “Abandonou”
     Then o usuário "Davi" visualiza uma mensagem de sucesso 
     And o usuário "Davi" continua na página que estava inicialmente
     And o jogo "League of Legends" está na lista de jogos do usuário "Davi" como "Abandonou"
-    Then something....
+
 
     
