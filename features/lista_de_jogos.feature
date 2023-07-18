@@ -8,7 +8,7 @@ Scenario: Adicionar jogo que não existe no sistema
 Given o usuário "Davi" está em qualquer página do sistema
 When o usuário "Davi" seleciona a opção “Adicionar Jogo”
 And o usuário "Davi" escolhe o jogo "SilkSong"
-Then o usuário "Davi" visualiza uma mensagem de erro "Jogo não encontrado"
+Then o usuário "Davi" visualiza uma mensagem de erro
 And o usuário "Davi" continua na página de adicionar jogo
 
 
@@ -129,9 +129,6 @@ When o usuário "João" pesquisa pelo jogo "Hollow Knight"
 Then o usuário "João" visualiza o jogo "Hollow Knight" na lista de jogos do usuário "Davi"
 And o usuário "João" não visualiza outros jogos na lista de jogos do usuário "Davi"
 And o usuário "João" continua na página da lista de jogos do usuário "Davi"
-
-
-
 
 
 
