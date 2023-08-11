@@ -75,6 +75,11 @@ router.post('/users/:id/unfollow', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const unfollowedUser = users.find(user => user.id === unfollowId);
 
+  if(!user?.following.includes(unfollowId)) {
+    res.status(400).json({ message: 'You are not following this user' });
+    return;
+  }
+
   if (!user || !unfollowedUser) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -83,7 +88,7 @@ router.post('/users/:id/unfollow', (req: Request, res: Response) => {
   user.following = user.following.filter(userId => userId !== unfollowId);
   unfollowedUser.followers = unfollowedUser.followers.filter(userId => userId !== id);
 
-  res.json(user);
+  res.json({ message: 'You are no longer following ' + unfollowedUser.username + '!'});
 });
 
 // Follow a user
@@ -93,14 +98,23 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const follower = users.find(user => user.id === followId);
 
+  if (user?.following.includes(followId)) {
+    res.status(400).json({ message: 'You are already following this user' });
+    return;
+  }
+
   if (!user || !follower) {
     res.status(404).json({ message: 'User not found' });
     return;
   }
+  
+  let following = users.find(user => user.id === followId);
+  let followingUsername = following ? following.username : null;
+
 
   user.following.push(followId);
   follower.followers.push(id);
-  res.json(user);
+  res.json({ message: 'You are now following ' + followingUsername + '!'});
 });
 
 // Counter for followers
