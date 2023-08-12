@@ -7,24 +7,6 @@ import users from '../database/users';
 const router = Router();
 const prefix = '/api';
 
-
-
-// Simulate a logged in user
-// declare module 'express-serve-static-core' {
-//   interface Request {
-//     user?: { id: number };
-//   }
-// }
-
-// router.use((req: Request, res: Response, next: NextFunction) => {
-//   // Insere um objeto de usuário simulado no objeto de solicitação
-//   req.user = {
-//     id: 5,
-//   };
-//   next();
-// });
-
-
 // -------------------------------- FOLLOWERS ROUTES --------------------------------
 // Route to get users
 router.get('/users', (req: Request, res: Response) => {
@@ -107,7 +89,7 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
     res.status(404).json({ message: 'User not found' });
     return;
   }
-  
+
   let following = users.find(user => user.id === followId);
   let followingUsername = following ? following.username : null;
 
@@ -115,6 +97,69 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
   user.following.push(followId);
   follower.followers.push(id);
   res.json({ message: 'You are now following ' + followingUsername + '!'});
+});
+1
+// Blocks a user
+router.post('/users/:id/block', (req: Request, res: Response) => {
+  const blockId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+  const user = users.find(user => user.id === id);
+  const blockedUser = users.find(user => user.id === blockId);
+
+  if (user?.blocked.includes(blockId)) {
+    res.status(400).json({ message: 'You have already blocked this user' });
+    return;
+  }
+
+  if (!user || !blockedUser) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  let blocked = users.find(user => user.id === blockId);
+  let blockedUsername = blocked ? blocked.username : null;
+
+  user.blocked.push(blockId);
+  res.json({ message: 'You have blocked ' + blockedUsername + '!'});
+});
+
+// Unblocks a user
+router.post('/users/:id/unblock', (req: Request, res: Response) => {
+  const unblockId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+  const user = users.find(user => user.id === id);
+  const unblockedUser = users.find(user => user.id === unblockId);
+
+  if(!user?.blocked.includes(unblockId)) {
+    res.status(400).json({ message: 'You have not blocked this user' });
+    return;
+  }
+
+  if (!user || !unblockedUser) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  let unblocked = users.find(user => user.id === unblockId);
+  let unblockedUsername = unblocked ? unblocked.username : null;
+
+  user.blocked = user.blocked.filter(userId => userId !== unblockId);
+  res.json({ message: 'You have unblocked ' + unblockedUsername + '!'});
+});
+
+// List blocked users
+router.get('/users/:id/blocked/count', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(user => user.id === id);
+
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const blockedUsersCount = user.blocked.length;
+
+  res.json({ blockedUsersCount });
 });
 
 // Counter for followers

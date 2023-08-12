@@ -9,91 +9,197 @@ let followResponse: supertest.Response;
 
 defineFeature(feature, test => {
     test('Client follows a user', ({ given, when, then, and }) => {
-        let followerId: number | null;
-        let followingId: number | null;
+        let client: typeof users[0] | null;
 
-        given(/^that the service authenticates the client as "(.*)"$/, (arg0) => {
-            const username = arg0;
-            const follower = users.find(user => user.username === username);
-            followerId = follower ? follower.id : null;
+        given(/^that the system authenticates the client as "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            client = user ? user: null;
         });
 
-        and(/^the profile service returns an existing profile for "(.*)"$/, (arg0) => {
-            const username = arg0;
-            const following = users.find(user => user.username === username);
-            followingId = following ? following.id : null;
+        and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username, userid) => {
+            const user = users.find(user => user.username === username);
+            expect(user).not.toBeNull();
+            expect(user?.id).toEqual(parseInt(userid));
         });
 
-        when(/^the client sends a POST to the endpoint "(.*)", with the body "(.*)"$/, async (arg0, arg1) => {
-            if(followingId !== null)
-                arg0 = arg0.replace(':id', followingId.toString());
+        and(/^"(.*)" is not in the list of users that the client is following$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.following).not.toContain(user?.id);
+        });
 
-            const endpoint = arg0;
-            const body = arg1;
-            if (followerId !== null && followingId !== null) {
-                followResponse = await request.post(`${endpoint}`).send({ id: followerId });
+        when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
+            let body_json = JSON.parse(body);
+
+            if (client !== null){
+                followResponse = await request.post(`${endpoint}`).send(body_json);
             }
         });
 
-        then(/^the service should return a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
+        then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
-        and(/^"(.*)" should be added to the list of users that the client is following$/, (arg0) => {
-            const follower = users.find(user => user.id === followerId);
-            console.log(follower);
-            expect(follower?.following).toContain(followingId);
+        and(/^"(.*)" is added to the list of users that the client is following$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.following).toContain(user?.id);
         });
 
-        and(/^the client should be added to the list of followers for "(.*)"$/, (username) => {
-            console.log(username);
-            const following = users.find(user => user.username === username);
-            console.log(following);
-            expect(following?.followers).toContain(followerId);
+        and(/^the client is added to the list of followers for "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(user?.followers).toContain(client?.id);
         });
     });
-
+    
     test('Client unfollows a user', ({ given, when, then, and }) => {
-        let followerId: number | null;
-        let unfollowingId: number | null;
+        let client: typeof users[0] | null;
 
-        given(/^that the service authenticates the client as "(.*)"$/, (arg0) => {
-            const username = arg0;
-            const follower = users.find(user => user.username === username);
-            followerId = follower ? follower.id : null;
+        given(/^that the system authenticates the client as "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            client = user ? user : null;
         });
 
-        and(/^the profile service returns an existing profile for "(.*)"$/, (arg0) => {
-            const username = arg0;
-            const unfollowing = users.find(user => user.username === username);
-            unfollowingId = unfollowing ? unfollowing.id : null;
+        and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username, userid) => {
+            const user = users.find(user => user.username === username);
+            expect(user).not.toBeNull();
+            expect(user?.id).toEqual(parseInt(userid));
         });
 
-        when(/^the client sends a POST to the endpoint "(.*)", with the body "(.*)"$/, async (arg0, arg1) => {
-            if(unfollowingId !== null)
-                arg0 = arg0.replace(':id', unfollowingId.toString());
+        and(/^"(.*)" is in the list of users that the client is following$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.following).toContain(user?.id);
+        });
 
-            const endpoint = arg0;
-            const body = arg1;
-            if (followerId !== null && unfollowingId !== null) {
-                followResponse = await request.post(`${endpoint}`).send({ id: followerId });
+        when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
+            let body_json = JSON.parse(body);
+
+            if (client !== null){
+                followResponse = await request.post(`${endpoint}`).send(body_json);
             }
         });
 
-        then(/^the service should return a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
+        then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
-        and(/^"(.*)" should be removed from the list of users that the client is following$/, (arg0) => {
-            const follower = users.find(user => user.id === followerId);
-            expect(follower?.following).not.toContain(unfollowingId);
+        and(/^"(.*)" is removed from the list of users that the client is following$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.following).not.toContain(user?.id);
         });
 
-        and(/^the client should be removed from the list of followers for "(.*)"$/, (username) => {
-            const unfollowing = users.find(user => user.username === username);
-            expect(unfollowing?.followers).not.toContain(followerId);
+        and(/^the client is removed from the list of followers for "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(user?.followers).not.toContain(client?.id);
         });
     });
+
+    test('Client follows a user that does not exist', ({ given, when, then, and }) => { 
+        let client: typeof users[0] | null;
+
+        given(/^that the system authenticates the client as "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            client = user ? user : null;
+        });
+
+        and(/^the system does not have an existing profile for "(.*)" id$/, (userid) => {
+            const user = users.find(user => user.id === userid);
+            expect(user).toBeUndefined();
+        });
+
+        when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
+            let body_json = JSON.parse(body);
+
+            if (client !== null){
+                followResponse = await request.post(`${endpoint}`).send(body_json);
+            }
+        });
+
+        then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
+            expect(followResponse.status).toEqual(parseInt(statusCode));
+            expect(followResponse.body.message).toEqual(message);
+        });
+
+    });
+    
+    // Client blocks a user
+    test('Client blocks a user', ({ given, when, then, and }) => {
+        let client: typeof users[0] | null;
+
+        given(/^that the system authenticates the client as "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            client = user ? user : null;
+        });
+
+        and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(user).not.toBeNull();
+        });
+
+        and(/^"(.*)" is not in the list of users that the client is blocking$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.blocked).not.toContain(user?.id);
+        });
+
+        when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
+            let body_json = JSON.parse(body);
+
+            if (client !== null){
+                followResponse = await request.post(`${endpoint}`).send(body_json);
+            }
+        });
+
+        then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
+            expect(followResponse.status).toEqual(parseInt(statusCode));
+            expect(followResponse.body.message).toEqual(message);
+        });
+
+        and(/^"(.*)" is added to the list of users that the client is blocking$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.blocked).toContain(user?.id);
+        });
+    });
+
+    // Client unblocks a user
+    test('Client unblocks a user', ({ given, when, then, and }) => {
+        let client: typeof users[0] | null;
+
+        given(/^that the system authenticates the client as "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            client = user ? user : null;
+        });
+
+        and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(user).not.toBeNull();
+        });
+
+        and(/^"(.*)" is in the list of users that the client is blocking$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.blocked).toContain(user?.id);
+        });
+
+        when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
+            let body_json = JSON.parse(body);
+            console.log(client);
+
+            if (client !== null){
+                followResponse = await request.post(`${endpoint}`).send(body_json);
+                console.log(followResponse.body.message);
+            }
+
+            console.log(client);
+        });
+
+        then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
+            expect(followResponse.status).toEqual(parseInt(statusCode));
+            expect(followResponse.body.message).toEqual(message);
+        });
+
+        and(/^"(.*)" is removed from the list of users that the client is blocking$/, (username) => {
+            const user = users.find(user => user.username === username);
+            expect(client?.blocked).not.toContain(user?.id);
+        });
+    });
+
 });
