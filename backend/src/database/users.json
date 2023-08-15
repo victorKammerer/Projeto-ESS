@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "user": "usuario1",
+    "email": "usuario1@example.com",
+    "password": "senha123",
+    "name": "Fulano",
+    "lastName": "Silva",
+    "pronouns": "ele/dele",
+    "bio": "Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."
+  },
+  {
+    "id": 3,
+    "user": "jujuba",
+    "email": "jujuba@gmail.com",
+    "password": "b",
+    "name": "c",
+    "lastName": "d",
+    "pronouns": "he/she",
+    "bio": "acabapelamordedeus"
+  },
+  {
+    "id": 4,
+    "user": "Lighthalzen",
+    "email": "Lighthalzen@gmail.com",
+    "password": "2173498723191a",
+    "name": "City of",
+    "lastName": "Lighthalzen",
+    "pronouns": "it/it",
+    "bio": "This is the city of science!"
+  },
+  {
+    "id": 4,
+    "user": "Mathbonc",
+    "email": "Bonc@gmail.com",
+    "password": "40028922b",
+    "name": "Matheus",
+    "lastName": "Boncsidai",
+    "pronouns": "he/him",
+    "bio": "Hello There!"
+  }
+]
