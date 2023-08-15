@@ -70,7 +70,7 @@ router.post('/users/:id/unfollow', (req: Request, res: Response) => {
   user.following = user.following.filter(userId => userId !== unfollowId);
   unfollowedUser.followers = unfollowedUser.followers.filter(userId => userId !== id);
 
-  res.json({ message: 'You are no longer following ' + unfollowedUser.username + '!'});
+  res.json({ message: 'You are no longer following this user!'});
 });
 
 // Follow a user
@@ -96,7 +96,7 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
 
   user.following.push(followId);
   follower.followers.push(id);
-  res.json({ message: 'You are now following ' + followingUsername + '!'});
+  res.json({ message: 'You are now following this user!'});
 });
 1
 // Blocks a user
@@ -120,7 +120,7 @@ router.post('/users/:id/block', (req: Request, res: Response) => {
   let blockedUsername = blocked ? blocked.username : null;
 
   user.blocked.push(blockId);
-  res.json({ message: 'You have blocked ' + blockedUsername + '!'});
+  res.json({ message: 'You have blocked this user!'});
 });
 
 // Unblocks a user
@@ -144,7 +144,7 @@ router.post('/users/:id/unblock', (req: Request, res: Response) => {
   let unblockedUsername = unblocked ? unblocked.username : null;
 
   user.blocked = user.blocked.filter(userId => userId !== unblockId);
-  res.json({ message: 'You have unblocked ' + unblockedUsername + '!'});
+  res.json({ message: 'You have unblocked this user!'});
 });
 
 // List blocked users
