@@ -1,13 +1,13 @@
 enum EntryType {
-  PLAYED = 1,
-  WISHLIST = 2,
-  ABANDONED = 3
+  PLAYED = 'played',
+  WISHLIST = 'wished',
+  ABANDONED = 'abandoned'
 }
 
 type ListEntry = {
   entryId: number;
   gameId: number;
-  entryType: number;
+  entryType: string;
   date: Date;
 }
 

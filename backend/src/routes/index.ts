@@ -90,13 +90,13 @@ router.post('/user/:id/list', async (req, res) => {
 // GET: Games of a certain entryType on a user's list
 router.get('/user/:id/list/:entryType', async (req, res) => {
   const id : number = parseInt(req.params.id);
-  const entryType : number = parseInt(req.params.entryType);
+  const entryType : string = req.params.entryType;
   const user = getUser(id);
   const userLists = getUsersList(id);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (entryType < 1 || entryType > 3) {
+  if (entryType != EntryType.PLAYED && entryType != EntryType.PLAYED && entryType != EntryType.WISHLIST) {
     return res.status(404).json({ message : 'Invalid entry type' });
   }
   if (!userLists) {
@@ -127,8 +127,8 @@ router.put('/user/:id/list/:entryId', async (req, res) => {
   if (! isEntryInList(userLists, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
-  if (entryType < 1 || entryType > 3) {
-    return res.status(404).json({ message : 'Invalid entry type' });
+  if (entryType != EntryType.PLAYED && entryType != EntryType.PLAYED && entryType != EntryType.WISHLIST) {
+    return res.status(400).json({ message : 'Invalid entry type' });
   }
   const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
   userLists.entries[entryIndex].entryType = entryType;
@@ -195,10 +195,10 @@ router.get('/user/:id/list/:criteria/:order', async (req, res) => {
     return res.status(404).json({ message : 'List not found' });
   }
   if (criteria !== 'date' && criteria !== 'title') {
-    return res.status(404).json({ message : 'Invalid criteria' });
+    return res.status(400).json({ message : 'Invalid criteria' });
   }
   if (order !== 'asc' && order !== 'desc') {
-    return res.status(404).json({ message : 'Invalid order' });
+    return res.status(400).json({ message : 'Invalid order' });
   }
   const orderedList = userLists.entries.sort((a, b) => {
     if (criteria === 'date') {
