@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "husky": "^8.0.3"
+  },
+  "devDependencies": {
+    "jest-cucumber": "^3.0.1"
   }
 }
