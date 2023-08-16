@@ -5,7 +5,7 @@ import users from '../../src/database/users';
 import exp from 'constants';
 import { parse } from 'path';
 
-const feature = loadFeature('../features/followers_service.feature');
+const feature = loadFeature('./tests/features/followers_service.feature');
 const request = supertest(app);
 let followResponse: supertest.Response;
 
@@ -120,7 +120,7 @@ defineFeature(feature, test => {
 
             const user = users.find(user => user.id === userid2);
             expect(user?.following).not.toContain(userid1);
-        }); 
+        });
     });
 
 
@@ -165,7 +165,7 @@ defineFeature(feature, test => {
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
-        
+
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
             userid = parseInt(userid);
 
@@ -205,16 +205,6 @@ defineFeature(feature, test => {
         });
     });
 
-
-      // Scenario: Client unblocks a user
-      //   Given that the system has an existing user with ID "3"
-      //   And the system has an existing user with ID "2"
-      //   And the list of blocked of the "3" has an user with ID "2"
-      //   When a POST request is made to "/api/users/2/unblock"
-      //   And the request body is '{"id":3}'
-      //   Then the system returns a "200" status and the message "You have unblocked this user!"
-      //   And "3" is removed from the list of blocked of "2"
-
     test('Client unblocks a user', ({ given, when, then, and }) => {
         let endpoint : string;
 
@@ -223,7 +213,7 @@ defineFeature(feature, test => {
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
-        
+
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
             userid = parseInt(userid);
 
@@ -263,85 +253,46 @@ defineFeature(feature, test => {
         });
     });
 
+    test('Client blocks a user that does not exist', ({ given, when, then, and }) => {
+        let endpoint : string;
 
-    // // Client blocks a user
-    // test('Client blocks a user', ({ given, when, then, and }) => {
-    //     let client: typeof users[0] | null;
+        given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            userid = parseInt(userid);
+            const user = users.find(user => user.id === userid);
+            expect(user).not.toBeUndefined();
+        });
 
-    //     given(/^that the system authenticates the client as "(.*)"$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         client = user ? user : null;
-    //     });
+        and(/^the system does not have an existing user with ID "(\d+)"$/, (userid) => {
+            userid = parseInt(userid);
+            const user = users.find(user => user.id === userid);
+            expect(user).toBeUndefined();
+        });
 
-    //     and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(user).not.toBeNull();
-    //     });
+        when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            endpoint = endpoint_;
+        });
 
-    //     and(/^"(.*)" is not in the list of users that the client is blocking$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(client?.blocked).not.toContain(user?.id);
-    //     });
+        and(/^the request body is '(.*)'$/, async (body) => {
+            let body_json = JSON.parse(body);
 
-    //     when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
-    //         let body_json = JSON.parse(body);
+            followResponse = await request.post(`${endpoint}`).send(body_json);
+        });
 
-    //         if (client !== null){
-    //             followResponse = await request.post(`${endpoint}`).send(body_json);
-    //         }
-    //     });
+        then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            expect(followResponse.status).toEqual(parseInt(statusCode));
+            expect(followResponse.body.message).toEqual(message);
+        });
+    });
 
-    //     then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
-    //         expect(followResponse.status).toEqual(parseInt(statusCode));
-    //         expect(followResponse.body.message).toEqual(message);
-    //     });
 
-    //     and(/^"(.*)" is added to the list of users that the client is blocking$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(client?.blocked).toContain(user?.id);
-    //     });
-    // });
+});
 
-    // // Client unblocks a user
-    // test('Client unblocks a user', ({ given, when, then, and }) => {
-    //     let client: typeof users[0] | null;
+test('Get the number of followers of a user', async() => {
+    let userid = 2;
+    let endpoint = "/api/users/" + String(userid) + "/followers/count";
+    console.log(endpoint);
 
-    //     given(/^that the system authenticates the client as "(.*)"$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         client = user ? user : null;
-    //     });
-
-    //     and(/^the system has an existing profile for "(.*)" with id "(.*)"$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(user).not.toBeNull();
-    //     });
-
-    //     and(/^"(.*)" is in the list of users that the client is blocking$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(client?.blocked).toContain(user?.id);
-    //     });
-
-    //     when(/^the client sends a POST to the endpoint "(.*)", with the body '(.*)'$/, async (endpoint, body) => {
-    //         let body_json = JSON.parse(body);
-    //         console.log(client);
-
-    //         if (client !== null){
-    //             followResponse = await request.post(`${endpoint}`).send(body_json);
-    //             console.log(followResponse.body.message);
-    //         }
-
-    //         console.log(client);
-    //     });
-
-    //     then(/^the system returns a (\d+) status and the message "(.*)"$/, (statusCode, message) => {
-    //         expect(followResponse.status).toEqual(parseInt(statusCode));
-    //         expect(followResponse.body.message).toEqual(message);
-    //     });
-
-    //     and(/^"(.*)" is removed from the list of users that the client is blocking$/, (username) => {
-    //         const user = users.find(user => user.username === username);
-    //         expect(client?.blocked).not.toContain(user?.id);
-    //     });
-    // });
-
+    let response = await request.get(`${endpoint}`);
+    expect(response.status).toEqual(200);
+    expect(response.body.followersCount).toEqual(users[userid - 1].followers.length);
 });

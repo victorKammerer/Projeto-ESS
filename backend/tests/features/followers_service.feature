@@ -37,6 +37,13 @@ Feature: Followers
     Then the system returns a "200" status and the message "You have blocked this user!"
     And "2" is added to the list of blocked of "1"
 
+  Scenario: Client blocks a user that does not exist
+    Given that the system has an existing user with ID "1"
+    And the system does not have an existing user with ID "52"
+    When a POST request is made to "/api/users/52/block"
+    And the request body is '{"id":1}'
+    Then the system returns a "404" status and the message "User not found"
+
   Scenario: Client unblocks a user
     Given that the system has an existing user with ID "5"
     And the system has an existing user with ID "2"
