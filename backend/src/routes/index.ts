@@ -2,9 +2,7 @@ import { Express, Router, Request, Response, NextFunction } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
-import users from '../database/users';
-import games from '../database/games';
-import lists from '../database/lists';
+
 import { loggedInId } from '../services/list.service';
 import users from '../database/users';
 import games from '../database/games';
@@ -220,7 +218,7 @@ function getLists(){
   return lists;
 }
 
-
+export {setUsers, setList, setGames, getGames, getUsers, getLists};
 // GET : List of games for a user
 router.get('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
