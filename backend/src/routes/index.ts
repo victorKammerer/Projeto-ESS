@@ -3,6 +3,9 @@ import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
 import { loggedInId } from '../services/list.service';
+import users from '../database/users';
+import games from '../database/games';
+import lists from '../database/lists';
 
 const router = Router();
 const prefix = '/api';
@@ -10,9 +13,6 @@ const prefix = '/api';
 
 // ----------------------- LIST ROUTES ----------------------- //
 // Importing users, games, and lists
-import users from '../database/users';
-import games from '../database/games';
-import lists from '../database/lists';
 import { ListEntry, EntryType, GameList } from '../models/list.model';
 import { User } from '../models/user.model';
 import { Game } from '../models/game.model';
@@ -42,7 +42,7 @@ function getLists(){
 
 
 // GET : List of games for a user
-router.get('/user/:id/list', async (req, res) => {
+router.get('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const user = utils.getUser(id, users);
   const userLists = utils.getUsersList(id, lists);
@@ -60,7 +60,7 @@ router.get('/user/:id/list', async (req, res) => {
 
 
 // POST : Add a game to a user's list
-router.post('/user/:id/list', async (req, res) => {
+router.post('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
   if(id !== loggedInId) {
     return res.status(401).json({ message : 'Unauthorized' });
@@ -98,7 +98,7 @@ router.post('/user/:id/list', async (req, res) => {
 });
   
 // GET: Games of a certain entryType on a user's list
-router.get('/user/:id/list/:entryType', async (req, res) => {
+router.get('/users/:id/list/:entryType', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryType : string = req.params.entryType;
   const user = utils.getUser(id, users);
@@ -123,7 +123,7 @@ router.get('/user/:id/list/:entryType', async (req, res) => {
 });
 
 // PUT : Edit a game on a user's list
-router.put('/user/:id/list/:entryId', async (req, res) => {
+router.put('/users/:id/list/:entryId', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryId : number = parseInt(req.params.entryId);
   const user = utils.getUser(id, users);
@@ -151,7 +151,7 @@ router.put('/user/:id/list/:entryId', async (req, res) => {
 });
 
 // DELETE : Remove a game from a user's list
-router.delete('/user/:id/list/:entryId', async (req, res) => {
+router.delete('/users/:id/list/:entryId', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryId : number = parseInt(req.params.entryId);
   const user = utils.getUser(id, users);
@@ -174,7 +174,7 @@ router.delete('/user/:id/list/:entryId', async (req, res) => {
 });
 
 // GET: Search a name in a user's list
-router.get('/user/:id/list/search/:name', async (req, res) => {
+router.get('/users/:id/list/search/:name', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const name : string = req.params.name;
   const user = utils.getUser(id, users);
@@ -200,7 +200,7 @@ router.get('/user/:id/list/search/:name', async (req, res) => {
 });
 
 // GET: List ordered by criteria
-router.get('/user/:id/list/:criteria/:order', async (req, res) => {
+router.get('/users/:id/list/:criteria/:order', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const criteria : string = req.params.criteria;
   const order : string = req.params.order;

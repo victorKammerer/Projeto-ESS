@@ -35,10 +35,16 @@ defineFeature(feature, (test) => {
     function makeUser(userId: string){
         let user = {
             id: parseInt(userId),
-            username: "username",
+            user: "username",
             email: "...",
+            password: "...",
+            name: "...",
+            lastName: "...",
+            pronouns: "...",
+            bio: "...",
             followers: [],
-            following: []
+            following: [],
+            blocked : []
         }
         user.id = parseInt(userId);
         const users = routes.getUsers();

@@ -1,9 +1,15 @@
 type User = {
-    id: number;
-    username: string;
-    email: string;
-    followers: number[];
-    following: number[];
-  };
+  id: number;
+  user: string;
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  pronouns: string;
+  bio: string;
+  followers: number[];
+  following: number[];
+  blocked: number[];
+}
 
-export {User};
+export { User };
