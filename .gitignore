@@ -4,3 +4,9 @@ __pycache__/
 *.log
 *.swp
 .husky/
+node_modules/
+jest.config.js
+package-lock.json
+package.json
+setupTests.js
+tsconfig.json

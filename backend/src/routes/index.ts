@@ -9,6 +9,7 @@ import { loggedInId } from '../services/list.service';
 import users from '../database/users';
 import games from '../database/games';
 import lists from '../database/lists';
+import posts from '../database/posts';
 
 const router = Router();
 const prefix = '/api';
@@ -16,7 +17,7 @@ const fs = require('fs'); //Module to read files
 let loggedID = 0;
 
 
-// BEGIN OF USER ROUTES //
+// -------------------------------- USERS ROUTES --------------------------------
 
 //*Create User
 router.post('/users', (req,res) => {
@@ -126,6 +127,7 @@ router.put('/users/:id', (req,res) => {
 // END OF USER ROUTES //
 
 // -------------------------------- FOLLOWERS ROUTES --------------------------------
+
 // Route to get users
 router.get('/users', (req: Request, res: Response) => {
   res.json(users);
@@ -212,7 +214,7 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
   follower.followers.push(id);
   res.json({ message: 'You are now following this user!'});
 });
-1
+
 // Blocks a user
 router.post('/users/:id/block', (req: Request, res: Response) => {
   const blockId = parseInt(req.params.id);
@@ -302,8 +304,8 @@ router.get('/users/:id/following/count', (req: Request, res: Response) => {
 
 // END OF FOLLOWERS ROUTES
 
+// -------------------------------- LIST ROUTES --------------------------------
 
-// ----------------------- LIST ROUTES ----------------------- //
 // Importing users, games, and lists
 import { ListEntry, EntryType, GameList } from '../models/list.model';
 import { User } from '../models/user.model';
@@ -533,6 +535,132 @@ router.get('/users/:id/list/:criteria/:order', async (req, res) => {
 
 
 // ----------------------- END LIST ROUTES ------------------- //
+
+// -------------------------------- HISTORIC ROUTES --------------------------------
+
+//User with id 1 is logged in
+const logged_in_id = 1;
+
+//function to verify username
+function verifyUserId(id: number) {
+  const user = users.find((user) => user.id === id);
+  //console.log(users);
+  if (!user) {
+    return null;
+  }
+  return user;
+}
+
+//function to verify review id
+function verifyReviewId(id: number) {
+  const post = posts.find((post) => post.post_id === id);
+  if (!post) {
+    return null;
+  }
+  return post;
+}
+
+//Route to get all reviews of that user by id
+router.get('/users/:id_user/historic', (req: Request, res: Response) => {
+  //check user
+  const user = verifyUserId(parseInt(req.params.id_user));
+
+  if (user === null) 
+    return res.status(404).json({ error: 'User not found' });
+  
+  let review_list = posts.filter((post) => post.user_id === user.id);
+
+  //para inverter a ordem da lista
+  // /user/:id_user/historico?desc=true
+  if (req.query.desc) 
+  review_list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  else 
+  review_list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
+  res.json(review_list);
+});
+
+
+//Route to filter reviews by category
+router.get('/users/:id_user/historic/category/:category', (req: Request, res: Response) => {
+  //check user
+  const user = verifyUserId(parseInt(req.params.id_user));
+  if (user === null) 
+    return res.status(404).json({ error: 'User not found' });
+
+  //check category
+  const category = req.params.category;
+  const review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
+  if (review.length === 0) 
+    return res.status(404).json({ error: 'Category not found' });
+
+  res.json(review);
+});
+
+//Route to get a review by id
+router.get('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
+  //check user
+  const user = verifyUserId(parseInt(req.params.id_user));
+  if (user === null) 
+    return res.status(404).json({ error: 'User not found' });
+
+  //check review id
+  const post = verifyReviewId(parseInt(req.params.id_post));
+  if (post === null) 
+    return res.status(404).json({ error: 'Post not found' });
+
+  res.json(post);
+});
+
+//Route to update a review by id
+//Only the author of the review can update it and only if the author is logged in
+router.put('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
+  //check user
+  const user = verifyUserId(parseInt(req.params.id_user));
+  if (user === null) 
+    return res.status(404).json({ error: 'User not found' });
+
+  //check review id
+  let post_to_edit = verifyReviewId(parseInt(req.params.id_post));
+  if (post_to_edit === null) 
+    return res.status(404).json({ error: 'Post not found' });
+
+  //check if user is logged in
+  if (post_to_edit.user_id !== logged_in_id) 
+    return res.status(404).json({ error: 'User must be logged in to edit a post' });
+  
+  const updatedPost = { ...post_to_edit, ...req.body };
+  posts[parseInt(req.params.id_post) - 1] = updatedPost;
+
+  res.json(posts[parseInt(req.params.id_post) - 1]);
+});
+
+//Route to delete a review by id
+router.delete('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
+  //check user
+  const user = verifyUserId(parseInt(req.params.id_user));
+  if (user === null) 
+    return res.status(404).json({ error: 'User not found' });
+
+  //check review id
+  const post_to_delete = verifyReviewId(parseInt(req.params.id_post));
+  if (post_to_delete === null) 
+    return res.status(404).json({ error: 'Post not found' });
+
+  //check if user is logged in
+  if (post_to_delete.user_id !== logged_in_id) 
+    return res.status(401).json({ error: 'user must to be logged in' });
+
+  //delete review
+  const index = posts.findIndex((post) => post.post_id === post_to_delete.post_id);
+
+  if (index !== -1) {
+    posts.splice(index, 1);
+    return res.status(200).json({ message: 'Post deleted successfully' });
+  }
+  else 
+    return res.status(404).json({ error: 'Post not found*' });
+});
 
 export default (app: Express) => {
   app.use(
