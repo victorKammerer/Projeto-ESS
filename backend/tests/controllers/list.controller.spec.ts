@@ -133,565 +133,773 @@ defineFeature(feature, (test) => {
     });
     
     test('The user tries to get a non-existing user list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
+        given(/^that the server authenticates the user with id "(.*)"$/, 
+        async (userId) => {
             makeAuthenticatedUser(userId);
         });
     
-        and(/^the server does not have a user registered with id "(.*)"$/, (userId) => {
+        and(/^the server does not have a user registered with id "(.*)"$/, 
+        async (userId) => {
             const users = routes.getUsers();
             if (users.find(u => u.id == parseInt(userId)) != undefined) routes.setUsers(users.filter(u => u.id != parseInt(userId)));
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-            
+        when(/^the user sends a GET to the endpoint "(.*)"$/, 
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message', 
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/, 
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
-    test('The user adds a game to its own list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+    test('The user adds a game to its own list.',  ({ given, and, when, then }) => {
+        given(/^that the server authenticates the user with id "(.*)"$/, 
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
-    
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+
+        and(/^the server has a user registered with id "(.*)"$/, 
+        async (userId) => {
+            makeUser(userId);
         });
-    
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+
+        and(/^the server has a game registered with id "(.*)"$/, 
+        async (gameId) => {
+            makeGame(gameId);
         });
-    
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, 
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
-    
-        and(/^the list with id "(.*)" has a single entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+
+        and(/^the list with id "(.*)" has a single entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, 
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
-    
-        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/, (endpoint, gameId, entryType, reqDate) => {
-    
+
+        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/, 
+        async (endpoint, gameId, entryType, reqDate) => {
+            response = await request.post(endpoint).send({
+                gameId: parseInt(gameId),
+                entryType: entryType,
+                reqDate: reqDate
+            });
         });
-    
-        then(/^the response should return the list object with the new entry with id "(.*)"$/, (entryId) => {
-    
+
+        then(/^the response should return the list object with the new entry with id "(.*)"$/, 
+        async (entryId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == utils.getAuthenticatedUserID());
+            let bodyList = response.body as GameList;
+            bodyList.entries.forEach(e => { e.date = new Date(e.date) });
+            expect(bodyList).toEqual(list);
         });
-    
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+
+        and(/^return status code "(.*)"$/, 
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user tries to add a game to another users list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/, 
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,  
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,  
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has no entries$/, (listId) => {
-    
+        and(/^the list with id "(.*)" has no entries$/,  
+        async (listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == parseInt(listId));
+            if (list != undefined) {
+                list.entries = [];
+                routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
+            }
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,  
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/, (endpoint, gameId, entryType, reqDate) => {
-    
+        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/,  
+        async (endpoint, gameId, entryType, reqDate) => {
+            response = await request.post(endpoint).send({
+                gameId: parseInt(gameId),
+                entryType: entryType,
+                reqDate: reqDate
+            });
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message',  
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,  
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user tries to add a repeated game to its own list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,  
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,  
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/, 
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, 
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, 
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/, (endpoint, gameId, entryType, reqDate) => {
-    
+        when(/^the user sends a POST to the endpoint "(.*)" with the body elements gameId = "(.*)", entryType = "(.*)" and reqDate = "(.*)"$/,  
+        async (endpoint, gameId, entryType, reqDate) => {
+            response = await request.post(endpoint).send({
+                gameId: parseInt(gameId),
+                entryType: entryType,
+                reqDate: reqDate
+            });
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message',  
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/, 
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user gets all "Played" games from a list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,  
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/, 
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/, 
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/, 
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, 
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,  
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" that corresponds to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,  
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/, 
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then(/^the response should return the list object with the entry with id "(.*)"$/, (entryId) => {
-    
+        then(/^the response should return the filtered list object with id "(.*)" and only entries of the type "(.*)"$/, 
+        async (listId, entryType) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == listId);
+            if (list) list.entries = list.entries.filter(e => e.entryType == entryType);
+            let bodyList = response.body as GameList;
+            bodyList.entries.forEach(e => { e.date = new Date(e.date) });
+            expect(bodyList).toEqual(list);
         });
     
         and(/^return status code "(.*)"$/, (statusCode) => {
-    
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
 
     test('The user gets all "Abandoned" games from an empty list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has no entries$/, (listId) => {
-    
+        and(/^the list with id "(.*)" has no entries$/,
+        async (listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == parseInt(listId));
+            if (list != undefined) {
+                list.entries = [];
+                routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
+            }
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then('the response should return an empty list object', () => {
-    
+        then('the response should return an empty list object',
+        async () => {
+            expect(response.body.entries.length).toBe(0);
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user edits an "Abandoned" game from its own list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a PUT to the endpoint "(.*)" with the body elements entryType = "(.*)" and reqDate = "(.*)"$/, (endpoint, entryType, reqDate) => {
-    
+        when(/^the user sends a PUT to the endpoint "(.*)" with the body elements entryType = "(.*)" and reqDate = "(.*)"$/,
+        async (endpoint, entryType, reqDate) => {
+            response = await request.put(endpoint).send({
+                entryType: entryType,
+                reqDate: reqDate
+            });
         });
     
-        then(/^the response should return the list object with the updated entry with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (entryId, entryType, reqDate) => {
-    
+        then(/^the response should return the entry with id "(.*)" and entryType "(.*)" and reqDate "(.*)" from the list object of id "(.*)"$/, 
+        async (entryId, entryType, reqDate, listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == listId);
+            let entry = list?.entries.find(e => e.entryId == parseInt(entryId));
+            let bodyList = response.body as ListEntry;
+            bodyList.date = new Date(bodyList.date);
+            expect(bodyList).toEqual(entry);
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user tries to edit a "Wishlisted" game from another users list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a PUT to the endpoint "(.*)" with the body elements entryType = "(.*)" and reqDate = "(.*)"$/, (endpoint, entryType, reqDate) => {
-    
+        when(/^the user sends a PUT to the endpoint "(.*)" with the body elements entryType = "(.*)" and reqDate = "(.*)"$/,
+        async (endpoint, entryType, reqDate) => {
+            response = await request.put(endpoint).send({
+                entryType: entryType,
+                reqDate: reqDate
+            });
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message',
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user deletes a game from its own list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
 
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
 
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
 
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
 
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
 
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
 
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
 
-        when(/^the user sends a DELETE to the endpoint "(.*)"$/, (endpoint) => {
-
+        when(/^the user sends a DELETE to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.delete(endpoint);
         });
 
         then('the response should return a sucess message', () => {
-
+            expect(response.body.message).not.toBeUndefined();
         });
 
         and(/^return status code "(.*)"$/, (statusCode) => {
-
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user tries to delete a game from another users list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a DELETE to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a DELETE to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.delete(endpoint);
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message',
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user searches for a game in another users list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then(/^the response should return the list object with the entry with id "(.*)"$/, (entryId) => {
-    
+        then(/^the response should return the list object of id "(.*)" with the entry with the gameId of the game with gameName "(.*)"$/,
+        async (listId, gameName) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == listId);
+            if (list) list.entries = list.entries.filter(e => e.gameId == routes.getGames().find(g => g.gameName == gameName)?.gameId);
+            let bodyList = response.body as GameList;
+            bodyList.entries.forEach(e => { e.date = new Date(e.date) });
+            expect(bodyList).toEqual(list);
         });
-    
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user searches for a game in an empty list.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the list with id "(.*)" has no entries$/, (listId) => {
-    
+        and(/^the list with id "(.*)" has no entries$/,
+        async (listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == parseInt(listId));
+            if (list != undefined) {
+                list.entries = [];
+                routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
+            }
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then('the response should return an empty list object', () => {
-    
+        then('the response should return an empty list object',
+        async () => {
+            expect(response.body.entries.length).toBe(0);
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user sorts its own list by "Name", in ascending order.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then('the response should return the list object with the entries sorted by the game name in ascending order', () => {
-    
+        then(/^the response should return the list object of id "(.*)" with the entries sorted by the game name in ascending order$/,
+        async (listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == listId);
+            const order = 'asc';
+            const games = routes.getGames();
+            if (list){
+                list.entries = list.entries.sort((a, b) => {
+                    const ag = utils.getGame(a.gameId, games);
+                    const bg = utils.getGame(b.gameId, games);
+                    if (!ag || !bg) {
+                    return 0;
+                    }
+                    return (order.localeCompare('asc') == 0) ? (ag.gameName.localeCompare(bg.gameName)) : (bg.gameName.localeCompare(ag.gameName));
+                  });
+            }
+            let bodyList = response.body as GameList;
+            bodyList.entries.forEach(e => { e.date = new Date(e.date) });
+            expect(bodyList).toEqual(list);
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user sorts another users list by "Date", in descending order.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
+        });
+
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
+        });
+
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        then(/^the response should return the list object of id "(.*)" with the entries sorted by the game date in descending order$/,
+        async (listId) => {
+            const lists = routes.getLists();
+            let list = lists.find(l => l.userId == listId);
+            const order = 'desc';
+            const games = routes.getGames();
+            if (list){
+                list.entries = list.entries.sort((a, b) => {
+                    return (order.localeCompare('asc') == 0) ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
+                  });
+            }
+            let bodyList = response.body as GameList;
+            bodyList.entries.forEach(e => { e.date = new Date(e.date) });
+            expect(bodyList).toEqual(list);
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
-        });
-    
-        then('the response should return the list object with the entries sorted by the game date in descending order', () => {
-    
-        });
-    
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
     test('The user tries to sort another users list by "Color", in ascending order.', ({ given, and, when, then }) => {
-        given(/^that the server authenticates the user with id "(.*)"$/, (userId) => {
-    
+        given(/^that the server authenticates the user with id "(.*)"$/,
+        async (userId) => {
+            makeAuthenticatedUser(userId);
         });
     
-        and(/^the server has a user registered with id "(.*)"$/, (userId) => {
-    
+        and(/^the server has a user registered with id "(.*)"$/,
+        async (userId) => {
+            makeUser(userId);
         });
     
-        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/, (userId, listId) => {
-    
+        and(/^the user with id "(.*)" has a list with corresponding id "(.*)"$/,
+        async (userId, listId) => {
+            makeList(userId, listId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the server has a game registered with id "(.*)"$/, (gameId) => {
-    
+        and(/^the server has a game registered with id "(.*)"$/,
+        async (gameId) => {
+            makeGame(gameId);
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/, (listId, entryId, gameId, entryType, reqDate) => {
-    
+        and(/^the list with id "(.*)" has a entry with id "(.*)" corresponding to a game with id "(.*)" and entryType "(.*)" and reqDate "(.*)"$/,
+        async (listId, entryId, gameId, entryType, reqDate) => {
+            makeEntryInList(listId, entryId, gameId, entryType, new Date(reqDate));
         });
     
-        when(/^the user sends a GET to the endpoint "(.*)"$/, (endpoint) => {
-    
+        when(/^the user sends a GET to the endpoint "(.*)"$/,
+        async (endpoint) => {
+            response = await request.get(endpoint);
         });
     
-        then('the response should return an error message', () => {
-    
+        then('the response should return an error message',
+        async () => {
+            expect(response.body.message).not.toBeUndefined();
         });
     
-        and(/^return status code "(.*)"$/, (statusCode) => {
-    
+        and(/^return status code "(.*)"$/,
+        async (statusCode) => {
+            expect(response.status).toBe(parseInt(statusCode));
         });
     });
     
