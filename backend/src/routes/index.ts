@@ -2,8 +2,9 @@ import { Express, Router, Request, Response } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
+import { User, users } from '../database/users';
 import * as utils from './utils';
-
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 const prefix = '/api';
@@ -34,34 +35,25 @@ router.post('/users', (req,res) => {
     return res.status(400).json({ message: 'Last name missing' });
   }
 
-  const users = utils.readUsers();
-  const usersArray = Object.values(users);
-
   //Checking already registered info
   try{
-    if(usersArray.some((users:any) => users.user === user)){
+    if(users.some((users:any) => users.user === user)){
       return res.status(409).json({ message: 'Username arealdy exists' });
-    }else if(usersArray.some((users:any) => users.email === email)){
+    }else if(users.some((users:any) => users.email === email)){
       return res.status(409).json({ message: 'Email arealdy exists' });
     }
   }catch(err){
     return res.status(400).json({Error : 'Could not find registered logs'});
   }
 
-  const newUser ={
-    id: users.length + 1,
-    user,
-    email,
-    password,
-    name,
-    lastName,
-    pronouns,
-    bio
+  let userID = parseInt(uuidv4());
+  while(users.some((users:any) => users.id === userID)){
+    userID = parseInt(uuidv4());
   }
+  const newUser = utils.createUser(userID, user, email, password, name, lastName, pronouns, bio);
 
   try{
     users.push(newUser);
-    utils.writeUsers(users);
   }catch (err){
     return res.status(400).json({ Error : 'File could not be written' });
   }
@@ -72,15 +64,20 @@ router.post('/users', (req,res) => {
 //*Delete User
 router.delete('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
-  const users = utils.readUsers();
 
   if(loggedID != id){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
-  utils.deleteUser(id, users);
+  const userIndex = users.findIndex(user => user.id === id);
+
+  if(userIndex !== -1){
+    users.splice(userIndex,1);
+    return res.status(201).json({ message: 'User was successfully deleted' });
+  }else{
+    return res.status(404).json({ Error : 'User not found' });
+  }
   
-  return res.status(201).json({ message: 'User was successfully deleted' });
 });
 
 //*User Profile
@@ -90,8 +87,7 @@ router.get('/users/:id', (req,res) => {
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
-  const users = utils.readUsers();
-  const requestedUser = utils.getUserByID(id,users);
+  const requestedUser = users.find(user => user.id === id);
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
@@ -106,31 +102,23 @@ router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
 
-  const users = utils.readUsers();
-  const usersArray = Object.values(users);
   const userIndex = users.findIndex((user: any) => user.id === id);
-  const requestedUser = utils.getUserByID(id,users);
+  const requestedUser = users.find(user => user.id === id);
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
   }else if(loggedID != requestedUser.id){
     return res.status(401).json({ Error : 'Unauthorized' });
   }else{
-    if(usersArray.some((users:any) => users.user === requestBody.user)){
+    if(users.some((users:any) => users.user === requestBody.user)){
       return res.status(409).json({ message: 'Username arealdy exists' });
-    }else if(usersArray.some((users:any) => users.email === requestBody.email)){
+    }else if(users.some((users:any) => users.email === requestBody.email)){
       return res.status(409).json({ message: 'Email arealdy exists' });
     }
   }
 
   //EDIT USER
   Object.assign(users[userIndex], requestBody);
-
-  try{
-    utils.writeUsers(users);
-  }catch (err){
-    return res.status(400).json({ Error : 'File could not be written' });
-  }
 
   return res.status(201).json({ message: 'User was successfully modified' });
 });
