@@ -1,12 +1,6 @@
-type User = {
-  id: number;
-  username: string;
-  email: string;
-  followers: number[];
-  following: number[];
-};
+import { User } from "../models/user.model";
 
-const users: User[] = [
+let users: User[] = [
   {
     id: 1,
     username: "Alice",

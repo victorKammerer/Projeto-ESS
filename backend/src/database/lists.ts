@@ -1,23 +1,7 @@
-enum EntryType {
-  PLAYED = 'played',
-  WISHLIST = 'wished',
-  ABANDONED = 'abandoned'
-}
-
-type ListEntry = {
-  entryId: number;
-  gameId: number;
-  entryType: string;
-  date: Date;
-}
-
-type GameList = {
-  userId: number;
-  entries: ListEntry[];
-}
+import { EntryType, ListEntry, GameList } from "../models/list.model";
 
 
-const lists : GameList[] = [
+let lists : GameList[] = [
   {
     userId: 1,
     entries: [
@@ -106,4 +90,4 @@ const lists : GameList[] = [
   
 ];
 
-export {lists, ListEntry, EntryType};
+export default lists

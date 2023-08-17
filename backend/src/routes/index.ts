@@ -2,40 +2,50 @@ import { Express, Router } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
+import { loggedInId } from '../services/list.service';
 
 const router = Router();
 const prefix = '/api';
-const loggedInId : number = 1;
 
 
 // ----------------------- LIST ROUTES ----------------------- //
 // Importing users, games, and lists
 import users from '../database/users';
 import games from '../database/games';
-import {lists, ListEntry, EntryType} from '../database/lists';
+import lists from '../database/lists';
+import { ListEntry, EntryType, GameList } from '../models/list.model';
+import { User } from '../models/user.model';
+import { Game } from '../models/game.model';
+import * as utils from '../services/list.service'
 
-// Helpers 
-function getUser(id : number) {
-  return users.find((user) => user.id === id);
+function setUsers(newUsers : User[]){
+  users.length = 0;
+  users.push(...newUsers);
 }
-function getUsersList(id : number) {
-  return lists.find((list) => list.userId === id);
+function setList(newList : GameList[]){
+  lists.length = 0;
+  lists.push(...newList);
 }
-function getGame(id : number) {
-  return games.find((game) => game.gameId === id);
+function setGames(newGames : Game[]){
+  games.length = 0;
+  games.push(...newGames);
 }
-function isEntryInList(list : any, entryId : number) {
-  return list.entries.find((entry : ListEntry) => entry.entryId === entryId);
+function getGames(){
+  return games;
 }
-function isGameInList(list : any, gameId : number) {
-  return list.entries.find((entry : ListEntry) => entry.gameId === gameId);
+function getUsers(){
+  return users;
 }
+function getLists(){
+  return lists;
+}
+
 
 // GET : List of games for a user
 router.get('/user/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
-  const user = getUser(id);
-  const userLists = getUsersList(id);
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
 
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
@@ -58,9 +68,9 @@ router.post('/user/:id/list', async (req, res) => {
   
   const { gameId, entryType, reqDate } = req.body;
 
-  const user = getUser(id);
-  const game = getGame(gameId);
-  const list = getUsersList(id);
+  const user = utils.getUser(id, users);
+  const game = utils.getGame(gameId, games);
+  const list = utils.getUsersList(id, lists);
 
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
@@ -71,7 +81,7 @@ router.post('/user/:id/list', async (req, res) => {
   if (!list) {
     return res.status(404).json({ message : 'List not found' });
   }
-  if (isGameInList(list, gameId)) {
+  if (utils.isGameInList(list, gameId)) {
     return res.status(409).json({ message : 'Game already exists in list' });
   }
   
@@ -91,8 +101,8 @@ router.post('/user/:id/list', async (req, res) => {
 router.get('/user/:id/list/:entryType', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryType : string = req.params.entryType;
-  const user = getUser(id);
-  const userLists = getUsersList(id);
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
@@ -112,19 +122,19 @@ router.get('/user/:id/list/:entryType', async (req, res) => {
 router.put('/user/:id/list/:entryId', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryId : number = parseInt(req.params.entryId);
-  const user = getUser(id);
+  const user = utils.getUser(id, users);
   const { entryType, reqDate } = req.body;
   if (id !== loggedInId) {
     return res.status(401).json({ message : 'Unauthorized' });
   }
-  const userLists = getUsersList(id);
+  const userLists = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
   if (!userLists) {
     return res.status(404).json({ message : 'List not found' });
   }
-  if (! isEntryInList(userLists, entryId)) {
+  if (! utils.isEntryInList(userLists, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
   if (entryType != EntryType.PLAYED && entryType != EntryType.PLAYED && entryType != EntryType.WISHLIST) {
@@ -140,18 +150,18 @@ router.put('/user/:id/list/:entryId', async (req, res) => {
 router.delete('/user/:id/list/:entryId', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryId : number = parseInt(req.params.entryId);
-  const user = getUser(id);
+  const user = utils.getUser(id, users);
   if (id !== loggedInId) {
     return res.status(401).json({ message : 'Unauthorized' });
   }
-  const userLists = getUsersList(id);
+  const userLists = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
   if (!userLists) {
     return res.status(404).json({ message : 'List not found' });
   }
-  if (! isEntryInList(userLists, entryId)) {
+  if (! utils.isEntryInList(userLists, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
   const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
@@ -163,8 +173,8 @@ router.delete('/user/:id/list/:entryId', async (req, res) => {
 router.get('/user/:id/list/search/:name', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const name : string = req.params.name;
-  const user = getUser(id);
-  const userLists = getUsersList(id);
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
@@ -172,7 +182,7 @@ router.get('/user/:id/list/search/:name', async (req, res) => {
     return res.status(404).json({ message : 'List not found' });
   }
   const filteredList = userLists.entries.filter((entry) => {
-    const game = getGame(entry.gameId);
+    const game = utils.getGame(entry.gameId, games);
     if (!game) {
       return false;
     }
@@ -186,8 +196,8 @@ router.get('/user/:id/list/:criteria/:order', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const criteria : string = req.params.criteria;
   const order : string = req.params.order;
-  const user = getUser(id);
-  const userLists = getUsersList(id);
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
@@ -205,8 +215,8 @@ router.get('/user/:id/list/:criteria/:order', async (req, res) => {
       return (order == 'asc') ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
     }
     if (criteria === 'title') {
-      const ag = getGame(a.gameId);
-      const bg = getGame(b.gameId);
+      const ag = utils.getGame(a.gameId, games);
+      const bg = utils.getGame(b.gameId, games);
       if (!ag || !bg) {
         return 0;
       }
@@ -227,3 +237,4 @@ export default (app: Express) => {
     new TestController(router, di.getService(TestService)).router
   );
 };
+export { getGames, getUsers, getLists, setUsers, setList, setGames };

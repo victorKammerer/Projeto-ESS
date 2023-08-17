@@ -1,9 +1,5 @@
-type Game = {
-  gameId: number;
-  gameName: string;
-}
-
-const games : Game[] = [
+import {Game} from "../models/game.model";
+let games : Game[] = [
   {
     gameId: 1,
     gameName: "League of Legends"
