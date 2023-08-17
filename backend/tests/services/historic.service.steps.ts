@@ -91,7 +91,7 @@ defineFeature(feature, test => {
 
         and(/^The list of posts should contain the post with id: "(.*)" and category: '(.*)'$/,
             (arg0, arg1) => {
-                console.log(response.body[0])
+                //console.log(response.body[0])
                 expect(response.body[0].post_id).toBe(parseInt(arg0));
                 JSON.parse(arg1).forEach((category: string) => {
                     //console.log(category);
