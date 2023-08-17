@@ -12,7 +12,7 @@ type User = {
   blocked: number[];
 }
 
-const users: User[] = [
+let users: User[] = [
   {
     id: 1,
     user: "usuario1",
@@ -24,6 +24,32 @@ const users: User[] = [
     bio: "Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia.",
     followers: [],
     following: [],
+    blocked: []
+  },
+  {
+    id: 2,
+    user: "Bileu",
+    email: "aiwjda@email.com",
+    password: "senha123",
+    name: "Ciclano",
+    lastName: "Silva",
+    pronouns: "ele/dele",
+    bio: "Olá! Sou Ciclano Silva e estou explorando o mundo da tecnologia.",
+    followers: [3],
+    following: [],
+    blocked: []
+  },
+  {
+    id: 3,
+    user: "Balalau",
+    email: "aiaisdj@email.com",
+    password: "senha123",
+    name: "Beltrano",
+    lastName: "Silva",
+    pronouns: "ele/dele",
+    bio: "Olá! Sou Beltrano Silva e estou explorando o mundo da tecnologia.",
+    followers: [3],
+    following: [2],
     blocked: []
   },
   {
@@ -51,6 +77,20 @@ const users: User[] = [
     followers: [],
     following: [],
     blocked: []
+  },
+  {
+    // generate a random person
+    id: 5,
+    user: "Laricell",
+    email: "lari@email.com",
+    password: "senha123",
+    name: "Larissa",
+    lastName: "Silva",
+    pronouns: "ela/dela",
+    bio: "Olá! Sou Larissa Silva e estou explorando o mundo da tecnologia.",
+    followers: [],
+    following: [],
+    blocked: [2]
   }
 ]
 
