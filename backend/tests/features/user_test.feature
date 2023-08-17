@@ -3,7 +3,7 @@ Feature:  User tests
     #?Create scenarios
     Scenario: Creating a new user succesfully
         Given The service has a database containing users
-        And The database does not contain a user "usuario1" 
+        And The database does not contain a user "usuario1"
         When A POST request is made to "/api/users" route with the request body 
             """
             {"user":"usuario1",
@@ -202,7 +202,7 @@ Feature:  User tests
             "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
             """
         And A user with id "2" is logged in
-        When A "GET" request is made to "/api/users/1" route
+        When A GET request is made to "/api/users/1" route
         Then The service should respond with status code "401" with the message "Unauthorized"
 
     Scenario: Getting a non existing user profile
