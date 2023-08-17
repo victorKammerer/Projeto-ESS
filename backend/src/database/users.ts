@@ -1,5 +1,16 @@
-
-import { User } from "../models/user.model";
+type User = {
+  id: number;
+  user: string;
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  pronouns: string;
+  bio: string;
+  followers: number[];
+  following: number[];
+  blocked: number[];
+}
 
 let users: User[] = [
   {
@@ -81,6 +92,6 @@ let users: User[] = [
     following: [],
     blocked: [2]
   }
-];
+]
 
 export default users;
