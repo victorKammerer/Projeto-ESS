@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
-const loggedID = 2;
+let loggedID = 0;
 
 
 // BEGIN OF USER ROUTES //
@@ -17,11 +17,7 @@ const loggedID = 2;
 //*Create User
 router.post('/users', (req,res) => {
   const { user, email, password, name, lastName, pronouns, bio } = req.body;
-
-  //! CREATING AN USER WITH SAME ID WHEN DELETING
-  //! THIS IS DUE TO ID == ARRAY SIZE
-  //! TRY ANOTHER APPROACH FOR CREATING USER IDS
-
+  
   //Checking missing info
   if(!user){
     return res.status(400).json({ message: 'Username missing' });
@@ -64,8 +60,9 @@ router.post('/users', (req,res) => {
 //*Delete User
 router.delete('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
+  loggedID = parseInt(req.query.loggedID as string);
 
-  if(loggedID != id){
+  if(!((loggedID !== 0) || (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
@@ -77,7 +74,6 @@ router.delete('/users/:id', (req,res) => {
   }else{
     return res.status(404).json({ Error : 'User not found' });
   }
-  
 });
 
 //*User Profile
@@ -131,4 +127,3 @@ export default (app: Express) => {
     new TestController(router, di.getService(TestService)).router
   );
 };
-
