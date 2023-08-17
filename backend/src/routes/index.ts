@@ -6,6 +6,9 @@ import users from '../database/users';
 import games from '../database/games';
 import lists from '../database/lists';
 import { loggedInId } from '../services/list.service';
+import users from '../database/users';
+import games from '../database/games';
+import lists from '../database/lists';
 
 const router = Router();
 const prefix = '/api';
