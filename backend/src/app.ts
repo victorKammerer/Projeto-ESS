@@ -14,7 +14,9 @@ app.use(
   cors({
     origin: '*',
   })
-);
+  );
+  
+import posts from './database/posts';
 
 setupRoutes(app);
 
