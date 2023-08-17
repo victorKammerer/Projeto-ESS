@@ -52,3 +52,23 @@ Feature: Followers
     And the request body is '{"id":5}'
     Then the system returns a "200" status and the message "You have unblocked this user!"
     And "2" is removed from the list of blocked of "5"
+
+  Scenario: Returns followers list
+    Given that the system has an existing user with ID "1"
+    And the system has an existing user with ID "2"
+    And the system has an existing user with ID "3"
+    And the list of followers of "1" contains "2"
+    And the list of followers of "1" contains "3"
+    When a GET request is made to "/api/users/1/followers"
+    Then the system returns a "200" status
+    And the response is a list containing "2" and "3"
+
+  Scenario: Returns following list
+    Given that the system has an existing user with ID "1"
+    And the system has an existing user with ID "2"
+    And the system has an existing user with ID "3"
+    And the list of following of "3" contains "2"
+    And the list of following of "3" contains "1"
+    When a GET request is made to "/api/users/3/following"
+    Then the system returns a "200" status
+    And the response is a list containing user "2" and user "1"

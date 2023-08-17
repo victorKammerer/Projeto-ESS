@@ -10,7 +10,7 @@ let users: User[] = [
     lastName: "Silva",
     pronouns: "ele/dele",
     bio: "Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia.",
-    followers: [],
+    followers: [2, 3],
     following: [],
     blocked: []
   },
@@ -24,7 +24,7 @@ let users: User[] = [
     pronouns: "ele/dele",
     bio: "Olá! Sou Ciclano Silva e estou explorando o mundo da tecnologia.",
     followers: [3],
-    following: [],
+    following: [1],
     blocked: []
   },
   {
@@ -37,7 +37,7 @@ let users: User[] = [
     pronouns: "ele/dele",
     bio: "Olá! Sou Beltrano Silva e estou explorando o mundo da tecnologia.",
     followers: [3],
-    following: [2],
+    following: [2, 1],
     blocked: []
   },
   {
