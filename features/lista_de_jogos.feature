@@ -107,6 +107,3 @@ Scenario: Ordenar a lista de jogos de um usuário por critério
     When o usuário "João" seleciona a opção "Ordenar por"
     And o usuário "João" seleciona a opção "Nome"
     Then o usuário "João" visualiza os jogos do usuário "Davi" ordenados por nome
-
-
-
