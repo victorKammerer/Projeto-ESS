@@ -1,20 +1,47 @@
-export type User = {
-  id: number;
-  user: string;
-  email: string;
-  password: string;
-  name: string;
-  lastName: string;
-  pronouns: string;
-  bio: string;
-  followers: number[];
-  following: number[];
-  blocked: number[];
-}
+import { User } from "../models/user.model";
 
-export let users: User[] = [
+let users: User[] = [
+  {
+    id: 1,
+    user: "usuario1",
+    email: "usuario1@example.com",
+    password: "senha123",
+    name: "Fulano",
+    lastName: "Silva",
+    pronouns: "ele/dele",
+    bio: "Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia.",
+    followers: [],
+    following: [],
+    blocked: []
+  },
   {
     id: 2,
+    user: "Bileu",
+    email: "aiwjda@email.com",
+    password: "senha123",
+    name: "Ciclano",
+    lastName: "Silva",
+    pronouns: "ele/dele",
+    bio: "Olá! Sou Ciclano Silva e estou explorando o mundo da tecnologia.",
+    followers: [3],
+    following: [],
+    blocked: []
+  },
+  {
+    id: 3,
+    user: "Balalau",
+    email: "aiaisdj@email.com",
+    password: "senha123",
+    name: "Beltrano",
+    lastName: "Silva",
+    pronouns: "ele/dele",
+    bio: "Olá! Sou Beltrano Silva e estou explorando o mundo da tecnologia.",
+    followers: [3],
+    following: [2],
+    blocked: []
+  },
+  {
+    id: 4,
     user: "Lighthalzen",
     email: "Lighthalzen@gmail.com",
     password: "2173498723191a",
@@ -27,7 +54,7 @@ export let users: User[] = [
     blocked: []
   },
   {
-    id: 3,
+    id: 4,
     user: "Mathbonc",
     email: "Bonc@gmail.com",
     password: "40028922b",
@@ -38,6 +65,20 @@ export let users: User[] = [
     followers: [],
     following: [],
     blocked: []
+  },
+  {
+    // generate a random person
+    id: 5,
+    user: "Laricell",
+    email: "lari@email.com",
+    password: "senha123",
+    name: "Larissa",
+    lastName: "Silva",
+    pronouns: "ela/dela",
+    bio: "Olá! Sou Larissa Silva e estou explorando o mundo da tecnologia.",
+    followers: [],
+    following: [],
+    blocked: [2]
   }
 ]
 
