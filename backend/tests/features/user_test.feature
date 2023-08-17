@@ -90,14 +90,17 @@ Feature:  User tests
     #?Edit scenarios
     Scenario: Editing a user profile
         Given The service has a database containing users
-        And The database contains a user """{"id":"1"
-                                            "user":"usuario1",
-                                            "email":"usuario1@example.com",
-                                            "password":"senha123",
-                                            "name":"Fulano",
-                                            "lastName":"Silva",
-                                            "pronouns":"ele/dele",
-                                            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains a user 
+            """
+            {"id":"1", 
+            "user":"usuario1", 
+            "email":"usuario1@example.com", 
+            "password":"senha123", 
+            "name":"Fulano", 
+            "lastName":"Silva", 
+            "pronouns":"ele/dele", 
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And A user with id "1" is logged in
         When A PUT request is made to "/api/users/1" route with the request body 
             """
@@ -110,14 +113,17 @@ Feature:  User tests
 
     Scenario: Editing a not logged in user profile
         Given The service has a database containing users
-        And The database contains the user """{"id":"1"
-                                                "user":"usuario1",
-                                                "email":"usuario1@example.com",
-                                                "password":"senha123",
-                                                "name":"Fulano",
-                                                "lastName":"Silva",
-                                                "pronouns":"ele/dele",
-                                                "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains the user 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And A user with id "2" is logged in
         When A PUT request is made to "/api/users/1" route with the request body
             """
@@ -130,14 +136,17 @@ Feature:  User tests
 
     Scenario: Editing a non existing user profile
         Given The service has a database containing users
-        And The database contains the users """{"id":"1"
-                                                "user":"usuario1",
-                                                "email":"usuario1@example.com",
-                                                "password":"senha123",
-                                                "name":"Fulano",
-                                                "lastName":"Silva",
-                                                "pronouns":"ele/dele",
-                                                "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains the users 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And An admin with id "0" is logged in
         When A PUT request is made to "/api/users/3" route with the request body
             """
@@ -153,50 +162,62 @@ Feature:  User tests
     #?Profile scenarios
     Scenario: Getting user profile
         Given The service has a database containing users
-        And The database contains a user """{"id":"1"
-                                            "user":"usuario1",
-                                            "email":"usuario1@example.com",
-                                            "password":"senha123",
-                                            "name":"Fulano",
-                                            "lastName":"Silva",
-                                            "pronouns":"ele/dele",
-                                            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains a user 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And A user with id "1" is logged in
         When A GET request is made to "/api/users/1" route
         Then The service should respond with status code "200"
-        And The service returns the object """{"id":"1"
-                                            "user":"usuario1",
-                                            "email":"usuario1@example.com",
-                                            "password":"senha123",
-                                            "name":"Fulano",
-                                            "lastName":"Silva",
-                                            "pronouns":"ele/dele",
-                                            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The service returns the object 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
 
     Scenario: Getting a not logged in user profile
         Given The service has a database containing users
-        And The database contains the users """{"id":"1"
-                                                "user":"usuario1",
-                                                "email":"usuario1@example.com",
-                                                "password":"senha123",
-                                                "name":"Fulano",
-                                                "lastName":"Silva",
-                                                "pronouns":"ele/dele",
-                                                "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains the users 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And A user with id "2" is logged in
         When A "GET" request is made to "/api/users/1" route
         Then The service should respond with status code "401" with the message "Unauthorized"
 
     Scenario: Getting a non existing user profile
         Given The service has a database containing users
-        And The database contains a user """{"id":"1"
-                                            "user":"usuario1",
-                                            "email":"usuario1@example.com",
-                                            "password":"senha123",
-                                            "name":"Fulano",
-                                            "lastName":"Silva",
-                                            "pronouns":"ele/dele",
-                                            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}"""
+        And The database contains a user 
+            """
+            {"id":"1",
+            "user":"usuario1",
+            "email":"usuario1@example.com",
+            "password":"senha123",
+            "name":"Fulano",
+            "lastName":"Silva",
+            "pronouns":"ele/dele",
+            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
+            """
         And An admin with id "0" is logged in 
         When A GET request is made to "/api/users/3" route
         Then The service should respond with status code "404" with the message "User not found"
