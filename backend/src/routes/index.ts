@@ -1,10 +1,538 @@
-import { Express, Router } from 'express';
+import { Express, Router, Request, Response, NextFunction } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
+import {createUser} from './utils';
+import { v4 as uuidv4 } from 'uuid';
+
+import { loggedInId } from '../services/list.service';
+import users from '../database/users';
+import games from '../database/games';
+import lists from '../database/lists';
 
 const router = Router();
 const prefix = '/api';
+const fs = require('fs'); //Module to read files
+let loggedID = 0;
+
+
+// BEGIN OF USER ROUTES //
+
+//*Create User
+router.post('/users', (req,res) => {
+  const { user, email, password, name, lastName, pronouns, bio } = req.body;
+  
+  //Checking missing info
+  if(!user){
+    return res.status(400).json({ message: 'Username missing' });
+  }else if(!email){
+    return res.status(400).json({ message: 'Email missing' });
+  }else if(!password){
+    return res.status(400).json({ message: 'Password missing' });
+  }else if(!name){
+    return res.status(400).json({ message: 'Name missing' });
+  }else if(!lastName){
+    return res.status(400).json({ message: 'Last name missing' });
+  }
+
+  //Checking already registered info
+  try{
+    if(users.some((users:any) => users.user === user)){
+      return res.status(409).json({ message: 'Username arealdy exists' });
+    }else if(users.some((users:any) => users.email === email)){
+      return res.status(409).json({ message: 'Email arealdy exists' });
+    }
+  }catch(err){
+    return res.status(400).json({Error : 'Could not find registered logs'});
+  }
+
+  let userID = parseInt(uuidv4());
+  while(users.some((users:any) => users.id === userID)){
+    userID = parseInt(uuidv4());
+  }
+  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
+
+  try{
+    users.push(newUser);
+  }catch (err){
+    return res.status(400).json({ Error : 'File could not be written' });
+  }
+
+  return res.status(201).json({ message: 'User was successfully registered' });
+});
+
+//*Delete User
+router.delete('/users/:id', (req,res) => {
+  const id = parseInt(req.params.id);
+  loggedID = parseInt(req.query.loggedID as string);
+
+  if(!((loggedID !== 0) || (loggedID !== id))){
+    return res.status(401).json({ Error : 'Unauthorized' });
+  }
+
+  const userIndex = users.findIndex(user => user.id === id);
+
+  if(userIndex !== -1){
+    users.splice(userIndex,1);
+    return res.status(201).json({ message: 'User was successfully deleted' });
+  }else{
+    return res.status(404).json({ Error : 'User not found' });
+  }
+});
+
+//*User Profile
+router.get('/users/:id', (req,res) => {
+  const id = parseInt(req.params.id);
+  if(loggedID !== id){
+    return res.status(401).json({ Error : 'Unauthorized' });
+  }
+
+  const requestedUser = users.find(user => user.id === id);
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User not found' });
+  }
+
+  //PRINT USER PROFILE INFO
+  res.status(200).json(requestedUser);
+});
+
+//Edit user profile
+router.put('/users/:id', (req,res) => {
+  const requestBody = req.body;
+  const id = parseInt(req.params.id);
+
+  const userIndex = users.findIndex((user: any) => user.id === id);
+  const requestedUser = users.find(user => user.id === id);
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User not found' });
+  }else if(loggedID != requestedUser.id){
+    return res.status(401).json({ Error : 'Unauthorized' });
+  }else{
+    if(users.some((users:any) => users.user === requestBody.user)){
+      return res.status(409).json({ message: 'Username arealdy exists' });
+    }else if(users.some((users:any) => users.email === requestBody.email)){
+      return res.status(409).json({ message: 'Email arealdy exists' });
+    }
+  }
+
+  //EDIT USER
+  Object.assign(users[userIndex], requestBody);
+
+  return res.status(201).json({ message: 'User was successfully modified' });
+});
+
+// END OF USER ROUTES //
+
+// -------------------------------- FOLLOWERS ROUTES --------------------------------
+// Route to get users
+router.get('/users', (req: Request, res: Response) => {
+  res.json(users);
+});
+
+// List followers for a user
+router.get('/users/:id/followers', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(user => user.id === id);
+
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const followers = user.followers.map(followerId => {
+    const follower = users.find(user => user.id === followerId);
+    return follower;
+  });
+
+  res.json(followers);
+});
+
+// List following for a user
+router.get('/users/:id/following', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const user = users.find(user => user.id === id);
+
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const following = user.following.map(followingId => {
+      const followingUser = users.find(user => user.id === followingId);
+      return followingUser;
+    });
+
+    res.json(following);
+});
+
+// Unfollow a user
+router.post('/users/:id/unfollow', (req: Request, res: Response) => {
+  const unfollowId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+
+  const user = users.find(user => user.id === id);
+  const unfollowedUser = users.find(user => user.id === unfollowId);
+
+  if(!user?.following.includes(unfollowId)) {
+    res.status(400).json({ message: 'You are not following this user' });
+    return;
+  }
+
+  if (!user || !unfollowedUser) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user.following = user.following.filter(userId => userId !== unfollowId);
+  unfollowedUser.followers = unfollowedUser.followers.filter(userId => userId !== id);
+
+  res.json({ message: 'You are no longer following this user!'});
+});
+
+// Follow a user
+router.post('/users/:id/follow', (req: Request, res: Response) => {
+  const followId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+  const user = users.find(user => user.id === id);
+  const follower = users.find(user => user.id === followId);
+
+  if (user?.following.includes(followId)) {
+    res.status(400).json({ message: 'You are already following this user' });
+    return;
+  }
+
+  if (!user || !follower) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user.following.push(followId);
+  follower.followers.push(id);
+  res.json({ message: 'You are now following this user!'});
+});
+1
+// Blocks a user
+router.post('/users/:id/block', (req: Request, res: Response) => {
+  const blockId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+  const user = users.find(user => user.id === id);
+  const blockedUser = users.find(user => user.id === blockId);
+
+  if (user?.blocked.includes(blockId)) {
+    res.status(400).json({ message: 'You have already blocked this user' });
+    return;
+  }
+
+  if (!user || !blockedUser) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user.blocked.push(blockId);
+  res.json({ message: 'You have blocked this user!'});
+});
+
+// Unblocks a user
+router.post('/users/:id/unblock', (req: Request, res: Response) => {
+  const unblockId = parseInt(req.params.id);
+  const id = parseInt(req.body.id);
+  const user = users.find(user => user.id === id);
+  const unblockedUser = users.find(user => user.id === unblockId);
+
+  if(!user?.blocked.includes(unblockId)) {
+    res.status(400).json({ message: 'You have not blocked this user' });
+    return;
+  }
+
+  if (!user || !unblockedUser) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user.blocked = user.blocked.filter(userId => userId !== unblockId);
+  res.json({ message: 'You have unblocked this user!'});
+});
+
+// List blocked users
+router.get('/users/:id/blocked/count', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(user => user.id === id);
+
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const blockedUsersCount = user.blocked.length;
+
+  res.json({ blockedUsersCount });
+});
+
+// Counter for followers
+router.get('/users/:id/followers/count', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(user => user.id === id);
+
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const followersCount = user.followers.length;
+
+  res.json({ followersCount });
+});
+
+// Counter for following
+router.get('/users/:id/following/count', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(user => user.id === id);
+
+  if(!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const followingCount = user.following.length;
+
+  res.json({ followingCount });
+});
+
+// END OF FOLLOWERS ROUTES
+
+
+// ----------------------- LIST ROUTES ----------------------- //
+// Importing users, games, and lists
+import { ListEntry, EntryType, GameList } from '../models/list.model';
+import { User } from '../models/user.model';
+import { Game } from '../models/game.model';
+import * as utils from '../services/list.service'
+
+function setUsers(newUsers : User[]){
+  users.length = 0;
+  users.push(...newUsers);
+}
+function setList(newList : GameList[]){
+  lists.length = 0;
+  lists.push(...newList);
+}
+function setGames(newGames : Game[]){
+  games.length = 0;
+  games.push(...newGames);
+}
+function getGames(){
+  return games;
+}
+function getUsers(){
+  return users;
+}
+function getLists(){
+  return lists;
+}
+
+export {setUsers, setList, setGames, getGames, getUsers, getLists};
+// GET : List of games for a user
+router.get('/users/:id/list', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
+
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if(!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  
+  return res.status(200).json(userLists);
+
+});
+
+
+// POST : Add a game to a user's list
+router.post('/users/:id/list', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  if(id !== loggedInId) {
+    return res.status(401).json({ message : 'Unauthorized' });
+  }
+  
+  const { gameId, entryType, reqDate } = req.body;
+
+  const user = utils.getUser(id, users);
+  const game = utils.getGame(gameId, games);
+  const list = utils.getUsersList(id, lists);
+
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (!game) {
+    return res.status(404).json({ message : 'Game not found' });
+  }
+  if (!list) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  if (utils.isGameInList(list, gameId)) {
+    return res.status(409).json({ message : 'Game already exists in list' });
+  }
+  
+  const lastEntryId = list.entries.length > 0 ? list.entries[list.entries.length - 1].entryId : 0;
+  
+  const nextEntry = {
+    entryId : lastEntryId + 1,
+    gameId,
+    entryType,
+    date : new Date(reqDate)
+  };
+  list.entries.push(nextEntry);
+  return res.status(201).json(list);
+});
+  
+// GET: Games of a certain entryType on a user's list
+router.get('/users/:id/list/:entryType', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const entryType : string = req.params.entryType;
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
+    return res.status(404).json({ message : 'Invalid entry type: ' + entryType });
+  }
+  if (!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+
+  const filteredEntries = userLists.entries.filter((entry) => entry.entryType === entryType);
+  const filteredList = {
+    userId : userLists.userId,
+    entries : filteredEntries
+  };
+  return res.status(200).json(filteredList);
+
+});
+
+// PUT : Edit a game on a user's list
+router.put('/users/:id/list/:entryId', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const entryId : number = parseInt(req.params.entryId);
+  const user = utils.getUser(id, users);
+  const { entryType, reqDate } = req.body;
+  if (id !== loggedInId) {
+    return res.status(401).json({ message : 'Unauthorized' });
+  }
+  const userLists = utils.getUsersList(id, lists);
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  if (! utils.isEntryInList(userLists, entryId)) {
+    return res.status(404).json({ message : 'Entry not found' });
+  }
+  if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
+    return res.status(400).json({ message : 'Invalid entry type' });
+  }
+  const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
+  userLists.entries[entryIndex].entryType = entryType;
+  userLists.entries[entryIndex].date = new Date(reqDate);
+  return res.status(200).json(userLists.entries.find((entry) => entry.entryId === entryId));
+});
+
+// DELETE : Remove a game from a user's list
+router.delete('/users/:id/list/:entryId', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const entryId : number = parseInt(req.params.entryId);
+  const user = utils.getUser(id, users);
+  if (id !== loggedInId) {
+    return res.status(401).json({ message : 'Unauthorized' });
+  }
+  const userLists = utils.getUsersList(id, lists);
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  if (! utils.isEntryInList(userLists, entryId)) {
+    return res.status(404).json({ message : 'Entry not found' });
+  }
+  const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
+  userLists.entries.splice(entryIndex, 1);
+  return res.status(200).json({ message : 'Entry deleted' });
+});
+
+// GET: Search a name in a user's list
+router.get('/users/:id/list/search/:name', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const name : string = req.params.name;
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  const filteredEntries = userLists.entries.filter((entry) => {
+    const game = utils.getGame(entry.gameId, games);
+    if (!game) {
+      return false;
+    }
+    return game.gameName.replace(/\s+/g, "").toLowerCase().includes(name.toLowerCase());
+  });
+  const filteredList = {
+    userId : userLists.userId,
+    entries : filteredEntries
+  };
+  return res.status(200).json(filteredList);
+});
+
+// GET: List ordered by criteria
+router.get('/users/:id/list/:criteria/:order', async (req, res) => {
+  const id : number = parseInt(req.params.id);
+  const criteria : string = req.params.criteria;
+  const order : string = req.params.order;
+  const user = utils.getUser(id, users);
+  const userLists = utils.getUsersList(id, lists);
+  if (!user) {
+    return res.status(404).json({ message : 'User not found' });
+  }
+  if (!userLists) {
+    return res.status(404).json({ message : 'List not found' });
+  }
+  if (criteria !== 'date' && criteria !== 'title') {
+    return res.status(400).json({ message : 'Invalid criteria' });
+  }
+  if (order !== 'asc' && order !== 'desc') {
+    return res.status(400).json({ message : 'Invalid order' });
+  }
+  const orderedEntries = userLists.entries.sort((a, b) => {
+    if (criteria === 'date') {
+      return (order.localeCompare('asc') == 0) ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
+    }
+    if (criteria === 'title') {
+      const ag = utils.getGame(a.gameId, games);
+      const bg = utils.getGame(b.gameId, games);
+      if (!ag || !bg) {
+        return 0;
+      }
+      return (order.localeCompare('asc') == 0) ? (ag.gameName.localeCompare(bg.gameName)) : (bg.gameName.localeCompare(ag.gameName));
+    }
+    return 0;
+  });
+  const orderedList = {
+    userId : userLists.userId,
+    entries : orderedEntries
+  };
+  return res.status(200).json(orderedList);
+});
+
+
+// ----------------------- END LIST ROUTES ------------------- //
 
 export default (app: Express) => {
   app.use(
