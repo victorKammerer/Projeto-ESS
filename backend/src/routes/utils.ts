@@ -1,4 +1,4 @@
-import { User } from '../database/users';
+import { User } from "../models/user.model";
 
 export function createUser(
     id: number,

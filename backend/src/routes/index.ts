@@ -2,8 +2,7 @@ import { Express, Router, Request, Response, NextFunction } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
-import { User, users } from '../database/users';
-import * as utils from './utils';
+import {createUser} from './utils';
 import { v4 as uuidv4 } from 'uuid';
 
 import { loggedInId } from '../services/list.service';
@@ -51,7 +50,7 @@ router.post('/users', (req,res) => {
   while(users.some((users:any) => users.id === userID)){
     userID = parseInt(uuidv4());
   }
-  const newUser = utils.createUser(userID, user, email, password, name, lastName, pronouns, bio);
+  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
 
   try{
     users.push(newUser);
