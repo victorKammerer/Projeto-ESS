@@ -90,10 +90,6 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
     return;
   }
 
-  let following = users.find(user => user.id === followId);
-  let followingUsername = following ? following.username : null;
-
-
   user.following.push(followId);
   follower.followers.push(id);
   res.json({ message: 'You are now following this user!'});
@@ -116,9 +112,6 @@ router.post('/users/:id/block', (req: Request, res: Response) => {
     return;
   }
 
-  let blocked = users.find(user => user.id === blockId);
-  let blockedUsername = blocked ? blocked.username : null;
-
   user.blocked.push(blockId);
   res.json({ message: 'You have blocked this user!'});
 });
@@ -139,9 +132,6 @@ router.post('/users/:id/unblock', (req: Request, res: Response) => {
     res.status(404).json({ message: 'User not found' });
     return;
   }
-
-  let unblocked = users.find(user => user.id === unblockId);
-  let unblockedUsername = unblocked ? unblocked.username : null;
 
   user.blocked = user.blocked.filter(userId => userId !== unblockId);
   res.json({ message: 'You have unblocked this user!'});

@@ -2,8 +2,6 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 import supertest from 'supertest';
 import app from '../../src/app';
 import users from '../../src/database/users';
-import exp from 'constants';
-import { parse } from 'path';
 
 const feature = loadFeature('./tests/features/followers_service.feature');
 const request = supertest(app);
