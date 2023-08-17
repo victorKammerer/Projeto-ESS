@@ -24,7 +24,7 @@ Scenario: The user adds a game to its own list.
     And the server has a game registered with id "1" 
     And the user with id "1" has a list with corresponding id "1"
     And the list with id "1" has a single entry with id "1" that corresponds to a game with id "1" and entryType "abandoned" and reqDate "2021-05-04"
-    When the user sends a POST to the endpoint "/api/user/1/list" with the body elements gameId = "1", entryType = "played" and reqDate = "2021-05-04"
+    When the user sends a POST to the endpoint "/api/user/1/list" with the body elements gameId = "2", entryType = "played" and reqDate = "2021-05-04"
     Then the response should return the list object with the new entry with id "1"
     And return status code "201"
 
