@@ -26,7 +26,7 @@ Feature: Historico de posts
     And The database contains a post with id: "4", user_id: "1" 
     When A "GET" request is made to "/api/users/1/historic" route
     Then The service should respond with a list of post of the user with id: "1"
-    And The list of posts should contain the post with id: "3", "2", "4" and "1+"
+    And The list of posts should contain the post with id: "3", "2", "4" and "1"
     And The service should respond with status code "200"
 
   Scenario: Get all posts of the user that does not exist
