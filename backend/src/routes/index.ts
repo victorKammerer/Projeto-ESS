@@ -106,14 +106,18 @@ router.get('/user/:id/list/:entryType', async (req, res) => {
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (entryType != EntryType.PLAYED && entryType != EntryType.PLAYED && entryType != EntryType.WISHLIST) {
-    return res.status(404).json({ message : 'Invalid entry type' });
+  if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
+    return res.status(404).json({ message : 'Invalid entry type: ' + entryType });
   }
   if (!userLists) {
     return res.status(404).json({ message : 'List not found' });
   }
 
-  const filteredList = userLists.entries.filter((entry) => entry.entryType === entryType);
+  const filteredEntries = userLists.entries.filter((entry) => entry.entryType === entryType);
+  const filteredList = {
+    userId : userLists.userId,
+    entries : filteredEntries
+  };
   return res.status(200).json(filteredList);
 
 });
@@ -137,13 +141,13 @@ router.put('/user/:id/list/:entryId', async (req, res) => {
   if (! utils.isEntryInList(userLists, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
-  if (entryType != EntryType.PLAYED && entryType != EntryType.PLAYED && entryType != EntryType.WISHLIST) {
+  if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
     return res.status(400).json({ message : 'Invalid entry type' });
   }
   const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
   userLists.entries[entryIndex].entryType = entryType;
   userLists.entries[entryIndex].date = new Date(reqDate);
-  return res.status(204).json(userLists.entries[entryIndex]);
+  return res.status(200).json(userLists.entries.find((entry) => entry.entryId === entryId));
 });
 
 // DELETE : Remove a game from a user's list
@@ -166,7 +170,7 @@ router.delete('/user/:id/list/:entryId', async (req, res) => {
   }
   const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
   userLists.entries.splice(entryIndex, 1);
-  return res.status(204).json({ message : 'Entry deleted' });
+  return res.status(200).json({ message : 'Entry deleted' });
 });
 
 // GET: Search a name in a user's list
@@ -181,13 +185,17 @@ router.get('/user/:id/list/search/:name', async (req, res) => {
   if (!userLists) {
     return res.status(404).json({ message : 'List not found' });
   }
-  const filteredList = userLists.entries.filter((entry) => {
+  const filteredEntries = userLists.entries.filter((entry) => {
     const game = utils.getGame(entry.gameId, games);
     if (!game) {
       return false;
     }
     return game.gameName.replace(/\s+/g, "").toLowerCase().includes(name.toLowerCase());
   });
+  const filteredList = {
+    userId : userLists.userId,
+    entries : filteredEntries
+  };
   return res.status(200).json(filteredList);
 });
 
@@ -210,9 +218,9 @@ router.get('/user/:id/list/:criteria/:order', async (req, res) => {
   if (order !== 'asc' && order !== 'desc') {
     return res.status(400).json({ message : 'Invalid order' });
   }
-  const orderedList = userLists.entries.sort((a, b) => {
+  const orderedEntries = userLists.entries.sort((a, b) => {
     if (criteria === 'date') {
-      return (order == 'asc') ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
+      return (order.localeCompare('asc') == 0) ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
     }
     if (criteria === 'title') {
       const ag = utils.getGame(a.gameId, games);
@@ -220,10 +228,14 @@ router.get('/user/:id/list/:criteria/:order', async (req, res) => {
       if (!ag || !bg) {
         return 0;
       }
-      return (order == 'asc') ? (ag.gameName.localeCompare(bg.gameName)) : (bg.gameName.localeCompare(ag.gameName));
+      return (order.localeCompare('asc') == 0) ? (ag.gameName.localeCompare(bg.gameName)) : (bg.gameName.localeCompare(ag.gameName));
     }
     return 0;
   });
+  const orderedList = {
+    userId : userLists.userId,
+    entries : orderedEntries
+  };
   return res.status(200).json(orderedList);
 });
 
