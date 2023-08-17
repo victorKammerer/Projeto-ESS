@@ -1,15 +1,4 @@
-type Post = {
-    user_id: number;
-    post_id: number;
-    status: string;
-    date: string;
-    category: string[];
-    game: string;
-    rate: number;
-    title: string;
-    description: string;
-    comments: number;
-}
+import { Post } from "../models/post.model";
 
 let posts: Post[] = [
     {
@@ -17,7 +6,7 @@ let posts: Post[] = [
         post_id: 1,
         status: "active",
         date: "2021-01-01",
-        category: ["Action", "Adventure"],
+        category: ["Adventure"],
         game: "Hollow Knight",
         rate: 5,
         title: "Primeiro Post no forum pessoal!! Hollow Knight",
@@ -63,7 +52,3 @@ let posts: Post[] = [
 ];
 
 export default posts;
-
-export const getPosts = (): Post[] => {
-    return posts;
-}
