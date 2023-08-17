@@ -13,12 +13,14 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
 
             const user = users.find(user => user.id === userid);
@@ -26,6 +28,7 @@ defineFeature(feature, test => {
         });
 
         and(/^the list of following of the "(\d+)" does not have an user with ID "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is not already following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -34,6 +37,7 @@ defineFeature(feature, test => {
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Make the request
             endpoint = endpoint_;
         });
 
@@ -44,11 +48,13 @@ defineFeature(feature, test => {
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
         and(/^"(\d+)" is added to the list of followers of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is now following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -57,6 +63,7 @@ defineFeature(feature, test => {
         });
 
         and(/^"(\d+)" is added to the list of following of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is now following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -69,12 +76,14 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
 
             const user = users.find(user => user.id === userid);
@@ -82,6 +91,7 @@ defineFeature(feature, test => {
         });
 
         and(/^the list of following of the "(\d+)" has an user with ID "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -90,21 +100,25 @@ defineFeature(feature, test => {
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Save the endpoint
             endpoint = endpoint_;
         });
 
         and(/^the request body is '(.*)'$/, async (body) => {
+            // Make the request
             let body_json = JSON.parse(body);
 
             followResponse = await request.post(`${endpoint}`).send(body_json);
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
         and(/^"(\d+)" is removed from the list of followers of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is no longer following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -113,6 +127,7 @@ defineFeature(feature, test => {
         });
 
         and(/^"(\d+)" is removed from the list of following of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is no longer following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -126,28 +141,33 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system does not have an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user does not exist
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).toBeUndefined();
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Save the endpoint
             endpoint = endpoint_;
         });
 
         and(/^the request body is '(.*)'$/, async (body) => {
+            // Make the request
             let body_json = JSON.parse(body);
 
             followResponse = await request.post(`${endpoint}`).send(body_json);
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
@@ -159,12 +179,14 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
 
             const user = users.find(user => user.id === userid);
@@ -172,6 +194,7 @@ defineFeature(feature, test => {
         });
 
         and(/^the list of blocked of the "(\d+)" does not have an user with ID "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is not already blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -180,21 +203,25 @@ defineFeature(feature, test => {
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Save the endpoint
             endpoint = endpoint_;
         });
 
         and(/^the request body is '(.*)'$/, async (body) => {
+            // Make the request
             let body_json = JSON.parse(body);
 
             followResponse = await request.post(`${endpoint}`).send(body_json);
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
         and(/^"(\d+)" is added to the list of blocked of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is now blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -207,12 +234,14 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
 
             const user = users.find(user => user.id === userid);
@@ -220,6 +249,7 @@ defineFeature(feature, test => {
         });
 
         and(/^the list of blocked of the "(\d+)" has an user with ID "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -228,21 +258,25 @@ defineFeature(feature, test => {
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Save the endpoint
             endpoint = endpoint_;
         });
 
         and(/^the request body is '(.*)'$/, async (body) => {
+            // Make the request
             let body_json = JSON.parse(body);
 
             followResponse = await request.post(`${endpoint}`).send(body_json);
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
 
         and(/^"(\d+)" is removed from the list of blocked of "(\d+)"$/, (userid1, userid2) => {
+            // Verify that the user is no longer blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
@@ -255,28 +289,33 @@ defineFeature(feature, test => {
         let endpoint : string;
 
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user exists
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system does not have an existing user with ID "(\d+)"$/, (userid) => {
+            // Verify that the user does not exist
             userid = parseInt(userid);
             const user = users.find(user => user.id === userid);
             expect(user).toBeUndefined();
         });
 
         when(/^a POST request is made to "(.*)"/, async (endpoint_) => {
+            // Save the endpoint
             endpoint = endpoint_;
         });
 
         and(/^the request body is '(.*)'$/, async (body) => {
+            // Make the request
             let body_json = JSON.parse(body);
 
             followResponse = await request.post(`${endpoint}`).send(body_json);
         });
 
         then(/^the system returns a "(\d+)" status and the message "(.*)"$/, (statusCode, message) => {
+            // Verify that the response is correct
             expect(followResponse.status).toEqual(parseInt(statusCode));
             expect(followResponse.body.message).toEqual(message);
         });
@@ -286,6 +325,7 @@ defineFeature(feature, test => {
 });
 
 test('Get the number of followers of a user', async() => {
+    // Unit test for the getFollowersCount function
     let userid = 2;
     let endpoint = "/api/users/" + String(userid) + "/followers/count";
     console.log(endpoint);
