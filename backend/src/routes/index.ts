@@ -94,7 +94,7 @@ router.post('/user/:id/list', async (req, res) => {
     date : new Date(reqDate)
   };
   list.entries.push(nextEntry);
-  return res.status(201).json(nextEntry);
+  return res.status(201).json(list);
 });
   
 // GET: Games of a certain entryType on a user's list
