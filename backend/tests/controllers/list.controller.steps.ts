@@ -567,7 +567,7 @@ defineFeature(feature, (test) => {
             response = await request.delete(endpoint);
         });
 
-        then('the response should return a sucess message', () => {
+        then('the response should return a success message', () => {
             expect(response.body.message).not.toBeUndefined();
         });
 
