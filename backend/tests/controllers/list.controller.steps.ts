@@ -919,84 +919,86 @@ getUser, getUsersList, getGame,
 isEntryInList, isGameInList
 
 */
-test('Set Authenticated User', () => {
-    const newUserId = 4;
-    makeAuthenticatedUser(newUserId.toString());
-    expect(utils.getAuthenticatedUserID()).toBe(newUserId);
-});
-test('Get Authenticated User', () => {
-    expect(utils.getAuthenticatedUserID()).toBe(utils.loggedInId);
-});
-test('Get User', () => {
-    const userId = 1;
-    const users = routes.getUsers();
-    const user = utils.getUser(userId, users);
-    expect(user).toEqual(routes.getUsers().find(u => u.id == userId));
-});
-test('Get Users List', () => {
-    const userId = 1;
-    const lists = routes.getLists();
-    const list = utils.getUsersList(userId, lists);
-    expect(list).toEqual(routes.getLists().find(l => l.userId == userId));
-});
-test('Get Game', () => {
-    const gameId = 1;
-    makeGame(gameId.toString());
-    const games = routes.getGames();
-    const game = utils.getGame(gameId, games);
-    expect(game).toEqual(routes.getGames().find(g => g.gameId == gameId));
-});
-test('Add User', () => {
-    makeUser("4");
-    const users = routes.getUsers();
-    const user = users[users.length - 1];
-    expect(user).toEqual(routes.getUsers().find(u => u.id == user.id));
-});
-test('Add List', () => {
-    makeUser("4");
-    makeList("4", "4");
-    const lists = routes.getLists();
-    const list = lists[lists.length - 1];
-    expect(lists[lists.length - 1]).toEqual(list);
-});
-test('Add Game', () => {
-    makeGame("4");
-    const games = routes.getGames();
-    const game = games[games.length - 1];
-    expect(games[games.length - 1]).toEqual(game);
-});
-test('Add Entry', () => {
-    makeUser("4");
-    makeList("4", "4");
-    makeEntryInList("4", "4", "4", "Wishlisted", new Date());
-    const lists = routes.getLists();
-    const list = lists.find(l => l.userId == 4);
-    if (!list){
-        expect(true).toBe(false);
-        return;
-    }
-    const entry = list?.entries.find(e => e.entryId == 4);
-    expect(utils.isEntryInList(list, 4)).toEqual(entry);
-});
-test('Is Entry In List', () => {
-    const listId = 1;
-    const entryId = 1;
-    const lists = routes.getLists();
-    const list = lists.find(l => l.userId == listId);
-    if (!list){
-        return;
-    }
-    const entry = list?.entries.find(e => e.entryId == entryId);
-    expect(utils.isEntryInList(list, entryId)).toEqual(entry);
-});
-test('Is Game In List', () => {
-    const listId = 1;
-    const gameId = 1;
-    const lists = routes.getLists();
-    const list = lists.find(l => l.userId == listId);
-    if (!list){
-        return;
-    }
-    const entry = list?.entries.find(e => e.gameId == gameId);
-    expect(utils.isGameInList(list, gameId)).toEqual(entry);
+describe("Testes Unitários", () => {
+    test('Set Authenticated User', () => {
+        const newUserId = 4;
+        makeAuthenticatedUser(newUserId.toString());
+        expect(utils.getAuthenticatedUserID()).toBe(newUserId);
+    });
+    test('Get Authenticated User', () => {
+        expect(utils.getAuthenticatedUserID()).toBe(utils.loggedInId);
+    });
+    test('Get User', () => {
+        const userId = 1;
+        const users = routes.getUsers();
+        const user = utils.getUser(userId, users);
+        expect(user).toEqual(routes.getUsers().find(u => u.id == userId));
+    });
+    test('Get Users List', () => {
+        const userId = 1;
+        const lists = routes.getLists();
+        const list = utils.getUsersList(userId, lists);
+        expect(list).toEqual(routes.getLists().find(l => l.userId == userId));
+    });
+    test('Get Game', () => {
+        const gameId = 1;
+        makeGame(gameId.toString());
+        const games = routes.getGames();
+        const game = utils.getGame(gameId, games);
+        expect(game).toEqual(routes.getGames().find(g => g.gameId == gameId));
+    });
+    test('Add User', () => {
+        makeUser("4");
+        const users = routes.getUsers();
+        const user = users[users.length - 1];
+        expect(user).toEqual(routes.getUsers().find(u => u.id == user.id));
+    });
+    test('Add List', () => {
+        makeUser("4");
+        makeList("4", "4");
+        const lists = routes.getLists();
+        const list = lists[lists.length - 1];
+        expect(lists[lists.length - 1]).toEqual(list);
+    });
+    test('Add Game', () => {
+        makeGame("4");
+        const games = routes.getGames();
+        const game = games[games.length - 1];
+        expect(games[games.length - 1]).toEqual(game);
+    });
+    test('Add Entry', () => {
+        makeUser("4");
+        makeList("4", "4");
+        makeEntryInList("4", "4", "4", "Wishlisted", new Date());
+        const lists = routes.getLists();
+        const list = lists.find(l => l.userId == 4);
+        if (!list){
+            expect(true).toBe(false);
+            return;
+        }
+        const entry = list?.entries.find(e => e.entryId == 4);
+        expect(utils.isEntryInList(list, 4)).toEqual(entry);
+    });
+    test('Is Entry In List', () => {
+        const listId = 1;
+        const entryId = 1;
+        const lists = routes.getLists();
+        const list = lists.find(l => l.userId == listId);
+        if (!list){
+            return;
+        }
+        const entry = list?.entries.find(e => e.entryId == entryId);
+        expect(utils.isEntryInList(list, entryId)).toEqual(entry);
+    });
+    test('Is Game In List', () => {
+        const listId = 1;
+        const gameId = 1;
+        const lists = routes.getLists();
+        const list = lists.find(l => l.userId == listId);
+        if (!list){
+            return;
+        }
+        const entry = list?.entries.find(e => e.gameId == gameId);
+        expect(utils.isGameInList(list, gameId)).toEqual(entry);
+    });
 });
