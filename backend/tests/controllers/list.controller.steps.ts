@@ -916,7 +916,6 @@ defineFeature(feature, (test) => {
 /*
 getAuthenticatedUserID, setAuthenticatedUserID, 
 getUser, getUsersList, getGame, 
-addUser, addList, addGame, addEntry,
 isEntryInList, isGameInList
 
 */
