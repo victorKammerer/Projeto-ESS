@@ -67,7 +67,7 @@ router.delete('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
 
-  if(!((loggedID !== 0) || (loggedID !== id))){
+  if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
