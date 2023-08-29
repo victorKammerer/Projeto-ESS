@@ -92,7 +92,7 @@ Feature:  User tests
         Given The service has a database containing users
         And The database contains a user 
             """
-            {"id":"1", 
+            {"id":1, 
             "user":"usuario165", 
             "email":"usuario1@example.com", 
             "password":"senha9009", 
@@ -115,7 +115,7 @@ Feature:  User tests
         Given The service has a database containing users
         And The database contains the user 
             """
-            {"id":"1",
+            {"id":1,
             "user":"usuario1543",
             "email":"usuario1@example.com",
             "password":"senha1325",
@@ -138,7 +138,7 @@ Feature:  User tests
         Given The service has a database containing users
         And The database contains the users 
             """
-            {"id":"1",
+            {"id":1,
             "user":"usuario1354",
             "email":"usuario1@example.com",
             "password":"senha1457",
@@ -164,7 +164,7 @@ Feature:  User tests
         Given The service has a database containing users
         And The database contains a user 
             """
-            {"id":"1",
+            {"id":1,
             "user":"usuario1354",
             "email":"usuario1354@example.com",
             "password":"senha357159",
@@ -178,7 +178,7 @@ Feature:  User tests
         Then The service should respond with status code "200"
         And The service returns the object 
             """
-            {"id":"1",
+            {"id":1,
             "user":"usuario1354",
             "email":"usuario1354@example.com",
             "password":"senha357159",
@@ -192,7 +192,8 @@ Feature:  User tests
         Given The service has a database containing users
         And The database contains the user 
             """
-            {"user":"usuario13456",
+            {"id":1,
+            "user":"usuario13456",
             "email":"usuario13456@example.com",
             "password":"senha78564",
             "name":"Fulano",
@@ -206,17 +207,7 @@ Feature:  User tests
 
     Scenario: Getting a non existing user profile
         Given The service has a database containing users
-        And The database contains a user 
-            """
-            {"id":"1",
-            "user":"usuario17894",
-            "email":"usuario17894@example.com",
-            "password":"senha1654",
-            "name":"Fulano",
-            "lastName":"Silva",
-            "pronouns":"ele/dele",
-            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
-            """
+        And The database does not contains a user with id "3"
         And An admin with id "0" is logged in 
         When A GET request is made to "/api/users/3" route
         Then The service should respond with status code "404" with the message "User not found"
