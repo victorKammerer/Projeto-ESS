@@ -20,7 +20,7 @@ let loggedID = 0;
 // -------------------------------- USERS ROUTES --------------------------------
 
 //*Create User
-router.post('/users', (req,res) => {
+router.post('/users', async (req,res) => {
   const { user, email, password, name, lastName, pronouns, bio } = req.body;
   
   //Checking missing info
@@ -47,23 +47,22 @@ router.post('/users', (req,res) => {
     return res.status(400).json({Error : 'Could not find registered logs'});
   }
 
-  let userID = parseInt(uuidv4());
-  while(users.some((users:any) => users.id === userID)){
-    userID = parseInt(uuidv4());
+  let userID = await parseInt(uuidv4());
+  while(users.find((users:any) => users.id === userID)){
+    userID = await parseInt(uuidv4());
   }
-  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
 
+  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
   try{
-    users.push(newUser);
+    await users.push(newUser);
   }catch (err){
     return res.status(400).json({ Error : 'File could not be written' });
   }
-
   return res.status(201).json({ message: 'User was successfully registered' });
 });
 
 //*Delete User
-router.delete('/users/:id', (req,res) => {
+router.delete('/users/:id', async (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
 
@@ -71,10 +70,10 @@ router.delete('/users/:id', (req,res) => {
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
-  const userIndex = users.findIndex(user => user.id === id);
+  const userIndex = await users.findIndex(user => user.id === id);
 
   if(userIndex !== -1){
-    users.splice(userIndex,1);
+    await users.splice(userIndex,1);
     return res.status(201).json({ message: 'User was successfully deleted' });
   }else{
     return res.status(404).json({ Error : 'User not found' });
