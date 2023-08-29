@@ -3,7 +3,7 @@ import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
 import {createUser} from './utils';
-import { v4 as uuidv4 } from 'uuid';
+import * as TestUtils from "../../tests/utils/test_utils";
 
 import { loggedInId } from '../services/list.service';
 import users from '../database/users';
@@ -47,9 +47,9 @@ router.post('/users', async (req,res) => {
     return res.status(400).json({Error : 'Could not find registered logs'});
   }
 
-  let userID = await parseInt(uuidv4());
+  let userID = await TestUtils.getRandomInt(1,1000);
   while(users.find((users:any) => users.id === userID)){
-    userID = await parseInt(uuidv4());
+    userID = await TestUtils.getRandomInt(1,1000);
   }
 
   const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
@@ -83,7 +83,9 @@ router.delete('/users/:id', async (req,res) => {
 //*User Profile
 router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
-  if(loggedID !== id){
+  loggedID = parseInt(req.query.loggedID as string);
+
+  if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
@@ -101,13 +103,15 @@ router.get('/users/:id', (req,res) => {
 router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
+  loggedID = parseInt(req.query.loggedID as string);
+  
 
   const userIndex = users.findIndex((user: any) => user.id === id);
   const requestedUser = users.find(user => user.id === id);
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
-  }else if(loggedID != requestedUser.id){
+  }else if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }else{
     if(users.some((users:any) => users.user === requestBody.user)){
