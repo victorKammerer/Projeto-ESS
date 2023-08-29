@@ -136,17 +136,7 @@ Feature:  User tests
 
     Scenario: Editing a non existing user profile
         Given The service has a database containing users
-        And The database contains the users 
-            """
-            {"id":1,
-            "user":"usuario1354",
-            "email":"usuario1@example.com",
-            "password":"senha1457",
-            "name":"Fulano",
-            "lastName":"Silva",
-            "pronouns":"ele/dele",
-            "bio":"Olá! Sou Fulano Silva e estou explorando o mundo da tecnologia."}
-            """
+        And The database does not contains a user with id "3"
         And An admin with id "0" is logged in
         When A PUT request is made to "/api/users/3" route with the request body
             """
