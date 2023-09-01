@@ -3,7 +3,7 @@ import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
 import {createUser} from './utils';
-import { v4 as uuidv4 } from 'uuid';
+import * as TestUtils from "../../tests/utils/test_utils";
 
 import { loggedInId } from '../services/list.service';
 import users from '../database/users';
@@ -20,7 +20,7 @@ let loggedID = 0;
 // -------------------------------- USERS ROUTES --------------------------------
 
 //*Create User
-router.post('/users', (req,res) => {
+router.post('/users', async (req,res) => {
   const { user, email, password, name, lastName, pronouns, bio } = req.body;
   
   //Checking missing info
@@ -47,34 +47,33 @@ router.post('/users', (req,res) => {
     return res.status(400).json({Error : 'Could not find registered logs'});
   }
 
-  let userID = parseInt(uuidv4());
-  while(users.some((users:any) => users.id === userID)){
-    userID = parseInt(uuidv4());
+  let userID = await TestUtils.getRandomInt(1,1000);
+  while(users.find((users:any) => users.id === userID)){
+    userID = await TestUtils.getRandomInt(1,1000);
   }
-  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
 
+  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
   try{
-    users.push(newUser);
+    await users.push(newUser);
   }catch (err){
     return res.status(400).json({ Error : 'File could not be written' });
   }
-
   return res.status(201).json({ message: 'User was successfully registered' });
 });
 
 //*Delete User
-router.delete('/users/:id', (req,res) => {
+router.delete('/users/:id', async (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
 
-  if(!((loggedID !== 0) || (loggedID !== id))){
+  if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
-  const userIndex = users.findIndex(user => user.id === id);
+  const userIndex = await users.findIndex(user => user.id === id);
 
   if(userIndex !== -1){
-    users.splice(userIndex,1);
+    await users.splice(userIndex,1);
     return res.status(201).json({ message: 'User was successfully deleted' });
   }else{
     return res.status(404).json({ Error : 'User not found' });
@@ -84,7 +83,9 @@ router.delete('/users/:id', (req,res) => {
 //*User Profile
 router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
-  if(loggedID !== id){
+  loggedID = parseInt(req.query.loggedID as string);
+
+  if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
@@ -102,13 +103,15 @@ router.get('/users/:id', (req,res) => {
 router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
+  loggedID = parseInt(req.query.loggedID as string);
+  
 
   const userIndex = users.findIndex((user: any) => user.id === id);
   const requestedUser = users.find(user => user.id === id);
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
-  }else if(loggedID != requestedUser.id){
+  }else if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }else{
     if(users.some((users:any) => users.user === requestBody.user)){
