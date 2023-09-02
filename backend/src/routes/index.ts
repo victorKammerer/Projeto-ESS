@@ -5,7 +5,7 @@ import TestService from '../services/test.service';
 import {createUser} from './utils';
 import * as TestUtils from "../../tests/utils/test_utils";
 
-import { loggedInId } from '../services/list.service';
+import { loggedInId, setAuthenticatedUserID } from '../services/list.service';
 import users from '../database/users';
 import games from '../database/games';
 import lists from '../database/lists';
@@ -15,7 +15,7 @@ const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
 let loggedID = 0;
-
+setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USERS ROUTES --------------------------------
 
