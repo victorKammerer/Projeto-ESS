@@ -141,6 +141,11 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -158,6 +163,11 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
 router.get('/users/:id/following', (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const user = users.find(user => user.id === id);
+
+    if (isNaN(id)) {
+      res.status(400).json({ message: 'Invalid user ID format' });
+      return;
+    }
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });
@@ -179,6 +189,11 @@ router.post('/users/:id/unfollow', (req: Request, res: Response) => {
 
   const user = users.find(user => user.id === id);
   const unfollowedUser = users.find(user => user.id === unfollowId);
+
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
 
   if(!user?.following.includes(unfollowId)) {
     res.status(400).json({ message: 'You are not following this user' });
@@ -203,6 +218,11 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const follower = users.find(user => user.id === followId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (user?.following.includes(followId)) {
     res.status(400).json({ message: 'You are already following this user' });
     return;
@@ -225,6 +245,11 @@ router.post('/users/:id/block', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const blockedUser = users.find(user => user.id === blockId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (user?.blocked.includes(blockId)) {
     res.status(400).json({ message: 'You have already blocked this user' });
     return;
@@ -246,6 +271,11 @@ router.post('/users/:id/unblock', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const unblockedUser = users.find(user => user.id === unblockId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if(!user?.blocked.includes(unblockId)) {
     res.status(400).json({ message: 'You have not blocked this user' });
     return;
@@ -265,6 +295,11 @@ router.get('/users/:id/blocked/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -280,6 +315,11 @@ router.get('/users/:id/followers/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -294,6 +334,11 @@ router.get('/users/:id/followers/count', (req: Request, res: Response) => {
 router.get('/users/:id/following/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
+
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
 
   if(!user) {
     res.status(404).json({ message: 'User not found' });
