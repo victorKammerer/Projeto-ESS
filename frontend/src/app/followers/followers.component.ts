@@ -12,8 +12,10 @@ import { Observable } from 'rxjs';
 export class FollowersComponent implements OnInit {
     followers: User[] = [];
     following: User[] = [];
+    blocked: User[] = [];
     followersCount: number = 0;
     followingCount: number = 0;
+    blockedCount: number = 0;
 
     constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
@@ -30,11 +32,19 @@ export class FollowersComponent implements OnInit {
             });
 
             this.getFollowingCount(Number(userId)).subscribe(response => {
-                this.followingCount = response.followingCount; // As per the console output you provided
+                this.followingCount = response.followingCount;
             });
 
             this.getFollowersCount(Number(userId)).subscribe(response => {
-                this.followersCount = response.followersCount; // Assuming the API returns an object with a "followersCount" property
+                this.followersCount = response.followersCount;
+            });
+
+            this.getBlocked(Number(userId)).subscribe(data => {
+                this.blocked = data;
+            });
+
+            this.getBlockedCount(Number(userId)).subscribe(response => {
+                this.blockedCount = response.blockedCount;
             });
 
         }
@@ -58,5 +68,9 @@ export class FollowersComponent implements OnInit {
 
     getBlocked(userId: number): Observable<User[]> {
         return this.http.get<User[]>(`/users/${userId}/blocked`);
+    }
+
+    getBlockedCount(userId: number): Observable<{ blockedCount: number }> {
+        return this.http.get<{ blockedCount: number }>(`/users/${userId}/blocked/count`);
     }
 }
