@@ -7,9 +7,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
+import { FollowersComponent } from './followers/followers.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, FollowersComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
