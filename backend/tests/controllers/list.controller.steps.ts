@@ -53,13 +53,17 @@ function makeEntryInList(listId: string, entryId: string, gameId: string, entryT
         date: reqDate
     }
     const lists = routes.getLists();
-    let list = lists.find(l => l.userId == parseInt(listId));
+    let list = findListOfUser(listId)
     if (list != undefined) {
         if (list.entries.find(e => e.entryId == parseInt(entryId)) == undefined) list.entries.push(entry);
         routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
     }
 }
-
+function findListOfUser(userId: string){
+    const lists = routes.getLists();
+    let list = lists.find(l => l.userId == parseInt(userId));
+    return list;
+}
 function makeGame(gameId: string){
     let game = {
         gameId: parseInt(gameId),
@@ -125,7 +129,7 @@ defineFeature(feature, (test) => {
         then(/^the response should return the list with id "(.*)" object$/, 
         async (listId) => {
             const lists = routes.getLists();
-            let list = lists.find(l => l.userId == parseInt(listId));
+            let list = findListOfUser(listId)
             // Convert body date string to Date to compare
             let bodyList = response.body as GameList;
             bodyList.entries.forEach(e => { e.date = new Date(e.date) });
@@ -235,7 +239,7 @@ defineFeature(feature, (test) => {
         and(/^the list with id "(.*)" has no entries$/,  
         async (listId) => {
             const lists = routes.getLists();
-            let list = lists.find(l => l.userId == parseInt(listId));
+            let list = findListOfUser(listId)
             if (list != undefined) {
                 list.entries = [];
                 routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
@@ -388,7 +392,7 @@ defineFeature(feature, (test) => {
         and(/^the list with id "(.*)" has no entries$/,
         async (listId) => {
             const lists = routes.getLists();
-            let list = lists.find(l => l.userId == parseInt(listId));
+            let list = findListOfUser(listId)
             if (list != undefined) {
                 list.entries = [];
                 routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
@@ -703,7 +707,7 @@ defineFeature(feature, (test) => {
         and(/^the list with id "(.*)" has no entries$/,
         async (listId) => {
             const lists = routes.getLists();
-            let list = lists.find(l => l.userId == parseInt(listId));
+            let list = findListOfUser(listId)
             if (list != undefined) {
                 list.entries = [];
                 routes.setList([...lists.filter(l => l.userId != parseInt(listId)), list]);
