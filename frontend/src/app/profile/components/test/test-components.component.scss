@@ -13,71 +13,79 @@
     height: 100%;
     position: absolute;
     z-index: -1;
-    opacity: 0.6; /* Ajuste a opacidade conforme necessário */
 }
 
 .profile-background {
-    background-color: rgba(44, 62, 80, 0.95);
-    color: #ecf0f1;
-    padding: 20px;
-    border-radius: 0; /* Removemos a borda arredondada */
-    text-align: center;
+    background-color: rgba(70, 70, 70);
     width: 70vw; /* 1280px*/
     height: 100vh; /* Ocupa toda a altura disponível */
+    position: absolute;
     display: flex;
-    flex-direction: column;
+    mix-blend-mode: multiply;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-content {
+    color: #ecf0f1;
+    padding: 20px;
+    width: 70vw; /* 1280px*/
+    height: 100vh; /* Ocupa toda a altura disponível */
+    position: absolute;
+    display: flex;
+    flex-direction: row;
     justify-content: top; /* Alinha o conteúdo verticalmente */
+    
+    .profile-left {
+        display: flex;
+        flex-direction: column;
+        width: 75%;
+
+        .profile-picture {
+            width: 150px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px;
+            display: block;
+            align-self: flex-start;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: row;
+            height: 25%;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+        }
+        
+        .username {
+            padding: 10px; 
+            margin-right: auto;
+        }
+        
+        .user-bio {
+            padding: 10px;
+            margin-right: auto;
+            text-align: left;
+        }
+        
+        .misc-info {
+            background-color: red; /* Cor de fundo do retângulo vertical */
+            color: #ecf0f1; /* Cor do texto */
+            height: 75%;
+            width: 100%;
+        }
+    }
+    
+    .profile-right {
+        background-color: blue; /* Cor de fundo do retângulo vertical */
+        color: #ecf0f1; /* Cor do texto */
+        border-radius: 10px;
+        height: 100%;
+        width: 25%;
+    }
 }
 
-.profile-picture {
-    width: 150px; /* Ajuste o tamanho da imagem conforme necessário */
-    height: 150px;
-    border-radius: 50%;
-    margin: 20px;
-    display: block;
-    align-self: flex-start;
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: row;
-    border-radius: 50%;
-    margin: 20px;
-    align-self: flex-start;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-    border-radius: 50%;
-    margin: 20px;
-    align-self: flex-start;
-}
-
-.TESTE {
-    background-color: red; /* Cor de fundo do retângulo vertical */
-    color: #ecf0f1; /* Cor do texto */
-    border-radius: 5px;
-    height: 70vh;
-    width: 75%;
-    align-self: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    opacity: 1;
-}
-
-.TESTE2 {
-    background-color: blue; /* Cor de fundo do retângulo vertical */
-    color: #ecf0f1; /* Cor do texto */
-    border-radius: 5px;
-    height: 70vh;
-    width: 25%;
-    align-self: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    opacity: 1;
-}
-
-.ABLUBLU {
-    display: flex;
-    flex-direction: row;
-    border-radius: 50%;
-}
