@@ -5,7 +5,7 @@ import TestService from '../services/test.service';
 import {createUser} from './utils';
 import * as TestUtils from "../../tests/utils/test_utils";
 
-import { loggedInId, setAuthenticatedUserID } from '../services/list.service';
+import { loggedInId, setAuthenticatedUserID, getAuthenticatedUserID } from '../services/list.service';
 import users from '../database/users';
 import games from '../database/games';
 import lists from '../database/lists';
@@ -14,10 +14,25 @@ import posts from '../database/posts';
 const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
-let loggedID = 0;
+let loggedID = 1;
 setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USERS ROUTES --------------------------------
+//*Return Logged USer
+router.get('/me', async (req,res) => {
+  const loggedId_ = getAuthenticatedUserID();
+  console.log(loggedId_)
+  const requestedUser = users.find(user => user.id === loggedId_);
+  console.log(requestedUser)
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
+  }
+
+  //PRINT USER PROFILE INFO
+  res.status(200).json(requestedUser);
+});
+
 
 //*Create User
 router.post('/users', async (req,res) => {
@@ -359,6 +374,7 @@ import { ListEntry, EntryType, GameList } from '../models/list.model';
 import { User } from '../models/user.model';
 import { Game } from '../models/game.model';
 import * as utils from '../services/list.service'
+import { get, request } from 'http';
 
 function setUsers(newUsers : User[]){
   users.length = 0;
