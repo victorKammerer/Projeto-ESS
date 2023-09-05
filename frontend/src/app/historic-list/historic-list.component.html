@@ -1,0 +1,31 @@
+<div class="container">
+    <mat-card class="card">
+        <div class="title">Historic ({{ all_posts.length }})</div>
+        <!-- Botão para inverter a ordem -->
+        <button mat-raised-button color="primary" (click)="toggleHistoricOrder()">Inverter Ordem</button>
+
+        <!-- Lista de categorias disponíveis  -->
+        <div class="category-list">
+            <div *ngFor="let category of availableCategories" class="category" (click)="filterByCategory(category)">
+                {{ category }}
+            </div>
+        </div>
+
+        <!-- Botão para remover o filtro -->
+        <button mat-raised-button color="warn" *ngIf="selectedCategory !== 'all'" (click)="removeCategoryFilter()">Mostrar tudo</button>
+
+        <!-- Lista de posts filtrados -->
+        <div *ngFor="let post of show_posts" class="post">
+            <h2>{{ post.title }}</h2>
+            <p><strong>Date:</strong> {{ post.date }}</p>
+            <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+            <p><strong>Game:</strong> {{ post.game }}</p>
+            <p><strong>Rate:</strong> {{ post.rate }}</p>
+        </div>
+    </mat-card>
+</div>
+
+
+
+
+
