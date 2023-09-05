@@ -1,31 +1,55 @@
-<div class="container">
-    <mat-card class="card">
-        <div class="title">Historic ({{ all_posts.length }})</div>
-        <!-- Botão para inverter a ordem -->
-        <button mat-raised-button color="primary" (click)="toggleHistoricOrder()">Inverter Ordem</button>
+<div class="profile-page">
+    <!-- Plano de fundo -->
+    <div class="background"></div>
+  
+    <div class="profile-background"></div>
+    <!-- Retângulo vertical para informações do perfil -->
+    <div class="profile-content">
+      <!-- Informações do perfil -->
+        <div class="profile-left">
+            <div class="profile-info">
+                <!-- Foto do perfil -->
+                <img src="../../../../assets/profile/profilePic.jpg" alt="Foto do perfil" class="profile-picture">
+                <div class="user-info">
+                    <h1 class="username">Nome do Usuário</h1>
+                    <div class="title" style="font-size: 30px;">Historico de Posts</div>
+                </div>
+            </div>
 
-        <!-- Lista de categorias disponíveis  -->
-        <div class="category-list">
-            <div *ngFor="let category of availableCategories" class="category" (click)="filterByCategory(category)">
-                {{ category }}
+            <div class="misc-info">
+                <div class="container">
+                    <mat-card class="card">
+                        <!-- Botão para remover o filtro -->
+                        <button mat-raised-button color="warn" *ngIf="selectedCategory !== 'all'" (click)="removeCategoryFilter()">Mostrar tudo</button>
+                        <!-- Lista de posts filtrados -->
+                        <div *ngFor="let post of show_posts" class="post">
+                            <h2>{{ post.title }}</h2>
+                            <p><strong>Date:</strong> {{ post.date }}</p>
+                            <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+                            <p><strong>Game:</strong> {{ post.game }}</p>
+                            <p><strong>Rate:</strong> {{ post.rate }}</p>
+                        </div>
+                    </mat-card>
+                </div>
             </div>
         </div>
+        
+        <div class="profile-right">
+            <!-- Botão para inverter a ordem -->
+            <button mat-raised-button class="order-btn" (click)="toggleHistoricOrder()">Inverter Ordem</button>
 
-        <!-- Botão para remover o filtro -->
-        <button mat-raised-button color="warn" *ngIf="selectedCategory !== 'all'" (click)="removeCategoryFilter()">Mostrar tudo</button>
+            <!-- Lista de categorias disponíveis  -->
+            <div class="category-list">
+                <div *ngFor="let category of availableCategories" class="category" (click)="getHistoricByCategory(category)">
+                    {{ category }}
+                </div>
+            </div>
 
-        <!-- Lista de posts filtrados -->
-        <div *ngFor="let post of show_posts" class="post">
-            <h2>{{ post.title }}</h2>
-            <p><strong>Date:</strong> {{ post.date }}</p>
-            <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
-            <p><strong>Game:</strong> {{ post.game }}</p>
-            <p><strong>Rate:</strong> {{ post.rate }}</p>
+      
         </div>
-    </mat-card>
+  
+      <!-- Outras informações, como jogos favoritos, conquistas, etc. -->
+      <!-- Você pode adicionar mais elementos aqui -->
+    </div>
 </div>
-
-
-
-
 

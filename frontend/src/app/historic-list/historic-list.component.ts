@@ -12,11 +12,10 @@ import { initial } from 'cypress/types/lodash';
 })
 
 export class HistoricListComponent implements OnInit {
-  // private url = 'http://localhost:5001/api';
   show_posts: Post[] = [];
   all_posts: Post[] = [];
   userId: number = 0;
-  isDesc: boolean = true;
+  isDesc: boolean = false;
   selectedCategory: string = 'all';
 
   availableCategories: string[] = [];
@@ -30,9 +29,19 @@ export class HistoricListComponent implements OnInit {
     });
   }
 
+  // Ordem do histórico (historico total ou filtrado)
+  toggleHistoricOrder() {
+    this.isDesc = !this.isDesc;
+    if (this.selectedCategory === 'all') {
+      this.getHistoric();
+    } else {
+      this.getHistoricByCategory(this.selectedCategory);
+    }
+  }
+
+  // Obter todos os posts do usuário
   getHistoric() {
     const url = `/users/${this.userId}/historic`;
-
     const urlWithOrder = this.isDesc ? `${url}?desc=true` : url;
 
     this.http.get<Post[]>(urlWithOrder).subscribe(posts => {
@@ -42,21 +51,18 @@ export class HistoricListComponent implements OnInit {
     });
   }
 
-  toggleHistoricOrder() {
-    this.isDesc = !this.isDesc;
-    this.getHistoric();
-  }
-
-  filterByCategory(category: string) {
+  // Obter posts do usuário filtrados por categoria
+  getHistoricByCategory(category: string) {
+    const url_category = `/users/${this.userId}/historic/category/${category}`;
+    const urlWithOrder_category = this.isDesc ? `${url_category}?desc=true` : url_category;
     this.selectedCategory = category;
-    if (category === 'all') {
-      this.show_posts = [...this.all_posts];
-    } else {
-      const filteredPosts = this.all_posts.filter(post => post.category.includes(category));
+    
+    this.http.get<Post[]>(urlWithOrder_category).subscribe(filteredPosts => {
       this.show_posts = filteredPosts;
-    }
+    });
   }
-
+  
+  // Obter todas as categorias dos posts do usuário
   collectCategories(posts: Post[]): string[] {
     const _categories: string[] = [];
 
@@ -71,6 +77,7 @@ export class HistoricListComponent implements OnInit {
     return _categories;
   }
 
+  // Remover filtro de categoria
   removeCategoryFilter() {
     this.selectedCategory = 'all';
     this.show_posts = [...this.all_posts];
