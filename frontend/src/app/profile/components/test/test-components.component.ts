@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test-components',
@@ -6,7 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./test-components.component.scss']
 })
 export class TestComponentsComponent {
-  public createItem(): void {
-   
+  constructor(
+    private readonly router: Router
+  ) {}
+
+  public goToRoute(route: string) {
+    this.router.navigate([route]);
   }
 }
