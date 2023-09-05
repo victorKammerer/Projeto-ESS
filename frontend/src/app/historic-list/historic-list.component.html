@@ -19,16 +19,21 @@
             <div class="misc-info">
                 <div class="container">
                     <mat-card class="card">
-                        <!-- Botão para remover o filtro -->
-                        <button mat-raised-button color="warn" *ngIf="selectedCategory !== 'all'" (click)="removeCategoryFilter()">Mostrar tudo</button>
-                        <!-- Lista de posts filtrados -->
-                        <div *ngFor="let post of show_posts" class="post">
-                            <h2>{{ post.title }}</h2>
-                            <p><strong>Date:</strong> {{ post.date }}</p>
-                            <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
-                            <p><strong>Game:</strong> {{ post.game }}</p>
-                            <p><strong>Rate:</strong> {{ post.rate }}</p>
+                        <div class="post-grid">
+                            <!-- Lista de posts filtrados -->
+                            <div *ngFor="let post of show_posts" class="post">
+                                <h2>{{ post.title }}</h2>
+                                <p><strong>Date:</strong> {{ post.date }}</p>
+                                <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+                                <p><strong>Game:</strong> {{ post.game }}</p>
+                                <p><strong>Rate:</strong> {{ post.rate }}</p>
+                                <div class="post-buttons">
+                                    <button mat-raised-button class="edit-button" >Editar/Remover</button>
+                                    <button mat-raised-button class="comment-button" >Comentar/Ver Comentários</button>
+                                </div>
+                            </div>
                         </div>
+                        
                     </mat-card>
                 </div>
             </div>
@@ -37,6 +42,9 @@
         <div class="profile-right">
             <!-- Botão para inverter a ordem -->
             <button mat-raised-button class="order-btn" (click)="toggleHistoricOrder()">Inverter Ordem</button>
+            <!-- Botão para remover o filtro -->
+            <button mat-raised-button color="warn" (click)="removeCategoryFilter()">Mostrar tudo</button>
+
 
             <!-- Lista de categorias disponíveis  -->
             <div class="category-list">
