@@ -1,0 +1,35 @@
+<div class="profile-page">
+    <!-- Plano de fundo -->
+    <div class="background"></div>
+  
+    <div class="profile-background"></div>
+    <!-- Retângulo vertical para informações do perfil -->
+    <div class="profile-content">
+      <!-- Informações do perfil -->
+      <div class="profile-left">
+        
+        <div class="profile-info">
+            <!-- Foto do perfil -->
+            <img src="../../../../assets/profile/profilePic.jpg" alt="Foto do perfil" class="profile-picture">
+            <div class="user-info">
+                <h1 class="username">Nome do Usuário</h1>
+                <p class="user-bio">Descrição do usuário</p>
+            </div>
+        </div>
+
+        <div class="misc-info"></div>
+      </div>
+        
+    <div class="profile-right">
+      <app-edit-btn class="editbtn"></app-edit-btn> <!--Click ele tem que trazer um componente de edição-->
+      <app-button (click)="goToRoute('/followers')" label="Seguidores" type="btn medium colorpurple"></app-button> 
+      <app-button (click)="goToRoute('/friends')" label="Amigos" type="btn medium colorpurple"></app-button> 
+      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
+      <app-button (click)="goToRoute('/historico')" label="Histórico" type="btn medium colorpurple"></app-button> 
+      <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
+    </div>
+  
+      <!-- Outras informações, como jogos favoritos, conquistas, etc. -->
+      <!-- Você pode adicionar mais elementos aqui -->
+    </div>
+  </div>
