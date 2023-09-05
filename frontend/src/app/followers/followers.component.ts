@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../../../backend/src/models/user.model'; // Update this path to the location of your User model
 import { Observable } from 'rxjs';
-
 @Component({
     selector: 'app-followers',
     templateUrl: './followers.component.html',
     styleUrls: ['./followers.component.scss'],
 })
+
 export class FollowersComponent implements OnInit {
+    @Input() userId: number = -1;
+    @Output() followersCountUpdated: EventEmitter<number> = new EventEmitter<number>();
+    @Output() followingCountUpdated: EventEmitter<number> = new EventEmitter<number>();
+    @Output() blockedCountUpdated: EventEmitter<number> = new EventEmitter<number>();
+
     followers: User[] = [];
     following: User[] = [];
     blocked: User[] = [];
@@ -20,7 +25,15 @@ export class FollowersComponent implements OnInit {
     constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
-        const userId = this.route.snapshot.paramMap.get('id');
+        // Se userId não foi passado como entrada, pegue-o da rota
+        if (this.userId === -1) {
+            const routeUserId = this.route.snapshot.paramMap.get('id');
+            if (routeUserId) {
+                this.userId = Number(routeUserId);
+            }
+        }
+
+        const userId = this.userId;
 
         if (userId) {
             this.getFollowers(Number(userId)).subscribe(data => {
@@ -33,10 +46,12 @@ export class FollowersComponent implements OnInit {
 
             this.getFollowingCount(Number(userId)).subscribe(response => {
                 this.followingCount = response.followingCount;
+                this.followingCountUpdated.emit(response.followingCount);
             });
 
             this.getFollowersCount(Number(userId)).subscribe(response => {
                 this.followersCount = response.followersCount;
+                this.followersCountUpdated.emit(response.followersCount);
             });
 
             this.getBlocked(Number(userId)).subscribe(data => {
@@ -45,6 +60,7 @@ export class FollowersComponent implements OnInit {
 
             this.getBlockedCount(Number(userId)).subscribe(response => {
                 this.blockedCount = response.blockedCount;
+                this.blockedCountUpdated.emit(response.blockedCount);
             });
 
         }

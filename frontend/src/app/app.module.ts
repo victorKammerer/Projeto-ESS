@@ -8,9 +8,10 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
 import { FollowersComponent } from './followers/followers.component';
+import { ProfileModule } from './profile/profile.module';
 
 @NgModule({
-    declarations: [AppComponent, FollowersComponent],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
@@ -18,6 +19,7 @@ import { FollowersComponent } from './followers/followers.component';
         HomeModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ProfileModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

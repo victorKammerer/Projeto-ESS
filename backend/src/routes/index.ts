@@ -85,9 +85,9 @@ router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
 
-  if(((loggedID !== 0) && (loggedID !== id))){
-    return res.status(401).json({ Error : 'Unauthorized' });
-  }
+  // if(((loggedID !== 0) && (loggedID !== id))){
+    // return res.status(401).json({ Error : 'Unauthorized' });
+  // }
 
   const requestedUser = users.find(user => user.id === id);
 
