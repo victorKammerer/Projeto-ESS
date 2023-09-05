@@ -6,12 +6,12 @@ import { FollowersComponent } from '../../../followers/followers.component';
 
 
 @Component({
-  selector: 'app-tests',
-  templateUrl: './tests.component.html',
-  styleUrls: ['./tests.component.scss']
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
 
-export class TestsComponent implements OnInit {
+export class UserComponent implements OnInit {
   userId : number = 0;
   user : User = {} as User;
   followersCount: number = 0;
@@ -61,5 +61,9 @@ export class TestsComponent implements OnInit {
   
   updateBlockedCount(count: number) {
     this.blockedCount = count;
+  }
+
+  public goToRoute(route: string) {
+    this.router.navigate([route]);
   }
 }
