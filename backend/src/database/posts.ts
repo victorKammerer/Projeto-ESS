@@ -1,15 +1,4 @@
-type Post = {
-    user_id: number;
-    post_id: number;
-    status: string;
-    date: string;
-    category: string[];
-    game: string;
-    rate: number;
-    title: string;
-    description: string;
-    comments: number;
-}
+import { Post } from "../models/post.model";
 
 let posts: Post[] = [
     {
