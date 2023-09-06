@@ -17,7 +17,8 @@ const fs = require('fs'); //Module to read files
 let loggedID = 1;
 setAuthenticatedUserID(loggedID);
 
-// -------------------------------- USERS ROUTES --------------------------------
+// -------------------------------- USER ROUTES -------------------------------- //
+
 //*Return Logged USer
 router.get('/me', async (req,res) => {
   const loggedId_ = getAuthenticatedUserID();
@@ -142,9 +143,8 @@ router.put('/users/:id', (req,res) => {
   return res.status(201).json({ message: 'User was successfully modified' });
 });
 
-// END OF USER ROUTES //
 
-// -------------------------------- FOLLOWERS ROUTES --------------------------------
+// -------------------------------- FOLLOWERS ROUTES -------------------------------- //
 
 // Route to get users
 router.get('/users', (req: Request, res: Response) => {
@@ -365,9 +365,8 @@ router.get('/users/:id/following/count', (req: Request, res: Response) => {
   res.json({ followingCount });
 });
 
-// END OF FOLLOWERS ROUTES
 
-// -------------------------------- LIST ROUTES --------------------------------
+// -------------------------------- LIST ROUTES -------------------------------- //
 
 // Importing users, games, and lists
 import { ListEntry, EntryType, GameList } from '../models/list.model';
@@ -598,38 +597,13 @@ router.get('/users/:id/list/:criteria/:order', async (req, res) => {
 });
 
 
-// ----------------------- END LIST ROUTES ------------------- //
-
-// -------------------------------- HISTORIC ROUTES --------------------------------
-
-//User with id 1 is logged in
-const logged_in_id = 1;
-
-//function to verify username
-function verifyUserId(id: number) {
-  const user = users.find((user) => user.id === id);
-  //console.log(users);
-  if (!user) {
-    return null;
-  }
-  return user;
-}
-
-//function to verify review id
-function verifyReviewId(id: number) {
-  const post = posts.find((post) => post.post_id === id);
-  if (!post) {
-    return null;
-  }
-  return post;
-}
+// -------------------------------- HISTORIC ROUTES -------------------------------- //
 
 //Route to get all reviews of that user by id
 router.get('/users/:id_user/historic', (req: Request, res: Response) => {
   //check user
-  const user = verifyUserId(parseInt(req.params.id_user));
-
-  if (user === null) 
+  const user = users.find((user) => user.id === parseInt(req.params.id_user));
+  if (!user)
     return res.status(404).json({ error: 'User not found' });
   
   let review_list = posts.filter((post) => post.user_id === user.id);
@@ -648,21 +622,22 @@ router.get('/users/:id_user/historic', (req: Request, res: Response) => {
 //Route to filter reviews by category
 router.get('/users/:id_user/historic/category/:category', (req: Request, res: Response) => {
   //check user
-  const user = verifyUserId(parseInt(req.params.id_user));
-  if (user === null) 
+  const user = users.find((user) => user.id === parseInt(req.params.id_user));
+  if (!user)
     return res.status(404).json({ error: 'User not found' });
 
   //check category
   const category = req.params.category;
   let review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
 
+  if (review.length === 0) 
+    return res.status(404).json({ error: 'Category not found' });
+
+  //sort posts by date
   if (req.query.desc) 
   review.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   else 
   review.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  if (review.length === 0) 
-    return res.status(404).json({ error: 'Category not found' });
 
   res.json(review);
 });
@@ -670,33 +645,32 @@ router.get('/users/:id_user/historic/category/:category', (req: Request, res: Re
 //Route to get a review by id
 router.get('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
   //check user
-  const user = verifyUserId(parseInt(req.params.id_user));
-  if (user === null) 
+  const user = users.find((user) => user.id === parseInt(req.params.id_user));
+  if (!user)
     return res.status(404).json({ error: 'User not found' });
 
   //check review id
-  const post = verifyReviewId(parseInt(req.params.id_post));
-  if (post === null) 
+  const post = posts.find((post) => post.post_id === parseInt(req.params.id_post));
+  if (!post)
     return res.status(404).json({ error: 'Post not found' });
 
   res.json(post);
 });
 
 //Route to update a review by id
-//Only the author of the review can update it and only if the author is logged in
 router.put('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
   //check user
-  const user = verifyUserId(parseInt(req.params.id_user));
-  if (user === null) 
+  const user = users.find((user) => user.id === parseInt(req.params.id_user));
+  if (!user)
     return res.status(404).json({ error: 'User not found' });
 
   //check review id
-  let post_to_edit = verifyReviewId(parseInt(req.params.id_post));
-  if (post_to_edit === null) 
+  const post_to_edit = posts.find((post) => post.post_id === parseInt(req.params.id_post));
+  if (!post_to_edit)
     return res.status(404).json({ error: 'Post not found' });
 
   //check if user is logged in
-  if (post_to_edit.user_id !== logged_in_id) 
+  if (post_to_edit.user_id !== loggedID) 
     return res.status(404).json({ error: 'User must be logged in to edit a post' });
   
   const updatedPost = { ...post_to_edit, ...req.body };
@@ -708,17 +682,17 @@ router.put('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Resp
 //Route to delete a review by id
 router.delete('/users/:id_user/historic/post_id/:id_post', (req: Request, res: Response) => {
   //check user
-  const user = verifyUserId(parseInt(req.params.id_user));
-  if (user === null) 
+  const user = users.find((user) => user.id === parseInt(req.params.id_user));
+  if (!user)
     return res.status(404).json({ error: 'User not found' });
 
   //check review id
-  const post_to_delete = verifyReviewId(parseInt(req.params.id_post));
-  if (post_to_delete === null) 
+  const post_to_delete = posts.find((post) => post.post_id === parseInt(req.params.id_post));
+  if (!post_to_delete)
     return res.status(404).json({ error: 'Post not found' });
 
   //check if user is logged in
-  if (post_to_delete.user_id !== logged_in_id) 
+  if (post_to_delete.user_id !== loggedID) 
     return res.status(401).json({ error: 'user must to be logged in' });
 
   //delete review
