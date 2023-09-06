@@ -1,11 +1,6 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
 import supertest from 'supertest';
 import app from '../../src/app';
-import { di } from '../../src/di';
-import TestRepository from '../../src/repositories/test.repository'
-import { createPost } from '../../src/routes/utils';
-import { Post } from "../../src/models/post.model";
-import { User } from "../../src/models/user.model";
 import users from '../../src/database/users';
 import posts from '../../src/database/posts';
 
@@ -47,10 +42,7 @@ defineFeature(feature, test => {
 // Test to delete a post route
     test('Excluindo um post', ({ given, and, when, then }) => {
         let testPost : any;
-        let testUser: any
         let loggedID : number;
-        let userId : number;
-        let postId : number;
         given('o server tem uma database contendo posts', () => {
 
         });
