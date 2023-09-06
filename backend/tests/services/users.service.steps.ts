@@ -68,7 +68,7 @@ defineFeature(feature, (test) => {
 
         });
 
-        and('The database contains the users', (docString) => {
+        and('The database contains the user', (docString) => {
             user = JSON.parse(docString); 
             if(users.find(user => user.id === user.id)){
                 users.push(user);
@@ -83,7 +83,7 @@ defineFeature(feature, (test) => {
             response = await request.get(`${endpoint}`).query({loggedID : loggedID});
         });
 
-        then(/^The service should respond with status code "(.*)" with the message "(.*)"$/, (statusCode, message) => {
+        then(/^The service should respond with status code "(.*)"$/, (statusCode, message) => {
             expect(response.status).toBe(parseInt(statusCode,10));
             expect(message).toBe('Unauthorized');
         });
@@ -140,7 +140,7 @@ defineFeature(feature, (test) => {
 
         });
 
-        then(/^The service should respond with status code "(.*)" with the message "(.*)"$/, (arg0, arg1) => {
+        then(/^The service should respond with status code "(.*)"$/, (arg0, arg1) => {
 
         });
     });
@@ -238,7 +238,7 @@ defineFeature(feature, (test) => {
 
         });
 
-        and('The database contains the users', (docString) => {
+        and(/^The database does not contains a user with id "(.*)"$/, (arg0) => {
 
         });
 
@@ -286,10 +286,10 @@ defineFeature(feature, (test) => {
 
         });
 
-        and('The database contains a user', (docString) => {
+        and(/^The database does not contains a user with id "(.*)"$/, (arg0) => {
 
         });
-
+        
         and(/^An admin with id "(.*)" is logged in$/, (arg0) => {
 
         });
