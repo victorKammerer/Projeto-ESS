@@ -25,7 +25,10 @@
                                 (blockedCountUpdated)="updateBlockedCount($event)">
                             </app-followers>
                         </div>
-                        <app-follow-btn class="follow-btn"></app-follow-btn>
+                        <div *ngIf="!isUserLoggedIn">
+                            <app-follow-btn (click)="followUser()" class="follow-btn" *ngIf="!isFollowing"></app-follow-btn>
+                            <app-unfollow-btn (click)="unfollowUser()" class="unfollow-btn" *ngIf="isFollowing"></app-unfollow-btn>
+                        </div>
                         <div class="follows">
                             <span class="follow-counter" (click)="followersButton()">{{followersCount}} Seguidores</span>
                             <span class="follow-counter" (click)="followersButton()">{{followingCount}} Seguindo</span>
