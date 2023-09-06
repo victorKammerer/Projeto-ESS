@@ -9,14 +9,15 @@ import { MatListModule } from '@angular/material/list';
 
 import { ProfileRoutingModule } from '../profile/profile-routing.module'
 import { SharedModule } from '../shared/shared.module';
-import { TestComponentsComponent } from '../profile/components/test/test-components.component'
-
+import { UserComponent } from './components/test/user.component'
+import { FollowersComponent } from '../followers/followers.component';
 
 
 @NgModule({
   declarations: [
     //Declaração dos componentes
-    TestComponentsComponent
+    UserComponent,
+    FollowersComponent
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile

@@ -8,7 +8,8 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
 import { HistoricListComponent } from './historic-list/historic-list.component';
-import { ProfileModule } from './profile/profile.module'
+import { FollowersComponent } from './followers/followers.component';
+import { ProfileModule } from './profile/profile.module';
 
 @NgModule({
     declarations: [AppComponent, HistoricListComponent],
