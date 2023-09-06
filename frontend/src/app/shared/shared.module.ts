@@ -14,9 +14,10 @@ import { MatListModule } from '@angular/material/list';
 import { DataCyDirective } from './directives/data-cy.directive';
 import { EditBtnComponent } from './components/editBtn/editBtn.component';
 import { FollowBtnComponent } from './components/follow-btn/follow-btn.component';
+import { PostBtnComponent } from './components/post-btn/post-btn.component';
 
 @NgModule({
-    declarations: [DataCyDirective, ButtonComponent, EditBtnComponent, FollowBtnComponent],
+    declarations: [DataCyDirective, ButtonComponent, EditBtnComponent, FollowBtnComponent, PostBtnComponent],
     imports: [
         CommonModule,
         MatInputModule,
@@ -34,7 +35,8 @@ import { FollowBtnComponent } from './components/follow-btn/follow-btn.component
         MatFormFieldModule,
         MatListModule,
         EditBtnComponent,
-        FollowBtnComponent
+        FollowBtnComponent,
+        PostBtnComponent,
     ],
     providers: [
         // TODO: Add services here
