@@ -16,7 +16,7 @@
                     class="profile-picture" />
                 <div class="user-info">
                     <h1 class="username">{{user.name}}</h1>
-                    <div class="follow-section">
+                    <div class="follow-section" *ngIf="!isUserLoggedIn">
                         <div class="followapp">
                             <app-followers 
                                 [userId]="userId" 

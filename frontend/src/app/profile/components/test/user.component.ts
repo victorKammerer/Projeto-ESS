@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { FollowersComponent } from '../../../followers/followers.component';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 
 @Component({
@@ -17,7 +19,9 @@ export class UserComponent implements OnInit {
   followersCount: number = 0;
   followingCount: number = 0;
   blockedCount: number = 0;
-  userLoggedIn: User = {} as User;
+  isUserLoggedIn: boolean = false;
+  isFollowing: boolean = false;
+  isBlocked: boolean = false;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -26,21 +30,22 @@ export class UserComponent implements OnInit {
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
 
+    this.checkIsUserLoggedIn();
+
     this.getUserDetails(this.userId).subscribe(data => {
       this.user = data as User;
-      console.log(this.user.name);
-    });
 
-    this.http.get('/me').subscribe(data => {
-      this.userLoggedIn = data as User;
+      if(!this.user) {
+        this.router.navigate(['/not-found']);
+      }
     });
 
   }
-    // this.route.params.subscribe(params => {
-    //   this.userId =+ params['id']; // O '+' converte a string para um número
-    // });
+
   getUserDetails(userId: number) {
-      return this.http.get(`/users/${userId}`);
+      const data = this.http.get(`/users/${userId}`);
+      console.log(data);
+      return data
   }
 
   public createItem(): void {
@@ -66,6 +71,18 @@ export class UserComponent implements OnInit {
   
   updateBlockedCount(count: number) {
     this.blockedCount = count;
+  }
+
+  checkIsUserLoggedIn() {
+    this.http.get('/me').subscribe(data => {
+      const userLoggedIn = data as User;
+
+      if (userLoggedIn.id === this.userId) {
+        this.isUserLoggedIn = true;
+      }
+
+    });
+
   }
 
   public goToRoute(route: string) {
