@@ -12,7 +12,7 @@
                 <img src="../../../../assets/profile/profilePic.jpg" alt="Foto do perfil" class="profile-picture">
                 <div class="user-info">
                     <h1 class="username">Nome do Usuário</h1>
-                    <div class="title" style="font-size: 30px;">Historico de Posts</div>
+                    <div class="title" style="font-size: 30px; padding: 10px; margin-right: auto;">Historico de Posts</div>
                 </div>
             </div>
 
@@ -23,13 +23,15 @@
                             <!-- Lista de posts filtrados -->
                             <div *ngFor="let post of show_posts" class="post">
                                 <h2>{{ post.title }}</h2>
-                                <p><strong>Date:</strong> {{ post.date }}</p>
-                                <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
                                 <p><strong>Game:</strong> {{ post.game }}</p>
+                                <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
                                 <p><strong>Rate:</strong> {{ post.rate }}</p>
+                                <p><strong>Date:</strong> {{ post.date }}</p>
                                 <div class="post-buttons">
-                                    <button mat-raised-button class="edit-button" >Editar/Remover</button>
-                                    <button mat-raised-button class="comment-button" >Comentar/Ver Comentários</button>
+                                    <!-- Mudar rota dos botões -->
+                                    <app-button (click)="goToRoute('users')" label="Apagar" type="btn mini"></app-button>
+                                    <app-button (click)="goToRoute('/users')" label="Editar" type="btn mini"></app-button>
+                                    <app-button (click)="goToRoute('/users')" label="Ver" type="btn mini"></app-button>
                                 </div>
                             </div>
                         </div>
@@ -41,23 +43,30 @@
         
         <div class="profile-right">
             <!-- Botão para inverter a ordem -->
-            <button mat-raised-button class="order-btn" (click)="toggleHistoricOrder()">Inverter Ordem</button>
-            <!-- Botão para remover o filtro -->
-            <button mat-raised-button color="warn" (click)="removeCategoryFilter()">Mostrar tudo</button>
-
-
-            <!-- Lista de categorias disponíveis  -->
-            <div class="category-list">
-                <div *ngFor="let category of availableCategories" class="category" (click)="getHistoricByCategory(category)">
-                    {{ category }}
+            <app-button (click)="toggleHistoricOrder()" label="Inverter Ordem" type="btn medium colorblue"></app-button>
+            
+            <div class="category-section">
+                <div class="category-title">Categorias</div>
+                <!-- Lista de categorias disponíveis  -->
+                <div class="category-list">
+                    <app-button *ngFor="let category of availableCategories" 
+                                (click)="getHistoricByCategory(category)" 
+                                type="btn small colorblue"
+                                label="{{ category }}">
+                    </app-button>
                 </div>
             </div>
 
-      
+            <!-- Botão para remover o filtro -->
+            <app-button *ngIf="selectedCategory !== 'all'" (click)="removeCategoryFilter()" label="Mostrar todos" type="btn medium colorblue"></app-button>
+
+            <!-- Separando esses botões -->
+            <div style="margin-top: 280px;"></div>
+
+            <!-- Botão para voltar para a tela perfil -->
+            <app-button (click)="goToRoute('/users')" label="Perfil" type="btn medium colorblue"></app-button>
+
         </div>
-  
-      <!-- Outras informações, como jogos favoritos, conquistas, etc. -->
-      <!-- Você pode adicionar mais elementos aqui -->
     </div>
 </div>
 

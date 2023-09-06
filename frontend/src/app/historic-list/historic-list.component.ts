@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../../../../backend/src/models/post.model';
 import { Observable } from 'rxjs';
@@ -17,10 +17,9 @@ export class HistoricListComponent implements OnInit {
   userId: number = 0;
   isDesc: boolean = false;
   selectedCategory: string = 'all';
-
   availableCategories: string[] = [];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -48,6 +47,8 @@ export class HistoricListComponent implements OnInit {
       this.all_posts = posts;
       this.show_posts = [...this.all_posts];
       this.availableCategories = this.collectCategories(posts);
+      //ordenando as categorias
+      this.availableCategories.sort();
     });
   }
 
@@ -81,5 +82,10 @@ export class HistoricListComponent implements OnInit {
   removeCategoryFilter() {
     this.selectedCategory = 'all';
     this.show_posts = [...this.all_posts];
+  }
+
+  // Ir para outras rotas
+  public goToRoute(route: string) {
+    this.router.navigate([route]);
   }
 }
