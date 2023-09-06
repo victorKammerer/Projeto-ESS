@@ -654,7 +654,13 @@ router.get('/users/:id_user/historic/category/:category', (req: Request, res: Re
 
   //check category
   const category = req.params.category;
-  const review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
+  let review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
+
+  if (req.query.desc) 
+  review.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  else 
+  review.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   if (review.length === 0) 
     return res.status(404).json({ error: 'Category not found' });
 
