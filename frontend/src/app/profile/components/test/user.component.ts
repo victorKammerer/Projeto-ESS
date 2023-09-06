@@ -123,4 +123,8 @@ export class UserComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  public goToHistoric(): void {
+    this.router.navigate([`/users/${this.userId}/historic`]);
+  }
+
 }
