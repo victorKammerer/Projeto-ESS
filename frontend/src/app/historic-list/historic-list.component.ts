@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../../../../backend/src/models/post.model';
+import { User } from '../../../../backend/src/models/user.model';
 import { Observable } from 'rxjs';
 import { initial } from 'cypress/types/lodash';
 
@@ -19,13 +20,24 @@ export class HistoricListComponent implements OnInit {
   selectedCategory: string = 'all';
   availableCategories: string[] = [];
 
+  user : User = {} as User;
+
+
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
+
+    // Informações do usuário
     this.route.params.subscribe(params => {
-      this.userId = params['userId'];
+      this.userId =+ params['userId']; // O '+' converte a string para um número
       this.getHistoric();
     });
+
+    this.getUserDetails(this.userId).subscribe(data => {
+      this.user = data as User;
+      console.log(this.user.name);
+    });
+
   }
 
   // Ordem do histórico (historico total ou filtrado)
@@ -84,8 +96,13 @@ export class HistoricListComponent implements OnInit {
     this.show_posts = [...this.all_posts];
   }
 
-  // Ir para outras rotas
-  public goToRoute(route: string) {
-    this.router.navigate([route]);
+  // Voltando para o perfil do usuário
+  public goToHome(): void {
+    this.router.navigate(['/users/' + this.userId]);
+  }
+
+  //Usuário
+  getUserDetails(userId: number) {
+    return this.http.get(`/users/${userId}`);
   }
 }

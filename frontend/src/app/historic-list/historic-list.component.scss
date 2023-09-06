@@ -7,10 +7,10 @@
 }
 
 .background {
-    background-image: url('../../assets/profile/background2.jpg');
+    background-image: url('https://cdn.steamstatic.com/steamcommunity/public/images/items/224420/1cee148dbe320a9367bcdf5211ae077e695a4cfe.jpg');
     background-size: cover;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     position: absolute;
     z-index: -1;
 }
@@ -63,6 +63,7 @@
         .username {
             padding: 10px; 
             margin-right: auto;
+            color: white;
         }
 
         .misc-info {
