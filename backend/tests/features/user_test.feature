@@ -45,7 +45,7 @@ Feature:  User tests
             "bio":"Olá! Sou Ciclano Silveira e estou explorando o mundo da musica."}
             """
         Then The service should respond with status code "409" with the message "Username arealdy exists"
-        
+
     Scenario: Creating a new user with missing information
         Given The service has a database containing users
         And The database does not contain a user "usuario3"

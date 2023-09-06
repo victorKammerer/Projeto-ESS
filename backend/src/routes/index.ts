@@ -2,7 +2,8 @@ import { Express, Router, Request, Response, NextFunction } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
-import {createUser} from './utils';
+import { createUser } from './utils';
+import { createPost } from './utils';
 import * as TestUtils from "../../tests/utils/test_utils";
 
 import { loggedInId, setAuthenticatedUserID, getAuthenticatedUserID } from '../services/list.service';
@@ -15,6 +16,7 @@ const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
 let loggedID = 1;
+setAuthenticatedUserID(loggedID);
 
 // ------------------------------------------ Post creation Routes -----------------------------------------
 router.post('/posts', async (req: Request, res: Response) => {
@@ -33,9 +35,9 @@ router.post('/posts', async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Description missing' });
   }
 
-  let postID = parseInt(uuidv4());
-  while(posts.some((posts:any) => posts.id === postID)){
-    postID = parseInt(uuidv4());
+  let postID = await TestUtils.getRandomInt(1,1000);
+  while(posts.find((posts:any) => posts.post_id === postID)){
+    postID = await TestUtils.getRandomInt(1,1000);
   }
   
   const newPost = createPost(userId, postID, category, game, rate, title, description);

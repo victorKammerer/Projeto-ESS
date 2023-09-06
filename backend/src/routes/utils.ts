@@ -1,4 +1,5 @@
 import { User } from "../models/user.model";
+import { Post } from "../models/post.model";
 
 export function createUser(
     id: number,
@@ -29,8 +30,6 @@ export function createUser(
   
     return newUser;
   }
-
-import { Post } from "../models/post.model";
 
 export function createPost(
     user_id: number,
