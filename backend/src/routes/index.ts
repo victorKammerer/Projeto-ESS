@@ -15,6 +15,80 @@ const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
 let loggedID = 1;
+
+// ------------------------------------------ Post creation Routes -----------------------------------------
+router.post('/posts', async (req: Request, res: Response) => {
+  const { category, game, rate, title, description } = req.body;
+  const userId = loggedID
+
+  if(userId <= 0) {
+    return res.status(400).json({ message: 'You must be logged in to post' });
+  } else if(!category) {
+    return res.status(400).json({ message: 'Category missing' });
+  } else if(!game) {
+    return res.status(400).json({ message: 'Game missing' });
+  } else if(!title) {
+    return res.status(400).json({ message: 'Title missing' });
+  } else if(!description) {
+    return res.status(400).json({ message: 'Description missing' });
+  }
+
+  let postID = parseInt(uuidv4());
+  while(posts.some((posts:any) => posts.id === postID)){
+    postID = parseInt(uuidv4());
+  }
+  
+  const newPost = createPost(userId, postID, category, game, rate, title, description);
+
+  posts.push(newPost);
+  
+  return res.status(201).json( {
+    message: 'Post sucessfully made',
+    post: newPost,
+  } );
+});
+
+// Route to delete a post
+router.delete('/posts/:user_id/:post_id', async (req: Request, res: Response) => {
+  const userId = parseInt(req.params.user_id);
+  const postId = parseInt(req.params.post_id)
+  loggedID = parseInt(req.query.loggedID as string);
+
+  if(((loggedID !== 0) && (loggedID !== userId))){
+    return res.status(401).json({ Error : 'Unauthorized' });
+  }
+
+  const postIndex = await posts.findIndex(post => post.post_id === postId);
+
+  if(postIndex !== -1){
+    await posts.splice(postIndex, 1);
+    return res.status(201).json({ message: 'Post deleted' });
+  }else{
+    return res.status(404).json({ Error : 'User not found' });
+  }
+});
+
+// Route to edit posts
+router.put('/posts/:user_id/:post_id', (req: Request, res: Response) => {
+  const requestBody = req.body;
+  const userId = parseInt(req.params.user_id);
+  const postId = parseInt(req.params.post_id);
+  let status: string = req.params.status;
+
+  loggedID = parseInt(req.query.loggedID as string);
+
+  const postIndex = posts.findIndex((post: any) => post.post_id === postId);
+
+  if(((loggedID !== 0) && (loggedID !== userId))){
+    return res.status(401).json({ Error : 'Unauthorized' });
+  }
+
+  Object.assign(posts[postIndex], requestBody);
+  status == "edited";
+  console.log(status)
+  return res.status(201).json({ message: 'Post edited' });
+});
+
 setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USERS ROUTES --------------------------------
@@ -119,7 +193,6 @@ router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
-  
 
   const userIndex = users.findIndex((user: any) => user.id === id);
   const requestedUser = users.find(user => user.id === id);
@@ -160,7 +233,6 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
     res.status(400).json({ message: 'Invalid user ID format' });
     return;
   }
-
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -178,12 +250,10 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
 router.get('/users/:id/following', (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const user = users.find(user => user.id === id);
-
     if (isNaN(id)) {
       res.status(400).json({ message: 'Invalid user ID format' });
       return;
     }
-
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
@@ -264,7 +334,6 @@ router.post('/users/:id/block', (req: Request, res: Response) => {
     res.status(400).json({ message: 'Invalid user ID format' });
     return;
   }
-
   if (user?.blocked.includes(blockId)) {
     res.status(400).json({ message: 'You have already blocked this user' });
     return;
@@ -349,12 +418,10 @@ router.get('/users/:id/followers/count', (req: Request, res: Response) => {
 router.get('/users/:id/following/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
-
   if (isNaN(id)) {
     res.status(400).json({ message: 'Invalid user ID format' });
     return;
   }
-
   if(!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -654,6 +721,7 @@ router.get('/users/:id_user/historic/category/:category', (req: Request, res: Re
 
   //check category
   const category = req.params.category;
+
   let review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
 
   if (req.query.desc) 

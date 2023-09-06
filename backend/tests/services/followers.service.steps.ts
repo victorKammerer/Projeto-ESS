@@ -3,7 +3,6 @@ import supertest from 'supertest';
 import app from '../../src/app';
 import users from '../../src/database/users';
 import { getUser } from '../../src/services/list.service';
-
 const feature = loadFeature('./tests/features/followers_service.feature');
 const request = supertest(app);
 let followResponse: supertest.Response;
@@ -98,7 +97,6 @@ defineFeature(feature, test => {
             // Verify that the user is not already following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
             const user = getUser(userid1, users);
             expect(user?.following).not.toContain(userid2);
         });
@@ -161,7 +159,6 @@ defineFeature(feature, test => {
             // Verify that the user is following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
             const user = getUser(userid1, users);
             expect(user?.following).toContain(userid2);
         });
@@ -197,7 +194,6 @@ defineFeature(feature, test => {
             // Verify that the user is no longer following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
             const user = getUser(userid2, users);
             expect(user?.following).not.toContain(userid1);
         });
@@ -264,7 +260,6 @@ defineFeature(feature, test => {
             // Verify that the user is not already blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
             const user = getUser(userid1, users);
             expect(user?.blocked).not.toContain(userid2);
         });
