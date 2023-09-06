@@ -68,7 +68,6 @@ defineFeature(feature, test => {
         then(/^The service should respond with status code "(.*)" and the message "(.*)"$/, (statusCode, message) => {
             expect(response.status).toBe(parseInt(statusCode,10));
             expect(posts.find(post => post.post_id === testPost)).toBeUndefined();
-            console.log(statusCode)
         });
     });
 
