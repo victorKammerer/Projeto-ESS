@@ -17,6 +17,7 @@ export class UserComponent implements OnInit {
   followersCount: number = 0;
   followingCount: number = 0;
   blockedCount: number = 0;
+  userLoggedIn: User = {} as User;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -28,6 +29,10 @@ export class UserComponent implements OnInit {
     this.getUserDetails(this.userId).subscribe(data => {
       this.user = data as User;
       console.log(this.user.name);
+    });
+
+    this.http.get('/me').subscribe(data => {
+      this.userLoggedIn = data as User;
     });
 
   }
@@ -66,4 +71,5 @@ export class UserComponent implements OnInit {
   public goToRoute(route: string) {
     this.router.navigate([route]);
   }
+
 }
