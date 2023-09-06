@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
-import { FollowersComponent } from '../../../followers/followers.component';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 
 
 @Component({
@@ -16,9 +13,10 @@ import { throwError } from 'rxjs';
 export class UserComponent implements OnInit {
   userId : number = 0;
   user : User = {} as User;
+  userLoggedInId: number = 0;
   followersCount: number = 0;
-  followingCount: number = 0;
   blockedCount: number = 0;
+  followingCount: number = 0;
   isUserLoggedIn: boolean = false;
   isFollowing: boolean = false;
   isBlocked: boolean = false;
@@ -39,6 +37,8 @@ export class UserComponent implements OnInit {
         this.router.navigate(['/not-found']);
       }
     });
+
+    this.checkIsFollowing();
 
   }
 
@@ -64,18 +64,39 @@ export class UserComponent implements OnInit {
   updateFollowersCount(count: number) {
     this.followersCount = count;
   }
-  
+
   updateFollowingCount(count: number) {
     this.followingCount = count;
   }
-  
+
+
   updateBlockedCount(count: number) {
     this.blockedCount = count;
   }
 
+  followUser() {
+    const endpoint = '/users/' + this.userId + '/follow';
+    this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
+      console.log(data);
+      this.isFollowing = true;
+      this.followersCount++;
+    });
+  }
+
+  unfollowUser() {
+    const endpoint = '/users/' + this.userId + '/unfollow';
+    this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
+      console.log(data);
+      this.isFollowing = false;
+      this.followersCount--;
+    });
+  } 
+
+
   checkIsUserLoggedIn() {
     this.http.get('/me').subscribe(data => {
       const userLoggedIn = data as User;
+      this.userLoggedInId = userLoggedIn.id;
 
       if (userLoggedIn.id === this.userId) {
         this.isUserLoggedIn = true;
@@ -83,6 +104,19 @@ export class UserComponent implements OnInit {
 
     });
 
+  }
+
+  checkIsFollowing() {
+    const followers = this.http.get(`/users/${this.userId}/followers`);
+
+    followers.subscribe(data => {
+      const followersList = data as User[];
+      const userLoggedIn = followersList.find(user => user.id === this.userLoggedInId);
+
+      if (userLoggedIn) {
+        this.isFollowing = true;
+      }
+    }); 
   }
 
   public goToRoute(route: string) {
