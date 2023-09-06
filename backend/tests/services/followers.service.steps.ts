@@ -2,7 +2,7 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 import supertest from 'supertest';
 import app from '../../src/app';
 import users from '../../src/database/users';
-
+import { getUser } from '../../src/services/list.service';
 const feature = loadFeature('./tests/features/followers_service.feature');
 const request = supertest(app);
 let followResponse: supertest.Response;
@@ -13,7 +13,8 @@ defineFeature(feature, test => {
             given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
                 // Verify that the user exists
                 userid = parseInt(userid);
-                const user = users.find(user => user.id === userid);
+                const user = getUser(userid, users);
+                // const user = users.find(user => user.id === userid);
                 expect(user).not.toBeUndefined();
             });
 
@@ -21,7 +22,7 @@ defineFeature(feature, test => {
                 // Verify that the user exists
                 userid = parseInt(userid);
 
-                const user = users.find(user => user.id === userid);
+                const user = getUser(userid, users);
                 expect(user).not.toBeUndefined();
             });
 
@@ -29,7 +30,7 @@ defineFeature(feature, test => {
                 // Verify that the user exists
                 userid = parseInt(userid);
 
-                const user = users.find(user => user.id === userid);
+                const user = getUser(userid, users);
                 expect(user).not.toBeUndefined();
             });
 
@@ -38,7 +39,7 @@ defineFeature(feature, test => {
                 userid1 = parseInt(userid1);
                 userid2 = parseInt(userid2);
 
-                const user = users.find(user => user.id === userid1);
+                const user = getUser(userid1, users);
                 expect(user?.following).toContain(userid2);
             });
 
@@ -47,7 +48,7 @@ defineFeature(feature, test => {
                 userid1 = parseInt(userid1);
                 userid2 = parseInt(userid2);
 
-                const user = users.find(user => user.id === userid1);
+                const user = getUser(userid1, users);
                 expect(user?.following).toContain(userid2);
             });
 
@@ -66,8 +67,8 @@ defineFeature(feature, test => {
                 userid1 = parseInt(userid1);
                 userid2 = parseInt(userid2);
 
-                let user1 = users.find(user => user.id === userid1);
-                let user2 = users.find(user => user.id === userid2);
+                const user1 = getUser(userid1, users);
+                const user2 = getUser(userid2, users);
 
                 expect(followResponse.body).toContainEqual(user1);
                 expect(followResponse.body).toContainEqual(user2);
@@ -80,7 +81,7 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -88,7 +89,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -96,8 +97,7 @@ defineFeature(feature, test => {
             // Verify that the user is not already following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
-            const user = users.find(user => user.id === 1);
+            const user = getUser(userid1, users);
             expect(user?.following).not.toContain(userid2);
         });
 
@@ -123,16 +123,16 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.followers).toContain(userid1);
         });
 
         and(/^"(\d+)" is added to the list of following of "(\d+)"$/, (userid1, userid2) => {
             // Verify that the user is now following the other user
             userid1 = parseInt(userid1);
-            userid2 = parseInt(userid2);
+            userid2 = parseInt(userid2)
 
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.following).toContain(userid1);
         });
     });
@@ -143,7 +143,7 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -151,7 +151,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -159,8 +159,7 @@ defineFeature(feature, test => {
             // Verify that the user is following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
-            const user = users.find(user => user.id === userid1);
+            const user = getUser(userid1, users);
             expect(user?.following).toContain(userid2);
         });
 
@@ -187,7 +186,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.followers).not.toContain(userid1);
         });
 
@@ -195,8 +194,7 @@ defineFeature(feature, test => {
             // Verify that the user is no longer following the other user
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.following).not.toContain(userid1);
         });
     });
@@ -208,14 +206,14 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system does not have an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user does not exist
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).toBeUndefined();
         });
 
@@ -246,7 +244,7 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -254,7 +252,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -262,8 +260,7 @@ defineFeature(feature, test => {
             // Verify that the user is not already blocked
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
-
-            const user = users.find(user => user.id === userid1);
+            const user = getUser(userid1, users);
             expect(user?.blocked).not.toContain(userid2);
         });
 
@@ -290,7 +287,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.blocked).toContain(userid1);
         });
     });
@@ -301,7 +298,7 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -309,7 +306,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -318,7 +315,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid1);
+            const user = getUser(userid1, users);
             expect(user?.blocked).toContain(userid2);
         });
 
@@ -345,7 +342,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid2);
+            const user = getUser(userid2, users);
             expect(user?.blocked).not.toContain(userid1);
         });
     });
@@ -356,14 +353,14 @@ defineFeature(feature, test => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
         and(/^the system does not have an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user does not exist
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).toBeUndefined();
         });
 
@@ -386,21 +383,11 @@ defineFeature(feature, test => {
         });
     });
 
-    // Scenario: Returns followers list
-    // Given that the system has an existing user with ID "1"
-    // And the system has an existing user with ID "2"
-    // And the system has an existing user with ID "3"
-    // And the list of followers of "1" contains "2"
-    // And the list of followers of "1" contains "3"
-    // When a GET request is made to "/api/users/1/followers"
-    // Then the system returns a "200" status
-    // And the response is a list containing "2" and "3"
-
     test('Returns followers list', ({ given, when, then, and }) => {
         given(/^that the system has an existing user with ID "(\d+)"$/, (userid) => {
             // Verify that the user exists
             userid = parseInt(userid);
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -408,7 +395,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -416,7 +403,7 @@ defineFeature(feature, test => {
             // Verify that the user exists
             userid = parseInt(userid);
 
-            const user = users.find(user => user.id === userid);
+            const user = getUser(userid, users);
             expect(user).not.toBeUndefined();
         });
 
@@ -425,7 +412,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid1);
+            const user = getUser(userid1, users);
             expect(user?.followers).toContain(userid2);
         });
 
@@ -434,7 +421,7 @@ defineFeature(feature, test => {
             userid1 = parseInt(userid1);
             userid2 = parseInt(userid2);
 
-            const user = users.find(user => user.id === userid1);
+            const user = getUser(userid1, users);
             expect(user?.followers).toContain(userid2);
         });
 
