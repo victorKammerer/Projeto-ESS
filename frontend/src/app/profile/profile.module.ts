@@ -11,13 +11,15 @@ import { ProfileRoutingModule } from '../profile/profile-routing.module'
 import { SharedModule } from '../shared/shared.module';
 import { UserComponent } from './components/test/user.component'
 import { FollowersComponent } from '../followers/followers.component';
+import { FeedComponent } from '../feed/feed.component';
 
 
 @NgModule({
   declarations: [
     //Declaração dos componentes
     UserComponent,
-    FollowersComponent
+    FollowersComponent,
+    FeedComponent
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile

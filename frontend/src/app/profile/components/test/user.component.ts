@@ -19,7 +19,6 @@ export class UserComponent implements OnInit {
   followingCount: number = 0;
   isUserLoggedIn: boolean = false;
   isFollowing: boolean = false;
-  isBlocked: boolean = false;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -39,7 +38,6 @@ export class UserComponent implements OnInit {
     });
 
     this.checkIsFollowing();
-
   }
 
   getUserDetails(userId: number) {
@@ -67,11 +65,6 @@ export class UserComponent implements OnInit {
 
   updateFollowingCount(count: number) {
     this.followingCount = count;
-  }
-
-
-  updateBlockedCount(count: number) {
-    this.blockedCount = count;
   }
 
   followUser() {

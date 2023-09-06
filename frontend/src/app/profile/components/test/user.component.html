@@ -21,8 +21,7 @@
                             <app-followers 
                                 [userId]="userId" 
                                 (followersCountUpdated)="updateFollowersCount($event)"
-                                (followingCountUpdated)="updateFollowingCount($event)"
-                                (blockedCountUpdated)="updateBlockedCount($event)">
+                                (followingCountUpdated)="updateFollowingCount($event)">
                             </app-followers>
                         </div>
                         <div *ngIf="!isUserLoggedIn">
@@ -37,7 +36,9 @@
                     <p class="user-bio">{{user.bio}}</p>
                 </div>
             </div>
-            <div class="misc-info"></div>
+            <div class="misc-info">
+                <app-feed></app-feed>
+            </div>
         </div>
 
     <div class="profile-right">
