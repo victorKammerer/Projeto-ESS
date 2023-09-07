@@ -10,3 +10,5 @@ package-lock.json
 package.json
 setupTests.js
 tsconfig.json
+frontend/.env.dev
+

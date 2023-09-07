@@ -21,11 +21,13 @@
                             <app-followers 
                                 [userId]="userId" 
                                 (followersCountUpdated)="updateFollowersCount($event)"
-                                (followingCountUpdated)="updateFollowingCount($event)"
-                                (blockedCountUpdated)="updateBlockedCount($event)">
+                                (followingCountUpdated)="updateFollowingCount($event)">
                             </app-followers>
                         </div>
-                        <app-follow-btn class="follow-btn"></app-follow-btn>
+                        <div *ngIf="!isUserLoggedIn">
+                            <app-follow-btn (click)="followUser()" class="follow-btn" *ngIf="!isFollowing"></app-follow-btn>
+                            <app-unfollow-btn (click)="unfollowUser()" class="unfollow-btn" *ngIf="isFollowing"></app-unfollow-btn>
+                        </div>
                         <div class="follows">
                             <span class="follow-counter" (click)="followersButton()">{{followersCount}} Seguidores</span>
                             <span class="follow-counter" (click)="followersButton()">{{followingCount}} Seguindo</span>
@@ -35,14 +37,14 @@
                 </div>
             </div>
             <div class="misc-info">
-                <router-outlet></router-outlet>
+                <app-feed></app-feed>
             </div>
         </div>
 
     <div class="profile-right">
       <app-edit-btn class="editbtn"></app-edit-btn> <!--Click ele tem que trazer um componente de edição-->
       <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
-      <app-button (click)="goToRoute('/historico')" label="Histórico" type="btn medium colorpurple"></app-button> 
+      <app-button (click)="goToHistoric()" label="Histórico" type="btn medium colorpurple"></app-button> 
       <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
     </div>
 

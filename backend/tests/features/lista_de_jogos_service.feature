@@ -173,6 +173,3 @@ Scenario: The user tries to sort another users list by "Color", in ascending ord
     When the user sends a GET to the endpoint "/api/users/2/list/color/asc"
     Then the response should return an error message
     And return status code "400"
-
-
-

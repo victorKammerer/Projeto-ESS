@@ -15,9 +15,10 @@ import { DataCyDirective } from './directives/data-cy.directive';
 import { EditBtnComponent } from './components/editBtn/editBtn.component';
 import { FollowBtnComponent } from './components/follow-btn/follow-btn.component';
 import { PostBtnComponent } from './components/post-btn/post-btn.component';
+import { UnfollowBtnComponent } from './components/unfollow-btn/unfollow-btn.component';
 
 @NgModule({
-    declarations: [DataCyDirective, ButtonComponent, EditBtnComponent, FollowBtnComponent, PostBtnComponent],
+    declarations: [DataCyDirective, ButtonComponent, EditBtnComponent, FollowBtnComponent, PostBtnComponent, UnfollowBtnComponent],
     imports: [
         CommonModule,
         MatInputModule,
@@ -37,6 +38,7 @@ import { PostBtnComponent } from './components/post-btn/post-btn.component';
         EditBtnComponent,
         FollowBtnComponent,
         PostBtnComponent,
+        UnfollowBtnComponent,
     ],
     providers: [
         // TODO: Add services here
