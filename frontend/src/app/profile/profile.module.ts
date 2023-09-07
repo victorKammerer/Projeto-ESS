@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 
+import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserComponent } from './components/test/user.component'
 import { FollowersComponent } from '../followers/followers.component';
@@ -29,6 +30,7 @@ import { EditComponent } from './components/edit/edit.component';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
+    AppRoutingModule,
   ],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
