@@ -175,17 +175,18 @@ router.delete('/users/:id', async (req,res) => {
 router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
-
-  // if(((loggedID !== 0) && (loggedID !== id))){
-    // return res.status(401).json({ Error : 'Unauthorized' });
-  // }
-
+ 
   const requestedUser = users.find(user => user.id === id);
-
+  
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
   }
-
+  
+  if(((loggedID !== 0) && (loggedID !== id))){
+    requestedUser.user = "***********";
+    requestedUser.password = "***********";
+    requestedUser.email = "***********"; 
+  }
   //PRINT USER PROFILE INFO
   res.status(200).json(requestedUser);
 });

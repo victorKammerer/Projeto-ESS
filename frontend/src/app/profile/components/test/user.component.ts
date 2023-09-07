@@ -27,6 +27,8 @@ export class UserComponent implements OnInit {
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
 
+    this.checkIsUserLoggedIn();
+
     this.getUserDetails(this.userId).subscribe(
       (data) => {
         this.user = data as User;
@@ -37,10 +39,6 @@ export class UserComponent implements OnInit {
         this.router.navigate(['/not-found']);
       }
     );
-
-    if(!this.user) {
-      this.router.navigate(['/not-found']);
-    };
 
     this.checkIsFollowing();
   }
