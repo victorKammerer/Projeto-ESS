@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { UserComponent } from './components/test/user.component'
 import { FollowersComponent } from '../followers/followers.component';
 import { FeedComponent } from '../feed/feed.component';
+import { EditComponent } from './components/edit/edit.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FeedComponent } from '../feed/feed.component';
     //Declaração dos componentes
     UserComponent,
     FollowersComponent,
-    FeedComponent
+    FeedComponent,
+    EditComponent
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile
