@@ -29,7 +29,7 @@
     color: #ecf0f1;
     padding: 20px;
     width: 70vw; /* 1280px*/
-    height: 105vh; /* Ocupa toda a altura disponível */
+    height: 100vh; /* Ocupa toda a altura disponível */
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -88,7 +88,7 @@
 
         .follow-section {
             display: flex;
-            flex-direction: ro;
+            flex-direction: row;
             align-items: center;
             span {
                 margin: 0 1rem;
@@ -105,10 +105,7 @@
         }
 
         .misc-info {
-            background-color: rgb(23, 23, 23); /* Cor de fundo do retângulo vertical */
-            color: #ecf0f1; /* Cor do texto */
-            height: 75%;
-            width: 100%;
+        
         }
     }
 
