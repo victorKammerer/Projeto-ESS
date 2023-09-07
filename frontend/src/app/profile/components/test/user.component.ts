@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
-
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -27,10 +27,16 @@ export class UserComponent implements OnInit {
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
 
-    this.checkIsUserLoggedIn();
-
-    this.getUserDetails(this.userId).subscribe(data => {
-      this.user = data as User;
+    this.getUserDetails(this.userId).subscribe(
+      (data) => {
+        this.user = data as User;
+        console.log(this.user.name);
+      },
+      (error) => {
+        console.error('Error loading user details', error);
+        this.router.navigate(['/not-found']);
+      }
+    );
 
       if(!this.user) {
         this.router.navigate(['/not-found']);
@@ -41,9 +47,12 @@ export class UserComponent implements OnInit {
   }
 
   getUserDetails(userId: number) {
-      const data = this.http.get(`/users/${userId}`);
-      console.log(data);
-      return data
+    return this.http.get(`/users/${userId}`).pipe(
+      catchError((error) => {
+        throw error;
+      })
+    );
+      
   }
 
   public createItem(): void {
