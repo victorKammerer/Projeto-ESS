@@ -18,6 +18,30 @@ const fs = require('fs'); //Module to read files
 let loggedID = 1;
 setAuthenticatedUserID(loggedID);
 
+// Rotas comuns para facilitar o desenvolvimento conjunto e dinamica do site
+// Return Logged User
+router.get('/me', async (req,res) => {
+  const loggedId_ = getAuthenticatedUserID();
+  console.log(loggedId_)
+  const requestedUser = users.find(user => user.id === loggedId_);
+  console.log(requestedUser)
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
+  }
+
+  //PRINT USER PROFILE INFO
+  res.status(200).json(requestedUser);
+});
+
+// Search users by regex matching name + lastname, username
+router.get('/search/users/:query', async (req,res) => {
+  const query = req.params.query;
+  const regex = new RegExp(query.toLowerCase(), 'i');
+  const usersList = users.filter(user => regex.test(user.name.toLowerCase() + ' ' + user.lastName.toLowerCase()));
+  res.status(200).json(usersList);
+});
+
 // -------------------------------- POST CREATION ROUTES -------------------------------- //
 router.post('/posts', async (req: Request, res: Response) => {
   const { category, game, rate, title, description } = req.body;
@@ -94,20 +118,6 @@ router.put('/posts/:user_id/:post_id', (req: Request, res: Response) => {
 setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USER ROUTES -------------------------------- //
-//*Return Logged USer
-router.get('/me', async (req,res) => {
-  const loggedId_ = getAuthenticatedUserID();
-  console.log(loggedId_)
-  const requestedUser = users.find(user => user.id === loggedId_);
-  console.log(requestedUser)
-
-  if(!requestedUser){
-    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
-  }
-
-  //PRINT USER PROFILE INFO
-  res.status(200).json(requestedUser);
-});
 
 
 //*Create User

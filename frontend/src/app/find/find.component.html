@@ -1,0 +1,6 @@
+<div class="search-container">
+    <input type="text" [(ngModel)]="query" (input)="onSearch()" placeholder="Search users..." />
+    <div *ngIf="users.length" class="search-results">
+        <p *ngFor="let user of users" (click)="onUserClick(user.id)"><strong>@{{ user.user }} </strong>{{ user.name }}</p>
+    </div>
+</div>
