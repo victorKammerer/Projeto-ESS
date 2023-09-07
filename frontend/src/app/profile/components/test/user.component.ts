@@ -49,7 +49,6 @@ export class UserComponent implements OnInit {
         throw error;
       })
     );
-      
   }
 
   public createItem(): void {
