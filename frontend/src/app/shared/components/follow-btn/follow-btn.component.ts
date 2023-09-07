@@ -6,5 +6,4 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./follow-btn.component.scss']
 })
 export class FollowBtnComponent {
-  @Input() label = 'Button';
 }

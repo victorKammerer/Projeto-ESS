@@ -216,6 +216,11 @@ defineFeature(feature, test => {
             expect(response.body[2].post_id).toBe(parseInt(arg2));
             expect(response.body[3].post_id).toBe(parseInt(arg3));
 
+            console.log(arg0)
+            console.log(arg1)
+            console.log(arg2)
+            console.log(arg3)
+
 
         });
 
@@ -479,6 +484,7 @@ defineFeature(feature, test => {
         and(/^The database does not contain a post with id: "(.*)"$/ , (arg0) => {
             //Checando se a base de dados de reviews não contem uma review com o id passado
             expect(Posts.find(post => post.post_id === parseInt(arg0))).toBeUndefined();
+            console.log(arg0)
         });
 
         and(/^The user with id: "(.*)" is logged in$/ , (arg0) => {

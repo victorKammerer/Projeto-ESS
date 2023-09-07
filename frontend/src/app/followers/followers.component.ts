@@ -13,14 +13,11 @@ export class FollowersComponent implements OnInit {
     @Input() userId: number = -1;
     @Output() followersCountUpdated: EventEmitter<number> = new EventEmitter<number>();
     @Output() followingCountUpdated: EventEmitter<number> = new EventEmitter<number>();
-    @Output() blockedCountUpdated: EventEmitter<number> = new EventEmitter<number>();
 
     followers: User[] = [];
     following: User[] = [];
-    blocked: User[] = [];
     followersCount: number = 0;
     followingCount: number = 0;
-    blockedCount: number = 0;
 
     constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
@@ -52,15 +49,6 @@ export class FollowersComponent implements OnInit {
             this.getFollowersCount(Number(userId)).subscribe(response => {
                 this.followersCount = response.followersCount;
                 this.followersCountUpdated.emit(response.followersCount);
-            });
-
-            this.getBlocked(Number(userId)).subscribe(data => {
-                this.blocked = data;
-            });
-
-            this.getBlockedCount(Number(userId)).subscribe(response => {
-                this.blockedCount = response.blockedCount;
-                this.blockedCountUpdated.emit(response.blockedCount);
             });
 
         }
