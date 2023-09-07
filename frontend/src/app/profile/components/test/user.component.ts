@@ -38,11 +38,6 @@ export class UserComponent implements OnInit {
       }
     );
 
-      if(!this.user) {
-        this.router.navigate(['/not-found']);
-      }
-    });
-
     this.checkIsFollowing();
   }
 
