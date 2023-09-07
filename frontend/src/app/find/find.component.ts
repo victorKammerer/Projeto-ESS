@@ -16,7 +16,7 @@ export class FindComponent {
 
 onSearch() {
   console.log(this.query);
-  if (this.query.length > 2 && this.query.length < 30) {
+  if (this.query.length < 30) {
     this.http.get<any[]>(`/search/users/${this.query}`).subscribe(
       data => {
         this.users = data;
