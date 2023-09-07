@@ -183,7 +183,6 @@ router.get('/users/:id', (req,res) => {
   }
   
   if(((loggedID !== 0) && (loggedID !== id))){
-    requestedUser.user = "***********";
     requestedUser.password = "***********";
     requestedUser.email = "***********"; 
   }
