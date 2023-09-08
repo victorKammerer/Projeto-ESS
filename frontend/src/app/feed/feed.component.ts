@@ -6,6 +6,7 @@ import { Observable, from } from 'rxjs';
 import { map, concatMap, mergeMap, mergeAll, toArray } from 'rxjs/operators';
 import { Post } from '../../../../backend/src/models/post.model';
 import { FeedItem } from './feed-item.model';
+import imageUtils from "../../assets/getImages.service";
 
 @Component({
   selector: 'app-feed',
@@ -30,13 +31,12 @@ export class FeedComponent implements OnInit{
 
       this.checkIsUserLoggedIn();
       this.getMyFeed();
-      this.getFollowingFeed();
     }
 
     getMyFeed(): void {
       this.feedItems = [] as FeedItem[];
       this.getPostsItems(this.userId).subscribe((feed: FeedItem[]) => {
-        this.feedItems = feed;
+        this.feedItems = feed.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       });
     }
 
@@ -51,7 +51,7 @@ export class FeedComponent implements OnInit{
         }),
         concatMap((obs: Observable<FeedItem[]>) => obs),
         map((feedItems: FeedItem[]) => {
-          this.feedItems = [...this.feedItems, ...feedItems];
+          this.feedItems = [...this.feedItems, ...feedItems].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         })
       ).subscribe();
 
@@ -65,7 +65,8 @@ export class FeedComponent implements OnInit{
               this.getUserDetails(post.user_id).pipe(
                 map(user => ({
                   authorId: post.user_id,
-                  authorName: user.name,
+                  authorUsername: user.user,
+                  authorName: user.name + ' ' + user.lastName,
                   content: post.title,
                   date: post.date,
                   type: 'post'
@@ -89,6 +90,7 @@ export class FeedComponent implements OnInit{
 
     getUserDetails(userId: number): Observable<User> {
       return this.http.get<User>(`/users/${userId}`);
+
     }
 
     getFollowing(userId: number): Observable<User[]> {
@@ -111,5 +113,15 @@ export class FeedComponent implements OnInit{
         }
       });
     }
+
+  _getProfileImage(userId : number) {
+    const prefix = '../../../../'
+    return imageUtils.getProfileImage(prefix, userId);
+  }
+
+  _getBackgroundImage(userId : number) {
+    const prefix = '../../../../'
+    return imageUtils.getBackgroundImage(prefix, userId);
+  }
 
 }

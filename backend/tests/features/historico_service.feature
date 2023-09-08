@@ -31,8 +31,8 @@ Feature: Historico de posts
 
   Scenario: Get all posts of the user that does not exist
     Given The service has a database containing posts
-    And The database does not contain any post with user_id: "6"
-    When A "GET" request is made to "/api/users/6/historic" route
+    And The database does not contain any post with user_id: "999"
+    When A "GET" request is made to "/api/users/999/historic" route
     Then The service should respond with status code "404"
     And The response should contain the message "User not found"
   
