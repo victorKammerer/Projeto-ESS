@@ -1,4 +1,16 @@
 <div class="profile-page">
+    <div class="popup-container">
+        <div class="popup" *ngIf="followPopUp" (click)="closePopUp()">
+            <app-followers
+                [userId]="userId"
+                [activeTab]="activeTab"
+                (followersCountUpdated)="updateFollowersCount($event)"
+                (followingCountUpdated)="updateFollowingCount($event)"
+                (followersListUpdated)="updateFollowersList($event)"
+                (followingListUpdated)="updateFollowingList($event)">
+            </app-followers>
+        </div>
+    </div>
     <!-- Plano de fundo -->
     <div class="background"></div>
 
@@ -16,12 +28,15 @@
                     class="profile-picture" />
                 <div class="user-info">
                     <h1 class="username">{{user.name}}</h1>
+                    <p class="user-bio">{{user.bio}}</p>
                     <div class="follow-section">
                         <div class="followapp">
                             <app-followers 
-                                [userId]="userId" 
+                                [userId]="userId"
                                 (followersCountUpdated)="updateFollowersCount($event)"
-                                (followingCountUpdated)="updateFollowingCount($event)">
+                                (followingCountUpdated)="updateFollowingCount($event)"
+                                (followersListUpdated)="updateFollowersList($event)"
+                                (followingListUpdated)="updateFollowingList($event)">
                             </app-followers>
                         </div>
                         <div *ngIf="!isUserLoggedIn">
@@ -29,11 +44,10 @@
                             <app-unfollow-btn (click)="unfollowUser()" class="unfollow-btn" *ngIf="isFollowing"></app-unfollow-btn>
                         </div>
                         <div class="follows">
-                            <span class="follow-counter" (click)="followersButton()">{{followersCount}} Seguidores</span>
-                            <span class="follow-counter" (click)="followersButton()">{{followingCount}} Seguindo</span>
+                            <span class="follow-counter" (click)="followerButton()">{{followersCount}} Seguidores</span>
+                            <span class="follow-counter" (click)="followingButton()">{{followingCount}} Seguindo</span>
                         </div>
                     </div>
-                    <p class="user-bio">{{user.bio}}</p>
                 </div>
             </div>
 

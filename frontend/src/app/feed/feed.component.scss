@@ -24,7 +24,9 @@
 }
 
 .feed-container {
-  max-height: 600px;  // Escolha uma altura adequada para a sua aplicação
+
+  max-height: 65vh;
+  // max-height: 600px;  // Escolha uma altura adequada para a sua aplicação
   overflow-y: auto;
   
   // Estilizações para a barra de rolagem (opcional):
