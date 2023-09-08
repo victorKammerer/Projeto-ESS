@@ -8,7 +8,7 @@
     <div *ngFor="let item of feedItems" class="post">
       <div class="author-info">
         <img [src]="_getProfileImage(item.authorId)" alt="Foto de perfil de {{ item.authorName }}" class="profile-picture">
-        <a class="author" (click)="openProfile(item.authorId)">{{ item.authorName }}</a>
+        <a class="author" (click)="openProfile(item.authorId)"><strong class="username">@{{item.authorUsername}}</strong> {{ item.authorName }}</a>
       </div>
       <h2>Novo post!</h2>
       <p>{{ item.content }}</p>
