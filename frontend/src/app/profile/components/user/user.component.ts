@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { catchError } from 'rxjs/operators';
+import imageUtils from "../../../../assets/getImages.service";
 
 @Component({
   selector: 'app-user',
@@ -45,6 +46,16 @@ export class UserComponent implements OnInit {
 
     this.checkIsFollowing();
   }
+
+  _getProfileImage() {
+    const prefix = '../../../../'
+    return imageUtils.getProfileImage(prefix, this.user.id);
+  }
+  
+  _getBackgroundImage() {
+    const prefix = '../../../../'
+    return imageUtils.getBackgroundImage(prefix, this.user.id);
+  } 
 
   getUserDetails(userId: number) {
     return this.http.get(`/users/${userId}`).pipe(
