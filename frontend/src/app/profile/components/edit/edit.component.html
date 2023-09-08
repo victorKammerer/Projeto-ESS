@@ -1,3 +1,41 @@
-<div class="meudeus">   
-    t
-</div>
+<mat-card>
+    <mat-card-content>
+      <h2>Edit User</h2>
+      <form #editForm="ngForm">
+
+        <!-- Todos os forms para edição -->
+  
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="user.email" name="Email" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Senha</mat-label>
+            <input matInput [(ngModel)]="user.password" name="Senha" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput [(ngModel)]="user.name" name="Nome" required>
+        </mat-form-field>
+
+        <mat-form-field>
+        <mat-label>Sobrenome</mat-label>
+        <input matInput [(ngModel)]="user.lastname" name="Sobrenome" required>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>Pronome</mat-label>
+            <input matInput [(ngModel)]="user.pronouns" name="Pronome" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Bio</mat-label>
+            <input matInput [(ngModel)]="user.bio" name="Bio" required>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" (click)="saveChanges()">Salvar</button>
+      </form>
+    </mat-card-content>
+  </mat-card>

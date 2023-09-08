@@ -118,6 +118,10 @@ export class UserComponent implements OnInit {
     }); 
   }
 
+  public editButton(): void {
+    this.router.navigate([`/users/${this.userId}/edit`]);
+  }
+
   public goToRoute(route: string) {
     this.router.navigate([route]);
   }
