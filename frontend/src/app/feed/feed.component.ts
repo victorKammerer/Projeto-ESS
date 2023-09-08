@@ -97,8 +97,10 @@ export class FeedComponent implements OnInit{
         return this.http.get<User[]>(`/users/${userId}/following`);
     }
 
-    openProfile(userId: number) : void {
-      this.router.navigate([`/users/${userId}`]);
+    openProfile(userId: number) {
+        this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+            this.router.navigate([`/users/${userId}`]);
+        });
     }
 
     openPost(userId: number) : void {
