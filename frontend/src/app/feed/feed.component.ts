@@ -65,7 +65,8 @@ export class FeedComponent implements OnInit{
               this.getUserDetails(post.user_id).pipe(
                 map(user => ({
                   authorId: post.user_id,
-                  authorName: user.name,
+                  authorUsername: user.user,
+                  authorName: user.name + ' ' + user.lastName,
                   content: post.title,
                   date: post.date,
                   type: 'post'
@@ -89,6 +90,7 @@ export class FeedComponent implements OnInit{
 
     getUserDetails(userId: number): Observable<User> {
       return this.http.get<User>(`/users/${userId}`);
+
     }
 
     getFollowing(userId: number): Observable<User[]> {

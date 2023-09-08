@@ -2,6 +2,18 @@
   cursor: pointer;
 }
 
+.username {
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover {
+    text-decoration: underline;
+    color: #0070cc;
+  }
+}
+
 .profile-picture {
   border-radius: 50%;
   width: 40px;
@@ -72,8 +84,9 @@
   }
 
   .author {
-    font-weight: bold;
-    color: #1da1f2;
+    margin: 1%;
+    font-weight: lighter;
+    color: #ffffff;
     text-decoration: none;
     transition: color 0.3s;
     cursor: pointer;
