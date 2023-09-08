@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { catchError } from 'rxjs/operators';
 
@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
   followingCount: number = 0;
   isUserLoggedIn: boolean = false;
   isFollowing: boolean = false;
+  goToEdit: boolean = true;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -102,7 +103,6 @@ export class UserComponent implements OnInit {
       }
 
     });
-
   }
 
   checkIsFollowing() {
@@ -119,7 +119,13 @@ export class UserComponent implements OnInit {
   }
 
   public editButton(): void {
-    this.router.navigate([`/users/${this.userId}/edit`]);
+    if (this.goToEdit) {
+      this.router.navigate([`/users/${this.userId}/edit`]);
+      this.goToEdit = false;
+    } else {
+      this.router.navigate([`/users/${this.userId}`]);
+      this.goToEdit = true;
+    }
   }
 
   public goToRoute(route: string) {
