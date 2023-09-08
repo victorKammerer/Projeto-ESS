@@ -94,6 +94,8 @@ export class FollowersComponent implements OnInit {
     }
 
     navigateToUser(userId: number) {
-        this.router.navigate([`/users/${userId}`]);
+        this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+            this.router.navigate([`/users/${userId}`]);
+        });
     }
 }
