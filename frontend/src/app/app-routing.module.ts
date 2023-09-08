@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { FollowersComponent } from './followers/followers.component';
 
-import { UserComponent } from './profile/components/test/user.component';
+import { UserComponent } from './profile/components/user/user.component';
 import { FeedComponent } from './feed/feed.component';
 import { EditComponent } from './profile/components/edit/edit.component';
 

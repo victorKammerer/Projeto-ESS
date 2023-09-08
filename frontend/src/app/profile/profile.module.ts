@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { UserComponent } from './components/test/user.component'
+import { UserComponent } from './components/user/user.component'
 import { FollowersComponent } from '../followers/followers.component';
 import { FeedComponent } from '../feed/feed.component';
 import { EditComponent } from './components/edit/edit.component';
