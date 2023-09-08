@@ -12,9 +12,15 @@
         </div>
     </div>
     <!-- Plano de fundo -->
-    <div class="background"></div>
+    <div class="background">
+        <img
+            [src]="_getBackgroundImage()"
+            alt="Foto de fundo do perfil"
+            class="profile-background-picture" />    
+    </div>
 
-    <div class="profile-background"></div>
+    <div class="profile-background">
+    </div>
     <!-- Retângulo vertical para informações do perfil -->
     <div class="profile-content">
         <!-- Informações do perfil -->
@@ -23,11 +29,11 @@
             <div class="profile-info">
                 <!-- Foto do perfil -->
                 <img
-                    src="https://www.w3schools.com/howto/img_avatar.png"
+                    [src]="_getProfileImage()"
                     alt="Foto do perfil"
                     class="profile-picture" />
                 <div class="user-info">
-                    <h1 class="username">{{user.name}}</h1>
+                    <h1 class="username">{{user.name}} {{user.lastName}}</h1>
                     <p class="user-bio">{{user.bio}}</p>
                     <div class="follow-section">
                         <div class="followapp">
