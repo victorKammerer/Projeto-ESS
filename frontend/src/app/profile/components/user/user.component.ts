@@ -14,11 +14,14 @@ export class UserComponent implements OnInit {
   userId : number = 0;
   user : User = {} as User;
   userLoggedInId: number = 0;
-  followersCount: number = 0;
-  blockedCount: number = 0;
-  followingCount: number = 0;
   isUserLoggedIn: boolean = false;
+  followers : User[] = [];
+  following : User[] = [];
+  followersCount: number = 0;
+  followingCount: number = 0;
   isFollowing: boolean = false;
+  followPopUp: boolean = false;
+  activeTab: string = 'followers';
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -55,13 +58,27 @@ export class UserComponent implements OnInit {
     // Implementação do método createItem
   }
 
-  public followersButton(): void {
-    // Agora, quando este método for chamado, this.userId já terá um valor definido
-    this.router.navigate([`/users/${this.userId}/followers`]);
+  closePopUp() {
+    this.followPopUp = false;
   }
 
-  public followingButton(): void {
-    this.router.navigate([`/users/${this.userId}/following`]);
+  followerButton(): void {
+    if(this.followPopUp == true)
+      this.followPopUp = false;
+    else
+      this.followPopUp = true;
+    
+    this.activeTab = 'followers';
+  }
+
+  followingButton(): void {
+    if(this.followPopUp == true)
+      this.followPopUp = false;
+    else
+      this.followPopUp = true;
+
+
+    this.activeTab = 'following';
   }
 
   updateFollowersCount(count: number) {
@@ -70,6 +87,14 @@ export class UserComponent implements OnInit {
 
   updateFollowingCount(count: number) {
     this.followingCount = count;
+  }
+
+  updateFollowersList(followers: User[]) {
+    this.followers = followers;
+  }
+
+  updateFollowingList(following: User[]) {
+    this.following = following;
   }
 
   followUser() {
@@ -88,7 +113,7 @@ export class UserComponent implements OnInit {
       this.isFollowing = false;
       this.followersCount--;
     });
-  } 
+  }
 
 
   checkIsUserLoggedIn() {
@@ -114,7 +139,7 @@ export class UserComponent implements OnInit {
       if (userLoggedIn) {
         this.isFollowing = true;
       }
-    }); 
+    });
   }
 
   public goToRoute(route: string) {
@@ -124,5 +149,4 @@ export class UserComponent implements OnInit {
   public goToHistoric(): void {
     this.router.navigate([`/users/${this.userId}/historic`]);
   }
-
 }
