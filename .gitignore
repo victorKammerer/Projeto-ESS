@@ -12,8 +12,8 @@ setupTests.js
 tsconfig.json
 frontend/.env.dev
 .vscode/
-frontend/angular.json
-frontend/package-lock.json
-frontend/package.json
+angular.json
+package-lock.json
+package.json
 frontend/src/index.html
 frontend/src/styles.scss
