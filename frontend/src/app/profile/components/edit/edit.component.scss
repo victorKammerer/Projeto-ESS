@@ -33,15 +33,38 @@ mat-card {
   
   /* Estilos para o botão "Salvar" */
   button {
-    background-color: rgb(168, 38, 255);
     color: #fff;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: pointer;    
+  }
+
+  .purple{
+    background-color: rgb(168, 38, 255);
+  }
+
+  /* Botão verde */
+  .green {
+    background-color: green;
+  }
+  .green:hover {
+    background-color: rgb(1, 110, 1);
+  }
+
+  /* Botão vermelho */
+  .red {
+    background-color: red;
+  }
+  .red:hover {
+    background-color: rgb(189, 2, 2);
   }
   
   button:hover {
     background-color: rgb(140, 32, 212);
+  }
+
+  :disabled {
+    cursor: not-allowed;
   }
   
