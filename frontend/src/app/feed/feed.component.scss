@@ -1,73 +1,119 @@
+.see-more{
+  cursor: pointer;
+}
+
+.username {
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover {
+    text-decoration: underline;
+    color: #0070cc;
+  }
+}
+
+.profile-picture {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.author-info {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+}
 
 .tabs {
   display: flex;
   border-bottom: 1px solid #e1e8ed;
   margin-bottom: 10px;
-  
+
   button {
-    padding: 10px 20px;
+    flex: 1;
+    padding: 10px 0;
     border: none;
-    background-color: #f5f8fa;
+    background-color: transparent;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s;
-    
+    color: #1da1f2;
+
     &.active {
-      background-color: #1da1f2;
-      color: #ffffff;
+      background-color: #ffffff;
     }
 
     &:hover {
-      background-color: #e1e8ed;
+      background-color: #f5f8fa;
     }
   }
 }
 
 .feed-container {
-  max-height: 600px;  // Escolha uma altura adequada para a sua aplicação
+  max-height: 65vh;
   overflow-y: auto;
-  
-  // Estilizações para a barra de rolagem (opcional):
+
   &::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: #1da1f2;
     border-radius: 4px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background-color: #f5f8fa;
   }
 }
 
 .post {
-    border-bottom: 1px solid #e1e8ed;
-    padding: 20px;
-    transition: background-color 0.2s;
-  
+  border-bottom: 1px solid #e1e8ed;
+  padding: 20px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: hsl(0, 0%, 28%);
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .author {
+    margin: 1%;
+    font-weight: lighter;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: pointer;
+
     &:hover {
-      background-color: #3b3b3b;
-    }
-  
-    h2 {
-      font-size: 20px;
-    }
-  
-    .author {
-      font-weight: bold;
-      color: #1da1f2;
-      text-decoration: none;
-  
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  
-    .date {
-      font-size: 12px;
-      color: #657786;
+      text-decoration: underline;
+      color: #0070cc;
     }
   }
-  
+
+  .date {
+    font-size: 12px;
+    color: #657786;
+  }
+
+  p {
+    margin-top: 10px;
+  }
+
+  a {
+    color: #1da1f2;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #0070cc;
+    }
+  }
+}

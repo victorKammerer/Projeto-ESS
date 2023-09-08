@@ -1,8 +1,20 @@
+.popup-container {
+    position: sticky;
+    top: 0;
+    z-index: 9999; 
+}
+
+.popup {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: center;
+}
+
 .profile-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Usamos min-height para garantir que ele cubra toda a altura da página */
+    min-height: 100vh;
     position: relative;
 }
 
@@ -17,8 +29,8 @@
 
 .profile-background {
     background-color: rgba(70, 70, 70);
-    width: 70vw; /* 1280px*/
-    height: 100vh; /* Ocupa toda a altura disponível */
+    width: 70vw; 
+    height: 100vh;
     position: absolute;
     display: flex;
     mix-blend-mode: multiply;
@@ -28,12 +40,12 @@
 .profile-content {
     color: #ecf0f1;
     padding: 20px;
-    width: 70vw; /* 1280px*/
-    height: 100vh; /* Ocupa toda a altura disponível */
+    width: 70vw;
+    height: 100vh;
     position: absolute;
     display: flex;
     flex-direction: row;
-    justify-content: top; /* Alinha o conteúdo verticalmente */
+    justify-content: top;
 
     .profile-left {
         display: flex;
@@ -41,7 +53,7 @@
         width: 75%;
 
         .profile-picture {
-            width: 150px; /* Ajuste o tamanho da imagem conforme necessário */
+            width: 150px;
             height: 150px;
             border-radius: 50%;
             margin: 20px;
@@ -52,13 +64,13 @@
         .profile-info {
             display: flex;
             flex-direction: row;
-            height: 25%;
+            height: 35%;
         }
 
         .user-info {
             display: flex;
             flex-direction: column;
-            margin: 20px;
+            margin: 30px;
         }
 
         .username {
@@ -104,9 +116,10 @@
             margin: 10px;
         }
 
-        // .misc-info {
-        //     background-color: ;
-        // }
+        .misc-info {
+            display: center;
+            max-height: 100vh;
+        }
     }
 
     .profile-right {

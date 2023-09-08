@@ -18,6 +18,30 @@ const fs = require('fs'); //Module to read files
 let loggedID = 1;
 setAuthenticatedUserID(loggedID);
 
+// Rotas comuns para facilitar o desenvolvimento conjunto e dinamica do site
+// Return Logged User
+router.get('/me', async (req,res) => {
+  const loggedId_ = getAuthenticatedUserID();
+  console.log(loggedId_)
+  const requestedUser = users.find(user => user.id === loggedId_);
+  console.log(requestedUser)
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
+  }
+
+  //PRINT USER PROFILE INFO
+  res.status(200).json(requestedUser);
+});
+
+// Search users by regex matching name + lastname, username
+router.get('/search/users/:query', async (req,res) => {
+  const query = req.params.query;
+  const regex = new RegExp(query.toLowerCase(), 'i');
+  const usersList = users.filter(user => regex.test(user.name.toLowerCase() + ' ' + user.lastName.toLowerCase()));
+  res.status(200).json(usersList);
+});
+
 // -------------------------------- POST CREATION ROUTES -------------------------------- //
 router.post('/posts', async (req: Request, res: Response) => {
   const { category, game, rate, title, description } = req.body;
@@ -94,20 +118,6 @@ router.put('/posts/:user_id/:post_id', (req: Request, res: Response) => {
 setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USER ROUTES -------------------------------- //
-//*Return Logged USer
-router.get('/me', async (req,res) => {
-  const loggedId_ = getAuthenticatedUserID();
-  console.log(loggedId_)
-  const requestedUser = users.find(user => user.id === loggedId_);
-  console.log(requestedUser)
-
-  if(!requestedUser){
-    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
-  }
-
-  //PRINT USER PROFILE INFO
-  res.status(200).json(requestedUser);
-});
 
 
 //*Create User
@@ -183,7 +193,6 @@ router.get('/users/:id', (req,res) => {
   }
   
   if(((loggedID !== 0) && (loggedID !== id))){
-    requestedUser.user = "***********";
     requestedUser.password = "***********";
     requestedUser.email = "***********"; 
   }
@@ -471,16 +480,16 @@ export {setUsers, setList, setGames, getGames, getUsers, getLists};
 router.get('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const user = utils.getUser(id, users);
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
 
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if(!userLists) {
+  if(!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
   
-  return res.status(200).json(userLists);
+  return res.status(200).json(userList);
 
 });
 
@@ -528,20 +537,20 @@ router.get('/users/:id/list/:entryType', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const entryType : string = req.params.entryType;
   const user = utils.getUser(id, users);
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
   if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
     return res.status(404).json({ message : 'Invalid entry type: ' + entryType });
   }
-  if (!userLists) {
+  if (!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
 
-  const filteredEntries = userLists.entries.filter((entry) => entry.entryType === entryType);
+  const filteredEntries = userList.entries.filter((entry) => entry.entryType === entryType);
   const filteredList = {
-    userId : userLists.userId,
+    userId : userList.userId,
     entries : filteredEntries
   };
   return res.status(200).json(filteredList);
@@ -557,23 +566,23 @@ router.put('/users/:id/list/:entryId', async (req, res) => {
   if (id !== loggedInId) {
     return res.status(401).json({ message : 'Unauthorized' });
   }
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (!userLists) {
+  if (!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
-  if (! utils.isEntryInList(userLists, entryId)) {
+  if (! utils.isEntryInList(userList, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
   if (entryType != EntryType.PLAYED && entryType != EntryType.ABANDONED && entryType != EntryType.WISHLIST) {
     return res.status(400).json({ message : 'Invalid entry type' });
   }
-  const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
-  userLists.entries[entryIndex].entryType = entryType;
-  userLists.entries[entryIndex].date = new Date(reqDate);
-  return res.status(200).json(userLists.entries.find((entry) => entry.entryId === entryId));
+  const entryIndex = userList.entries.findIndex((entry) => entry.entryId === entryId);
+  userList.entries[entryIndex].entryType = entryType;
+  userList.entries[entryIndex].date = new Date(reqDate);
+  return res.status(200).json(userList.entries.find((entry) => entry.entryId === entryId));
 });
 
 // DELETE : Remove a game from a user's list
@@ -584,18 +593,18 @@ router.delete('/users/:id/list/:entryId', async (req, res) => {
   if (id !== loggedInId) {
     return res.status(401).json({ message : 'Unauthorized' });
   }
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (!userLists) {
+  if (!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
-  if (! utils.isEntryInList(userLists, entryId)) {
+  if (! utils.isEntryInList(userList, entryId)) {
     return res.status(404).json({ message : 'Entry not found' });
   }
-  const entryIndex = userLists.entries.findIndex((entry) => entry.entryId === entryId);
-  userLists.entries.splice(entryIndex, 1);
+  const entryIndex = userList.entries.findIndex((entry) => entry.entryId === entryId);
+  userList.entries.splice(entryIndex, 1);
   return res.status(200).json({ message : 'Entry deleted' });
 });
 
@@ -604,14 +613,14 @@ router.get('/users/:id/list/search/:name', async (req, res) => {
   const id : number = parseInt(req.params.id);
   const name : string = req.params.name;
   const user = utils.getUser(id, users);
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (!userLists) {
+  if (!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
-  const filteredEntries = userLists.entries.filter((entry) => {
+  const filteredEntries = userList.entries.filter((entry) => {
     const game = utils.getGame(entry.gameId, games);
     if (!game) {
       return false;
@@ -619,7 +628,7 @@ router.get('/users/:id/list/search/:name', async (req, res) => {
     return game.gameName.replace(/\s+/g, "").toLowerCase().includes(name.toLowerCase());
   });
   const filteredList = {
-    userId : userLists.userId,
+    userId : userList.userId,
     entries : filteredEntries
   };
   return res.status(200).json(filteredList);
@@ -631,11 +640,11 @@ router.get('/users/:id/list/:criteria/:order', async (req, res) => {
   const criteria : string = req.params.criteria;
   const order : string = req.params.order;
   const user = utils.getUser(id, users);
-  const userLists = utils.getUsersList(id, lists);
+  const userList = utils.getUsersList(id, lists);
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
   }
-  if (!userLists) {
+  if (!userList) {
     return res.status(404).json({ message : 'List not found' });
   }
   if (criteria !== 'date' && criteria !== 'title') {
@@ -644,7 +653,7 @@ router.get('/users/:id/list/:criteria/:order', async (req, res) => {
   if (order !== 'asc' && order !== 'desc') {
     return res.status(400).json({ message : 'Invalid order' });
   }
-  const orderedEntries = userLists.entries.sort((a, b) => {
+  const orderedEntries = userList.entries.sort((a, b) => {
     if (criteria === 'date') {
       return (order.localeCompare('asc') == 0) ? (a.date.getTime() - b.date.getTime()) : (b.date.getTime() - a.date.getTime());
     }
@@ -659,7 +668,7 @@ router.get('/users/:id/list/:criteria/:order', async (req, res) => {
     return 0;
   });
   const orderedList = {
-    userId : userLists.userId,
+    userId : userList.userId,
     entries : orderedEntries
   };
   return res.status(200).json(orderedList);

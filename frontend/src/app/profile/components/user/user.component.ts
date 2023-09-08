@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { catchError } from 'rxjs/operators';
+import imageUtils from "../../../../assets/getImages.service";
 
 @Component({
   selector: 'app-user',
@@ -14,12 +15,14 @@ export class UserComponent implements OnInit {
   userId : number = 0;
   user : User = {} as User;
   userLoggedInId: number = 0;
-  followersCount: number = 0;
-  blockedCount: number = 0;
-  followingCount: number = 0;
   isUserLoggedIn: boolean = false;
+  followers : User[] = [];
+  following : User[] = [];
+  followersCount: number = 0;
+  followingCount: number = 0;
   isFollowing: boolean = false;
-  goToEdit: boolean = true;
+  followPopUp: boolean = false;
+  activeTab: string = 'followers';
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -44,26 +47,49 @@ export class UserComponent implements OnInit {
     this.checkIsFollowing();
   }
 
+  _getProfileImage() {
+    const prefix = '../../../../'
+    return imageUtils.getProfileImage(prefix, this.user.id);
+  }
+  
+  _getBackgroundImage() {
+    const prefix = '../../../../'
+    return imageUtils.getBackgroundImage(prefix, this.user.id);
+  } 
+
   getUserDetails(userId: number) {
     return this.http.get(`/users/${userId}`).pipe(
       catchError((error) => {
         throw error;
       })
     );
-      
   }
 
   public createItem(): void {
     // Implementação do método createItem
   }
 
-  public followersButton(): void {
-    // Agora, quando este método for chamado, this.userId já terá um valor definido
-    this.router.navigate([`/users/${this.userId}/followers`]);
+  closePopUp() {
+    this.followPopUp = false;
   }
 
-  public followingButton(): void {
-    this.router.navigate([`/users/${this.userId}/following`]);
+  followerButton(): void {
+    if(this.followPopUp == true)
+      this.followPopUp = false;
+    else
+      this.followPopUp = true;
+    
+    this.activeTab = 'followers';
+  }
+
+  followingButton(): void {
+    if(this.followPopUp == true)
+      this.followPopUp = false;
+    else
+      this.followPopUp = true;
+
+
+    this.activeTab = 'following';
   }
 
   updateFollowersCount(count: number) {
@@ -72,6 +98,14 @@ export class UserComponent implements OnInit {
 
   updateFollowingCount(count: number) {
     this.followingCount = count;
+  }
+
+  updateFollowersList(followers: User[]) {
+    this.followers = followers;
+  }
+
+  updateFollowingList(following: User[]) {
+    this.following = following;
   }
 
   followUser() {
@@ -90,7 +124,7 @@ export class UserComponent implements OnInit {
       this.isFollowing = false;
       this.followersCount--;
     });
-  } 
+  }
 
 
   checkIsUserLoggedIn() {
@@ -103,6 +137,7 @@ export class UserComponent implements OnInit {
       }
 
     });
+
   }
 
   checkIsFollowing() {
@@ -115,9 +150,9 @@ export class UserComponent implements OnInit {
       if (userLoggedIn) {
         this.isFollowing = true;
       }
-    }); 
+    });
   }
-
+  
   public editButton(): void {
     if (this.goToEdit) {
       this.router.navigate([`/users/${this.userId}/edit`]);
@@ -127,7 +162,7 @@ export class UserComponent implements OnInit {
       this.goToEdit = true;
     }
   }
-
+  
   public goToRoute(route: string) {
     this.router.navigate([route]);
   }
@@ -135,5 +170,5 @@ export class UserComponent implements OnInit {
   public goToHistoric(): void {
     this.router.navigate([`/users/${this.userId}/historic`]);
   }
-
 }
+ 
