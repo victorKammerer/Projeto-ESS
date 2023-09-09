@@ -27,7 +27,6 @@ export class EditComponent implements OnInit{
   ngOnInit(): void {
     this.route.parent?.params.subscribe(params => {
       this.userId =+ params['id']; // O '+' converte a string para um número
-      console.log(this.userId);
     });
 
     this.http.get('/me').subscribe(data => {
@@ -50,7 +49,7 @@ export class EditComponent implements OnInit{
   }
 
   getUserDetails(userId: number) {
-    const params = new HttpParams().set('loggedID', this.userLoggedInId);
+    const params = new HttpParams().set('loggedID', 1);
 
     return this.http.get(`/users/${userId}`,{params}).pipe(
       catchError((error) => {
@@ -61,18 +60,16 @@ export class EditComponent implements OnInit{
   }
 
   saveChanges() {
-    const params = new HttpParams().set('loggedID', this.userLoggedInId);
-
-    this.http.put(`/users/${this.userId}`,this.user, {params}).subscribe(
-      () => {
+    console.log(this.user);
+    this.http.put(`/users/${this.userId}`,this.user).subscribe(
+      (response) => {
         console.log('User details updated successfully');
-        this.router.navigate(['/users/', this.userId]);
+        //this.router.navigate(['/users/', this.userId]);
         this.saved = true;
         this.disabled = true;
       },
       (error) => {
         this.notSaved = true;
-        this.disabled = true;
         console.error('Error updating user details', error);
         this.router.navigate([`/users/${this.userId}/edit`]);
       }

@@ -23,6 +23,7 @@ export class UserComponent implements OnInit {
   isFollowing: boolean = false;
   followPopUp: boolean = false;
   activeTab: string = 'followers';
+  goToEdit: boolean = true;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
