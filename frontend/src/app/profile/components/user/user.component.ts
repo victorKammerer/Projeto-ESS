@@ -49,12 +49,12 @@ export class UserComponent implements OnInit {
 
   _getProfileImage() {
     const prefix = '../../../../'
-    return imageUtils.getProfileImage(prefix, this.user.id);
+    return imageUtils.getProfileImage(prefix, this.userId);
   }
   
   _getBackgroundImage() {
     const prefix = '../../../../'
-    return imageUtils.getBackgroundImage(prefix, this.user.id);
+    return imageUtils.getBackgroundImage(prefix, this.userId);
   } 
 
   getUserDetails(userId: number) {
