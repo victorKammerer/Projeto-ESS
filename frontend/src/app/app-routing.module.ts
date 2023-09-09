@@ -16,10 +16,10 @@ const routes: Routes = [
     {path: 'users/:id', component: UserComponent,children: [
         { path: '', component: FeedComponent },
         { path: 'edit', component: EditComponent },
+        { path: 'history', component: HistoricListComponent },
     ]},
     {path: 'users/:id/followers',component: FollowersComponent},
     {path: 'search',component: FindComponent},
-    { path: 'users/:userId/historic', component: HistoricListComponent },
     { path: 'not-found', component: NotFoundComponent },
     { path: '**', redirectTo: 'not-found' },
 ];
