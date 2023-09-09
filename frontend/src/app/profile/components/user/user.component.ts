@@ -49,12 +49,12 @@ export class UserComponent implements OnInit {
 
   _getProfileImage() {
     const prefix = '../../../../'
-    return imageUtils.getProfileImage(prefix, this.user.id);
+    return imageUtils.getProfileImage(prefix, this.userId);
   }
   
   _getBackgroundImage() {
     const prefix = '../../../../'
-    return imageUtils.getBackgroundImage(prefix, this.user.id);
+    return imageUtils.getBackgroundImage(prefix, this.userId);
   } 
 
   getUserDetails(userId: number) {
@@ -154,10 +154,7 @@ export class UserComponent implements OnInit {
   }
 
   public goToRoute(route: string) {
-    this.router.navigate([route]);
-  }
-
-  public goToHistoric(): void {
-    this.router.navigate([`/users/${this.userId}/historic`]);
+    let route_ = '/users/' + this.userId + '/' + route;
+    this.router.navigate([route_]);
   }
 }
