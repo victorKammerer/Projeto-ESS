@@ -62,7 +62,7 @@
         </div>
 
     <div class="profile-right">
-      <app-edit-btn class="editbtn"></app-edit-btn> <!--Click ele tem que trazer um componente de edição-->
+      <app-edit-btn class="editbtn" (click)="editButton()" [goToEdit]="!goToEdit"></app-edit-btn>
       <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
       <app-button (click)="goToHistoric()" label="Histórico" type="btn medium colorpurple"></app-button> 
       <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
