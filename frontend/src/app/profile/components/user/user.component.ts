@@ -29,11 +29,6 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.params.subscribe(params => {
-      let id = params['id']; 
-      if(id == 'me') { 
-        this.navigateToUserLoggedIn();
-      };
-
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
 
