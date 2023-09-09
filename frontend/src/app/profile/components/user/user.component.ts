@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
+
     this.route.params.subscribe(params => {
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
@@ -139,6 +140,15 @@ export class UserComponent implements OnInit {
 
     });
 
+  }
+
+  navigateToUserLoggedIn(){
+    this.http.get('/me').subscribe(data => {
+      const userLoggedIn = data as User;
+      this.userLoggedInId = userLoggedIn.id;
+
+      this.router.navigate(['/users/' + this.userLoggedInId]);
+    });
   }
 
   checkIsFollowing() {

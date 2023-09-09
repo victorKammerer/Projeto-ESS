@@ -50,8 +50,14 @@
                             <app-unfollow-btn (click)="unfollowUser()" class="unfollow-btn" *ngIf="isFollowing"></app-unfollow-btn>
                         </div>
                         <div class="follows">
-                            <span class="follow-counter" (click)="followerButton()">{{followersCount}} Seguidores</span>
-                            <span class="follow-counter" (click)="followingButton()">{{followingCount}} Seguindo</span>
+                            <div class="follower" (click)="followerButton()">
+                                <div class="follower-counter">{{followersCount}}</div>
+                                <p class="follower-text">Seguidores</p>
+                            </div>
+                            <div class="following" (click)="followingButton()">
+                                <div class="follower-counter">{{followingCount}}</div>
+                                <p class="follower-text">Seguindo</p>
+                            </div>
                         </div>
                     </div>
                 </div>
