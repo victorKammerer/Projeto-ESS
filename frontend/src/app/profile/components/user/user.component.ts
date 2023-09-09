@@ -23,6 +23,7 @@ export class UserComponent implements OnInit {
   isFollowing: boolean = false;
   followPopUp: boolean = false;
   activeTab: string = 'followers';
+  goToEdit: boolean = true;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -152,7 +153,17 @@ export class UserComponent implements OnInit {
       }
     });
   }
-
+  
+  public editButton(): void {
+    if (this.goToEdit) {
+      this.router.navigate([`/users/${this.userId}/edit`]);
+      this.goToEdit = false;
+    } else {
+      this.router.navigate([`/users/${this.userId}`]);
+      this.goToEdit = true;
+    }
+  }
+  
   public goToRoute(route: string) {
     this.router.navigate([route]);
   }
@@ -161,3 +172,4 @@ export class UserComponent implements OnInit {
     this.router.navigate([`/users/${this.userId}/historic`]);
   }
 }
+ 
