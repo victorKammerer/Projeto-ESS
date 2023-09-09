@@ -22,7 +22,7 @@ onSearch() {
   } else if (this.query.length < 30) {
     this.http.get<any[]>(`/search/users/${this.query}`).subscribe(
       data => {
-        this.users = data;
+        this.users = data.slice(0, 10);
         },
       error => {
         console.error('Erro ao buscar usuários:', error);
