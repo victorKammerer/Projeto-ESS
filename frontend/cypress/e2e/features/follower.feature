@@ -22,5 +22,3 @@ Scenario: Deixar de seguir uma pessoa
   And o usuário de id "1" não está na lista Seguidores do usuário de id "3"
   And o feed "Seguindo" não contém as postagens do usuário de id "3"
   And o usuário de id "3" não está na lista Seguindo do usuário de id "1"
-
-
