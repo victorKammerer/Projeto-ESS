@@ -8,14 +8,14 @@
             </div> 
         </button>
         <button class="categories" *ngFor="let category of availableCategories" (click)="getHistoryByCategory(category)" [class.active]="selectedCategory === category">{{category}}</button>
-        <button [class.active]="selectedCategory === 'all'" (click)="showAll()">All</button>
+        <button class="all" [class.active]="selectedCategory === 'all'" (click)="showAll()">All</button>
     </div>
     <div *ngFor="let post of show_posts" class="post" (click)="goToPost()">
         <h2>{{post.title}}</h2>
-        <p><strong>Game:</strong> {{post.game}}</p>
-        <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
-        <p><strong>Rate:</strong> {{ post.rate }}</p>
-        <p><strong>Date:</strong> {{ post.date }}</p>
+        <p class="game"><strong>Game:</strong> {{post.game}}</p>
+        <p class="categories"><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+        <p class="rate"><strong>Rate:</strong> {{ post.rate }}</p>
+        <p class="date"><strong>Date:</strong> {{ post.date }}</p>
     </div>
 </div>
 
