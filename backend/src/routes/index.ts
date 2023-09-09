@@ -34,6 +34,18 @@ router.get('/me', async (req,res) => {
   res.status(200).json(requestedUser);
 });
 
+router.put('/me', async (req, res) => {
+  const loggedId_ = req.body;
+
+  try{
+    setAuthenticatedUserID(loggedId_);
+  }catch(err){
+    return res.status(400).json( {message: 'Could not log in'} );
+  }
+
+  return res.status(200).json( {message: 'loggedID confirmed'} );
+});
+
 // Search users by regex matching name + lastname, username
 router.get('/search/users/:query', async (req,res) => {
   const query = req.params.query;
