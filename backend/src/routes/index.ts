@@ -165,7 +165,7 @@ router.post('/users', async (req,res) => {
 //*Delete User
 router.delete('/users/:id', async (req,res) => {
   const id = parseInt(req.params.id);
-  loggedID = parseInt(req.query.loggedID as string);
+  loggedID = loggedID = getAuthenticatedUserID();
 
   if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
@@ -184,14 +184,14 @@ router.delete('/users/:id', async (req,res) => {
 //*User Profile
 router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
-  loggedID = parseInt(req.query.loggedID as string);
+  loggedID = getAuthenticatedUserID();
  
   const requestedUser = users.find(user => user.id === id);
   
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
   }
-  
+
   if(((loggedID !== 0) && (loggedID !== id))){
     requestedUser.password = "***********";
     requestedUser.email = "***********"; 
@@ -204,7 +204,7 @@ router.get('/users/:id', (req,res) => {
 router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
-  loggedID = parseInt(req.query.loggedID as string);
+  loggedID = getAuthenticatedUserID();
 
   const userIndex = users.findIndex((user: any) => user.id === id);
   const requestedUser = users.find(user => user.id === id);
@@ -214,9 +214,7 @@ router.put('/users/:id', (req,res) => {
   }else if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }else{
-    if(users.some((users:any) => users.user === requestBody.user)){
-      return res.status(409).json({ message: 'Username arealdy exists' });
-    }else if(users.some((users:any) => users.email === requestBody.email)){
+    if((requestBody.email != requestedUser.email) && users.some((users:any) => users.email === requestBody.email)){
       return res.status(409).json({ message: 'Email arealdy exists' });
     }
   }
