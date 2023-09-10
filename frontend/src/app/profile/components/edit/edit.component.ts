@@ -67,6 +67,7 @@ export class EditComponent implements OnInit{
         //this.router.navigate(['/users/', this.userId]);
         this.saved = true;
         this.disabled = true;
+        window.location.reload();
       },
       (error) => {
         this.notSaved = true;

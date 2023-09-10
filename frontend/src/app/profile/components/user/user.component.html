@@ -68,9 +68,9 @@
         </div>
 
     <div class="profile-right">
-      <app-edit-btn class="editbtn" (click)="editButton()" [goToEdit]="!goToEdit"></app-edit-btn>
-      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
-      <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorpurple"></app-button> 
+      <app-edit-btn class="editbtn" (click)="editButton()" *ngIf="isUserLoggedIn" [goToEdit]="!goToEdit"></app-edit-btn>
+      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorred"></app-button> 
+      <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button> 
       <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
     </div>
 
