@@ -1,5 +1,6 @@
 import {Before, Given, When, Then} from '@badeball/cypress-cucumber-preprocessor';
 
+describe('Seguidores features', () => {
   let userLoggedName = '';
   Before(() => {
     cy.visit('/me').then(() => {
@@ -22,7 +23,10 @@ import {Before, Given, When, Then} from '@badeball/cypress-cucumber-preprocessor
 
 
   Given("{string} está visível", (button: string) => {
-    cy.get('.Btn > p').should('contain', button);
+    cy.get('.user-info > .username').invoke('text').then((username) => {
+      userName = username;
+      cy.get('.Btn > p').should('contain', button);
+    });
   });
 
   let userName : string = '';
@@ -91,3 +95,4 @@ import {Before, Given, When, Then} from '@badeball/cypress-cucumber-preprocessor
       });
     });
   });
+});
