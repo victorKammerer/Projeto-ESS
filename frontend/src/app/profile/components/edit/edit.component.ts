@@ -29,10 +29,15 @@ export class EditComponent implements OnInit{
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
 
+    //geting loggedID and returning if the user is not logged with the correct id
     this.http.get('/me').subscribe(data => {
       const userLoggedIn = data as User;
-      this.userLoggedInId = userLoggedIn.id;
-    });
+      this.userLoggedInId = userLoggedIn.id;   
+      
+      if(this.userLoggedInId !== this.userId){     
+        this.router.navigate([`/users/${this.userId}`]);
+      }
+    });  
 
     this.getUserDetails(this.userId).subscribe(
       (data) => {
@@ -44,12 +49,10 @@ export class EditComponent implements OnInit{
         this.router.navigate(['/not-found']);
       }
     );
-
-  
   }
 
   getUserDetails(userId: number) {
-    const params = new HttpParams().set('loggedID', 1);
+    const params = new HttpParams().set('loggedID', this.userLoggedInId);
 
     return this.http.get(`/users/${userId}`,{params}).pipe(
       catchError((error) => {
