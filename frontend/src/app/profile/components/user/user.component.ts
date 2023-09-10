@@ -47,6 +47,11 @@ export class UserComponent implements OnInit {
     );
 
     this.checkIsFollowing();
+
+    this.route.url.subscribe(urlSegments => {
+      const currentUrl = this.router.url;
+      this.goToEdit = !currentUrl.includes('edit');
+    });
   }
 
   _getProfileImage() {
