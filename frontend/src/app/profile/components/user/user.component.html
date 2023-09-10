@@ -50,8 +50,14 @@
                             <app-unfollow-btn (click)="unfollowUser()" class="unfollow-btn" *ngIf="isFollowing"></app-unfollow-btn>
                         </div>
                         <div class="follows">
-                            <span class="follow-counter" (click)="followerButton()">{{followersCount}} Seguidores</span>
-                            <span class="follow-counter" (click)="followingButton()">{{followingCount}} Seguindo</span>
+                            <div class="follower" (click)="followerButton()">
+                                <div class="follower-counter">{{followersCount}}</div>
+                                <p class="follower-text">Seguidores</p>
+                            </div>
+                            <div class="following" (click)="followingButton()">
+                                <div class="follower-counter">{{followingCount}}</div>
+                                <p class="follower-text">Seguindo</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,10 +68,11 @@
         </div>
 
     <div class="profile-right">
-      <app-edit-btn class="editbtn" (click)="editButton()" [goToEdit]="!goToEdit"></app-edit-btn>
-      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
-      <app-button (click)="goToHistoric()" label="Histórico" type="btn medium colorpurple"></app-button> 
-      <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
+      <app-edit-btn class="editbtn" (click)="editButton()" *ngIf="isUserLoggedIn" [goToEdit]="!goToEdit"></app-edit-btn>
+      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorred"></app-button> 
+      <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button> 
+      <app-button class="postbtn" (click)="deleteAccount()" label="Excluir conta" type="btn small deletebtn" *ngIf="!goToEdit"></app-button> 
+      <app-post-btn class="postbtn" (click)="goToRoute('/post')" *ngIf="goToEdit"></app-post-btn>
     </div>
 
         <!-- Outras informações, como jogos favoritos, conquistas, etc. -->

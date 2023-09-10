@@ -10,16 +10,18 @@ import { EditComponent } from './profile/components/edit/edit.component';
 import { HistoricListComponent } from './historic-list/historic-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
+import { MeComponent } from './me/me.component';
 
 
 const routes: Routes = [
     {path: 'users/:id', component: UserComponent,children: [
         { path: '', component: FeedComponent },
         { path: 'edit', component: EditComponent },
+        { path: 'history', component: HistoricListComponent },
     ]},
     {path: 'users/:id/followers',component: FollowersComponent},
     {path: 'search',component: FindComponent},
-    { path: 'users/:userId/historic', component: HistoricListComponent },
+    { path: 'me', component: MeComponent},
     { path: 'not-found', component: NotFoundComponent },
     { path: '**', redirectTo: 'not-found' },
 ];
