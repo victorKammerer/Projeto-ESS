@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
+
     this.route.params.subscribe(params => {
       this.userId =+ params['id']; // O '+' converte a string para um número
     });
@@ -46,16 +47,21 @@ export class UserComponent implements OnInit {
     );
 
     this.checkIsFollowing();
+
+    this.route.url.subscribe(urlSegments => {
+      const currentUrl = this.router.url;
+      this.goToEdit = !currentUrl.includes('edit');
+    });
   }
 
   _getProfileImage() {
     const prefix = '../../../../'
-    return imageUtils.getProfileImage(prefix, this.user.id);
+    return imageUtils.getProfileImage(prefix, this.userId);
   }
   
   _getBackgroundImage() {
     const prefix = '../../../../'
-    return imageUtils.getBackgroundImage(prefix, this.user.id);
+    return imageUtils.getBackgroundImage(prefix, this.userId);
   } 
 
   getUserDetails(userId: number) {
@@ -141,6 +147,15 @@ export class UserComponent implements OnInit {
 
   }
 
+  navigateToUserLoggedIn(){
+    this.http.get('/me').subscribe(data => {
+      const userLoggedIn = data as User;
+      this.userLoggedInId = userLoggedIn.id;
+
+      this.router.navigate(['/users/' + this.userLoggedInId]);
+    });
+  }
+
   checkIsFollowing() {
     const followers = this.http.get(`/users/${this.userId}/followers`);
 
@@ -154,22 +169,33 @@ export class UserComponent implements OnInit {
     });
   }
   
-  public editButton(): void {
-    if (this.goToEdit) {
+  editButton(): void {
+    if (this.goToEdit && window.confirm('Tem certeza que deseja editar sua conta?')) {
       this.router.navigate([`/users/${this.userId}/edit`]);
       this.goToEdit = false;
-    } else {
+    }else if(!this.goToEdit){
       this.router.navigate([`/users/${this.userId}`]);
       this.goToEdit = true;
     }
   }
+
+  deleteAccount(): void {
+    if (window.confirm('Tem certeza que deseja excluir sua conta?')) {
+      this.http.delete(`/users/${this.userId}`).subscribe(
+        (response) => {
+          console.log('User deleted successfully');
+          this.router.navigate([`/`]);
+        },
+        (error) => {
+          console.error('Error updating user details', error);
+        }
+      ); 
+    }
+  }
   
   public goToRoute(route: string) {
-    this.router.navigate([route]);
-  }
-
-  public goToHistoric(): void {
-    this.router.navigate([`/users/${this.userId}/historic`]);
+    let route_ = '/users/' + this.userId + '/' + route;
+    this.router.navigate([route_]);
   }
 }
  

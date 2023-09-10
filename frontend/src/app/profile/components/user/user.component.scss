@@ -4,6 +4,46 @@
     z-index: 9999; 
 }
 
+.follows{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5%;
+
+    .follower{
+        display: flex;
+        flex-direction: row;
+        margin-left: 10%;
+        padding-right: 20%;
+    }
+    // Hover follower
+    .follower:hover{
+        color: #3758eb;
+        cursor: pointer;
+    } 
+
+
+    .following{
+        display: flex;
+        flex-direction: row;
+        padding-right: 30%
+    }
+
+    .following:hover{
+        color: #3758eb;
+        cursor: pointer;
+    } 
+
+    .follower-counter{
+        cursor: pointer;
+        padding-right: 15%;
+        color: gray;
+    }
+
+
+}
+
+
+
 .popup {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
@@ -123,12 +163,7 @@
     }
 
     .profile-right {
-        background-color: rgba(
-            17,
-            46,
-            83,
-            0.6
-        ); /* Cor de fundo do retângulo vertical */
+        background-color: rgba(105, 105, 105, 0.6); /* Cor de fundo do retângulo vertical */
         color: #ecf0f1; /* Cor do texto */
         border-radius: 10px;
         height: 100%;
