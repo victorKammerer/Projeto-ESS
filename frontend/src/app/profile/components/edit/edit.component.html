@@ -8,11 +8,13 @@
         <mat-form-field>
             <mat-label>Email</mat-label>
             <input [disabled]="disabled" matInput [(ngModel)]="user.email" name="Email" required>
+            <div *ngIf="formErrors.email" class="error-message">{{ formErrors.email }}</div>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Senha</mat-label>
             <input [disabled]="disabled" matInput [(ngModel)]="user.password" name="Senha" required>
+            <div *ngIf="formErrors.password" class="error-message">{{ formErrors.password }}</div>
         </mat-form-field>
     
         <mat-form-field>
