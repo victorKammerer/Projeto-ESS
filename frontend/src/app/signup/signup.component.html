@@ -6,21 +6,31 @@
                 <div class="form-group">
                     <label for="username">Nome de Usuário *</label>
                     <input type="text" id="username" name="username" required [(ngModel)]="user.user" />
+                    <div *ngIf="formErrors.user" class="error-message">{{ formErrors.user }}</div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">E-mail *</label>
                     <input type="email" id="email" name="email" required [(ngModel)]="user.email" />
+                    <div *ngIf="formErrors.email" class="error-message">{{ formErrors.email }}</div>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Senha *</label>
                     <input type="password" id="password" name="password" required [(ngModel)]="user.password" />
+                    <div *ngIf="formErrors.password" class="error-message">{{ formErrors.password }}</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="name">Nome e Sobrenome *</label>
+                    <label for="name">Nome *</label>
                     <input type="text" id="name" name="name" required [(ngModel)]="user.name" />
+                    <div *ngIf="formErrors.name" class="error-message">{{ formErrors.name }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Sobrenome *</label>
+                    <input type="text" id="lastname" name="lastname" required [(ngModel)]="user.lastName" />
+                    <div *ngIf="formErrors.lastName" class="error-message">{{ formErrors.lastName }}</div>
                 </div>
 
                 <div class="form-group">
@@ -34,6 +44,7 @@
                 </div>
 
                 <button type="submit">Cadastrar</button>
+                <button class="back" (click)="goToRoute('/')">Voltar</button>
             </form>
         </div>
     </div>
