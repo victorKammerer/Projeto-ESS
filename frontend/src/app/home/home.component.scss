@@ -8,13 +8,13 @@
     background-image: url("../../assets/background/13.jpg");
 }
 
-.header {
+.logo {
+    background: url("../../assets/logo.png") no-repeat;
+    background-size: contain; /* ou 'cover', dependendo do comportamento desejado */
     position: fixed;
-    // padding: 120px 580px; /* Espaçamento interno */
-    color: white; /* Cor do texto */
-    font-size: 100px; /* Tamanho da fonte */
-    font-weight: bold; /* Peso da fonte */
-    margin-top: 5%;
+    height: 300px;
+    width: 300px;
+    margin-top: 3%;
 }
 
 .centered-container {
