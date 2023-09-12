@@ -12,6 +12,7 @@ import { HistoricListComponent } from './historic-list/historic-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
 import { MeComponent } from './me/me.component';
+import { GameListComponent } from './game-list/game-list.component';
 
 
 const routes: Routes = [
@@ -20,9 +21,10 @@ const routes: Routes = [
         { path: '', component: FeedComponent },
         { path: 'edit', component: EditComponent },
         { path: 'history', component: HistoricListComponent },
+        { path: 'list', component: GameListComponent},
     ]},
-    {path: 'users/:id/followers',component: FollowersComponent},
-    {path: 'search',component: FindComponent},
+    { path: 'users/:id/followers',component: FollowersComponent},
+    { path: 'search',component: FindComponent},
     { path: 'me', component: MeComponent},
     { path: 'not-found', component: NotFoundComponent },
     { path: '**', redirectTo: 'not-found' },
