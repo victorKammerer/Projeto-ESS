@@ -13,7 +13,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
 import { MeComponent } from './me/me.component';
 
-
 const routes: Routes = [
     {path: 'signup', component: SignupComponent},
     {path: 'users/:id', component: UserComponent,children: [

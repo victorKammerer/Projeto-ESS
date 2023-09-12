@@ -13,7 +13,7 @@ import { UserComponent } from './components/user/user.component'
 import { FollowersComponent } from '../followers/followers.component';
 import { FeedComponent } from '../feed/feed.component';
 import { EditComponent } from './components/edit/edit.component';
-
+import { PostComponent }
 
 @NgModule({
   declarations: [
