@@ -16,7 +16,6 @@ export class FindComponent {
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
 onSearch() {
-  console.log(this.query);
   if(this.query == '') {
     this.users = []
   } else if (this.query.length < 30) {

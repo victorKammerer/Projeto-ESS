@@ -14,10 +14,12 @@ import { FeedComponent } from './feed/feed.component';
 
 import { HomeModule } from './home/home.module';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SignupComponent } from './signup/signup.component';
 import { GameListComponent } from './game-list/game-list.component';
 
+
 @NgModule({
-    declarations: [AppComponent, HistoricListComponent, NotFoundComponent],
+    declarations: [AppComponent, HistoricListComponent, NotFoundComponent, SignupComponent],
     imports: [
         FormsModule,
         BrowserModule,

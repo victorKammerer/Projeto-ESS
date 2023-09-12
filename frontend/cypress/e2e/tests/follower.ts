@@ -1,4 +1,5 @@
 import {Before, Given, When, Then} from '@badeball/cypress-cucumber-preprocessor';
+import { contains } from 'cypress/types/jquery';
 
 describe('Seguidores features', () => {
   let userLoggedName = '';
@@ -95,4 +96,18 @@ describe('Seguidores features', () => {
       });
     });
   });
+
+  When('clico em {string} na barra de {string}', (button : string, bar : string) => {
+    cy.get(bar).contains(button).click();
+  });
+
+  Then('o popup de {string} é aberto', (popup : string) => {
+    cy.get('.popup').should('contain', popup);
+  });
+
+  Then('o popup de {string} é fechado', (popup : string) => {
+    cy.get('.popup').should('not.exist');
+  });
+
+
 });

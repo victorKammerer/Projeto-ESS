@@ -3,7 +3,7 @@ import { EntryType, ListEntry, GameList } from "../models/list.model";
 import { Game } from "../models/game.model";
 import { getUsers } from '../routes';
 import * as routesMethods from '../routes/index';
-let loggedInId : number = 1;
+let loggedInId : number = 0;
 
 function getAuthenticatedUserID(){
     return loggedInId;

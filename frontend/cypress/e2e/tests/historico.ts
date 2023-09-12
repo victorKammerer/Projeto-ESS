@@ -35,6 +35,8 @@ When('o usuário clica no botão {string}', (button: string) => {
         cy.get('.arrows').click();
     else if (button === 'All')
         cy.get('.buttons-list').contains(button).click();
+    else if (button === 'Histórico')
+        cy.get('.profile-right').contains(button).click();
 });
 
 Then('os reviews são exibidos de forma contrária.', () => {
@@ -79,4 +81,11 @@ Then('todos os reviews são exibidos do mais novo para o mais antigo.', () => {
         }
     });
 });
+
+// new scenario
+Then('o usuário é direcionado para a página {string}.', (page: string) => {
+    cy.url().should('include', page);
+});
+
+
 

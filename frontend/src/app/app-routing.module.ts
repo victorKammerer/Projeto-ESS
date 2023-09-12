@@ -6,6 +6,7 @@ import { FollowersComponent } from './followers/followers.component';
 import { UserComponent } from './profile/components/user/user.component';
 import { FeedComponent } from './feed/feed.component';
 import { EditComponent } from './profile/components/edit/edit.component';
+import { SignupComponent } from './signup/signup.component';
 
 import { HistoricListComponent } from './historic-list/historic-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -15,6 +16,7 @@ import { GameListComponent } from './game-list/game-list.component';
 
 
 const routes: Routes = [
+    {path: 'signup', component: SignupComponent},
     {path: 'users/:id', component: UserComponent,children: [
         { path: '', component: FeedComponent },
         { path: 'edit', component: EditComponent },
