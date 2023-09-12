@@ -22,3 +22,17 @@ Scenario: Deixar de seguir uma pessoa
   And o usuário de id "1" não está na lista Seguidores do usuário de id "3"
   And o feed "Seguindo" não contém as postagens do usuário de id "3"
   And o usuário de id "3" não está na lista Seguindo do usuário de id "1"
+
+Scenario: Abrir e fechar popup de Seguidores
+    Given o usuário está na página "users/2"
+    When clico em "Seguidores" na barra de ".follower"
+    Then o popup de "Seguidores" é aberto
+    When clico em "Seguidores" na barra de ".follower"
+    Then o popup de "Seguidores" é fechado
+
+Scenario: Abrir e fechar popup de Seguindo
+    Given o usuário está na página "users/2"
+    When clico em "Seguindo" na barra de ".following"
+    Then o popup de "Seguindo" é aberto
+    When clico em "Seguindo" na barra de ".following"
+    Then o popup de "Seguindo" é fechado
