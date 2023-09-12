@@ -8,4 +8,9 @@ function getBackgroundImage(prefix_path: string,  id: number): string {
     return `/assets/background/${id}.jpg`;
 }
 
-export default { getProfileImage, getBackgroundImage };
+function getGameImage(prefix_path: string, id: number): string {
+    id = id % 13;
+    return `/assets/games/${id}.jpg`;
+}
+
+export default { getProfileImage, getBackgroundImage, getGameImage };
