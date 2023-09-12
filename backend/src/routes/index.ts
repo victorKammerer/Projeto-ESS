@@ -486,6 +486,7 @@ function getLists(){
 }
 
 export {setUsers, setList, setGames, getGames, getUsers, getLists};
+
 // GET : Game from gameId
 router.get('/games/:id', async (req, res) => {
   const id : number = parseInt(req.params.id);
@@ -497,6 +498,11 @@ router.get('/games/:id', async (req, res) => {
   return res.status(200).json(game);
 });
 
+// GET: All games
+router.get('/games', async (req, res) => {
+  const games = getGames();
+  return res.status(200).json(games);
+});
 // GET : List of games for a user
 router.get('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
@@ -523,7 +529,7 @@ router.post('/users/:id/list', async (req, res) => {
   }
   
   const { gameId, entryType, reqDate } = req.body;
-
+  
   const user = utils.getUser(id, users);
   const game = utils.getGame(gameId, games);
   const list = utils.getUsersList(id, lists);
