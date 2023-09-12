@@ -14,7 +14,6 @@ import { FeedComponent } from './feed/feed.component';
 import { HomeModule } from './home/home.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 
-
 @NgModule({
     declarations: [AppComponent, HistoricListComponent, NotFoundComponent],
     imports: [

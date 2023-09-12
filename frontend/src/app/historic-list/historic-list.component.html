@@ -1,72 +1,21 @@
-<div class="profile-page">
-    <!-- Plano de fundo -->
-    <div class="background"></div>
-  
-    <div class="profile-background"></div>
-    <!-- Retângulo vertical para informações do perfil -->
-    <div class="profile-content">
-      <!-- Informações do perfil -->
-        <div class="profile-left">
-            <div class="profile-info">
-                <!-- Foto do perfil -->
-                <img src="../../../../assets/profile/profilePic.jpg" alt="Foto do perfil" class="profile-picture">
-                <div class="user-info">
-                    <h1 class="username">{{user.name}}</h1>
-                    <div class="title" style="font-size: 30px; padding: 10px; margin-right: auto; color: white;">Historico de Posts</div>
-                </div>
-            </div>
-
-            <div class="misc-info">
-                <div class="container">
-                    <mat-card class="card">
-                        <div class="post-grid">
-                            <!-- Lista de posts filtrados -->
-                            <div *ngFor="let post of show_posts" class="post">
-                                <h2>{{ post.title }}</h2>
-                                <p><strong>Game:</strong> {{ post.game }}</p>
-                                <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
-                                <p><strong>Rate:</strong> {{ post.rate }}</p>
-                                <p><strong>Date:</strong> {{ post.date }}</p>
-                                <div class="post-buttons">
-                                    <!-- Mudar rota dos botões -->
-                                    <app-button (click)="goToHome()" label="Apagar" type="btn mini"></app-button>
-                                    <app-button (click)="goToHome()" label="Editar" type="btn mini"></app-button>
-                                    <app-button (click)="goToHome()" label="Ver" type="btn mini"></app-button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </mat-card>
-                </div>
-            </div>
-        </div>
-        
-        <div class="profile-right">
-            <!-- Botão para inverter a ordem -->
-            <app-button (click)="toggleHistoricOrder()" label="Inverter Ordem" type="btn medium colorblue"></app-button>
-            
-            <div class="category-section">
-                <div class="category-title">Categorias</div>
-                <!-- Lista de categorias disponíveis  -->
-                <div class="category-list">
-                    <app-button *ngFor="let category of availableCategories" 
-                                (click)="getHistoricByCategory(category)" 
-                                type="btn small colorblue"
-                                label="{{ category }}">
-                    </app-button>
-                </div>
-            </div>
-
-            <!-- Botão para remover o filtro -->
-            <app-button *ngIf="selectedCategory !== 'all' && all_posts.length > 1"  (click)="removeCategoryFilter()" label="Mostrar todos" type="btn medium colorblue"></app-button>
-
-            <!-- <!-1- Separando esses botões -1-> -->
-            <div style="margin-top: 100%;"></div>
-
-            <!-- Botão para voltar para a tela perfil -->
-            <app-button (click)="goToHome()" label="Voltar" type="btn medium colorblue"></app-button>
-
-        </div>
+<div class="history-container"> 
+    <div class="buttons-list">
+        <button class="arrows"(click)="HistoryOrder()">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <path d="M9.9 6.417a1 1 0 0 1-.9.571H6V17a1 1 0 0 1-2 0V6.988H1a1 1 0 0 1-.9-.571.983.983 0 0 1 .12-1.051l4-5.006a1.024 1.024 0 0 1 1.56 0l4 5.006a.983.983 0 0 1 .12 1.051zm8 5.166a1 1 0 0 0-.9-.571h-3V1a1 1 0 0 0-2 0v10.012H9a1 1 0 0 0-.9.571.983.983 0 0 0 .12 1.051l4 5.006a1.024 1.024 0 0 0 1.56 0l4-5.006a.983.983 0 0 0 .12-1.051z" fill="#1da1f2" fill-rule="evenodd"/>
+                </svg>
+            </div> 
+        </button>
+        <button class="categories" *ngFor="let category of availableCategories" (click)="getHistoryByCategory(category)" [class.active]="selectedCategory === category">{{category}}</button>
+        <button [class.active]="selectedCategory === 'all'" (click)="showAll()">All</button>
+    </div>
+    <div *ngFor="let post of show_posts" class="post" (click)="goToPost()">
+        <h2>{{post.title}}</h2>
+        <p><strong>Game:</strong> {{post.game}}</p>
+        <p><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+        <p><strong>Rate:</strong> {{ post.rate }}</p>
+        <p><strong>Date:</strong> {{ post.date }}</p>
     </div>
 </div>
 

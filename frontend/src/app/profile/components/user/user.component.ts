@@ -188,11 +188,10 @@ export class UserComponent implements OnInit {
       this.goToPost = true;
     }
   }
-
+  
   public goToRoute(route: string) {
     let route_ = '/users/' + this.userId + '/' + route;
     this.router.navigate([route_]);
   }
-
 }
  
