@@ -12,11 +12,13 @@ import { HistoricListComponent } from './historic-list/historic-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
 import { MeComponent } from './me/me.component';
+import { PostComponent } from './profile/components/post/post.component';
 
 const routes: Routes = [
     {path: 'signup', component: SignupComponent},
     {path: 'users/:id', component: UserComponent,children: [
         { path: '', component: FeedComponent },
+        { path: 'post', component: PostComponent},
         { path: 'edit', component: EditComponent },
         { path: 'history', component: HistoricListComponent },
     ]},

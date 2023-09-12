@@ -55,7 +55,7 @@ router.get('/search/users/:query', async (req,res) => {
 });
 
 // -------------------------------- POST CREATION ROUTES -------------------------------- //
-router.post('/posts', async (req: Request, res: Response) => {
+router.post('/post', async (req: Request, res: Response) => {
   const { category, game, rate, title, description } = req.body;
   const userId = loggedID
 

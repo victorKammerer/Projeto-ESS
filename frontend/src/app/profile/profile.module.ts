@@ -13,7 +13,7 @@ import { UserComponent } from './components/user/user.component'
 import { FollowersComponent } from '../followers/followers.component';
 import { FeedComponent } from '../feed/feed.component';
 import { EditComponent } from './components/edit/edit.component';
-import { PostComponent }
+import { PostComponent } from './components/post/post.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { PostComponent }
     UserComponent,
     FollowersComponent,
     FeedComponent,
-    EditComponent
+    EditComponent,
+    PostComponent
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile

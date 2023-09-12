@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../../../../../../backend/src/models/post.model';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { toast } from 'react-toastify';
 
 @Component({
   selector: 'app-post',
@@ -13,7 +13,7 @@ import { throwError } from 'rxjs';
 })
 
 export class PostComponent implements OnInit {
-  userId : number = 0;
+  userId : User = {} as User;
   post : Post = {} as Post;
   postId : number = 0;
   formErrors: { category: string, 
@@ -31,11 +31,9 @@ export class PostComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
   submitForm() {
-    // Lógica para enviar o formulário se não houver erros
-    if (this.isFormValid()) {
+    if(this.isFormValid()){
       this.sendRequest();
-    }else{
-      console.log('ERROR: Could not create user');
+      console.log("oi");
     }
   }
   
@@ -80,38 +78,13 @@ export class PostComponent implements OnInit {
     this.router.navigate([route]);
   }
 
-
-  saveChanges() {
-    console.log(this.post);
-    this.http.put(`/users/${this.userId}/${this.postId}`,this.post).subscribe(
-      (response) => {
-        console.log('Post made successfully');
-        //this.router.navigate(['/users/', this.userId]);
-        this.saved = true;
-        this.disabled = true;
-      },
-      (error) => {
-        this.notSaved = true;
-        console.error('Error making your post', error);
-        this.router.navigate([`/users/${this.userId}/post`]);
-      }
-    ); 
-  }
-
   sendRequest(): void {
     console.log('New Post:', this.post);
     this.http.post('/post', this.post).subscribe(
       (data) => {
-        const createdPost: Post = data as Post;
-        console.log('createdPost:', createdPost);
-        this.http.put('/post', { id: createdPost.post_id }).subscribe(
-          (data) => {
-            this.router.navigate([`/users/${createdPost.user_id}/${createdPost.post_id}`]);
-          },
-          (error) => {
-            console.log("Error logging in", error);
-          }
-        );
+        console.log("funfou");
+        window.alert("Post feito com sucesso!");
+        this.router.navigate([`/users/${this.userLoggedInId}`])
       },
       (error) => {
         console.log(error.status);
@@ -126,43 +99,27 @@ export class PostComponent implements OnInit {
     );
   }  
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.userId =+ params['id']; // O '+' converte a string para um número
-    });
-
-    this.checkIsUserLoggedIn();
-
-    this.getPostDetails(this.userId, this.postId).subscribe(
-      (data) => {
-        this.post = data as Post;
-        console.log(this.post.category);
-      },
-      (error) => {
-        console.error('Error loading post details', error);
-        this.router.navigate(['/not-found']);
-      }
-    );
-  }
-
-  getPostDetails(userId: number, postId: number) {
-    return this.http.get(`/users/${userId}/${postId}`).pipe(
-      catchError((error) => {
-        throw error;
-      })
-    );
-  }
-
-  checkIsUserLoggedIn() {
+  navigateToUserLoggedIn(){
     this.http.get('/me').subscribe(data => {
       const userLoggedIn = data as User;
       this.userLoggedInId = userLoggedIn.id;
 
-      if (userLoggedIn.id === this.userId) {
-        this.isUserLoggedIn = true;
-      }
-
+      this.router.navigate(['/users/' + this.userLoggedInId]);
     });
+  }
+      
+  checkIsUserLoggedIn() {
+    this.http.get('/me').subscribe(data => {
+      const userId = data as User;
+      this.userLoggedInId = userId.id;
+      
+    });
+  }
+
+  ngOnInit(): void {
+
+    this.checkIsUserLoggedIn();
+
   }
   
 }
