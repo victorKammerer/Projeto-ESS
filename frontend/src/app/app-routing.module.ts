@@ -13,7 +13,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
 import { MeComponent } from './me/me.component';
 import { PostComponent } from './profile/components/post/post.component';
-import { PostDetailsComponent } from './profile/components/postDetails/postDetails.component';
+import { PostDetailComponent } from './profile/components/postDetails/postDetails.component';
+import { GameListComponent } from './game-list/game-list.component';
 
 const routes: Routes = [
     {path: 'signup', component: SignupComponent},
@@ -22,10 +23,11 @@ const routes: Routes = [
         { path: 'post', component: PostComponent},
         { path: 'edit', component: EditComponent },
         { path: 'history', component: HistoricListComponent },
-        { path: ':post_id', component: PostDetailsComponent},
+        { path: ':post_id', component: PostDetailComponent},
+        { path: 'list', component: GameListComponent},
     ]},
-    {path: 'users/:id/followers',component: FollowersComponent},
-    {path: 'search',component: FindComponent},
+    { path: 'users/:id/followers',component: FollowersComponent},
+    { path: 'search',component: FindComponent},
     { path: 'me', component: MeComponent},
     { path: 'not-found', component: NotFoundComponent },
     { path: '**', redirectTo: 'not-found' },
