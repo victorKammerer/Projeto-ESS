@@ -125,7 +125,6 @@ export class UserComponent implements OnInit {
   unfollowUser() {
     const endpoint = '/users/' + this.userId + '/unfollow';
     this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
-      console.log(data);
       this.isFollowing = false;
       this.followersCount--;
     });
