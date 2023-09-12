@@ -69,7 +69,7 @@
 
     <div class="profile-right">
       <app-edit-btn class="editbtn" (click)="editButton()" *ngIf="isUserLoggedIn" [goToEdit]="!goToEdit"></app-edit-btn>
-      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorred"></app-button> 
+      <app-button (click)="goToRoute('/list')" label="Lista de jogos" type="btn medium colorred"></app-button> 
       <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button> 
       <app-button class="postbtn" (click)="deleteAccount()" label="Excluir conta" type="btn small deletebtn" *ngIf="!goToEdit"></app-button> 
       <app-post-btn class="postbtn" (click)="goToRoute('/post')" *ngIf="goToEdit"></app-post-btn>
