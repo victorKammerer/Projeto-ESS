@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
@@ -12,6 +13,7 @@ import { UserComponent } from './components/user/user.component'
 import { FollowersComponent } from '../followers/followers.component';
 import { FeedComponent } from '../feed/feed.component';
 import { EditComponent } from './components/edit/edit.component';
+import { PostComponent } from './components/post/post.component';
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { EditComponent } from './components/edit/edit.component';
     UserComponent,
     FollowersComponent,
     FeedComponent,
-    EditComponent
+    EditComponent,
+    PostComponent
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile
@@ -31,6 +34,7 @@ import { EditComponent } from './components/edit/edit.component';
     MatInputModule,
     MatListModule,
     AppRoutingModule,
+    FormsModule,
   ],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../../../backend/src/models/user.model';
+import { Post } from '../../../../../../backend/src/models/post.model';
 import { catchError } from 'rxjs/operators';
 import imageUtils from "../../../../assets/getImages.service";
 
@@ -13,7 +14,9 @@ import imageUtils from "../../../../assets/getImages.service";
 
 export class UserComponent implements OnInit {
   userId : number = 0;
+  postId : number = 0;
   user : User = {} as User;
+  post : Post = {} as Post;
   userLoggedInId: number = 0;
   isUserLoggedIn: boolean = false;
   followers : User[] = [];
@@ -23,6 +26,8 @@ export class UserComponent implements OnInit {
   isFollowing: boolean = false;
   followPopUp: boolean = false;
   activeTab: string = 'followers';
+  goToEdit: boolean = true;
+  goToPost: boolean = true;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -30,6 +35,7 @@ export class UserComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.userId =+ params['id']; // O '+' converte a string para um número
+      this.postId =+ params['id'];
     });
 
     this.checkIsUserLoggedIn();
@@ -162,12 +168,31 @@ export class UserComponent implements OnInit {
       }
     });
   }
+  
+  public editButton(): void {
+    if (this.goToEdit) {
+      this.router.navigate([`/users/${this.userId}/edit`]);
+      this.goToEdit = false;
+    } else {
+      this.router.navigate([`/users/${this.userId}`]);
+      this.goToEdit = true;
+    }
+  }
+
+  public postButton(): void {
+    if (this.goToPost) {
+      this.router.navigate([`/users/${this.userId}/post`]);
+      this.goToPost = false;
+    } else {
+      this.router.navigate([`/users/${this.userId}`]);
+      this.goToPost = true;
+    }
+  }
 
   public goToRoute(route: string) {
-    this.router.navigate([route]);
+    let route_ = '/users/' + this.userId + '/' + route;
+    this.router.navigate([route_]);
   }
 
-  public goToHistoric(): void {
-    this.router.navigate([`/users/${this.userId}/historic`]);
-  }
 }
+ 
