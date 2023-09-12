@@ -4,22 +4,30 @@ import { contains } from 'cypress/types/jquery';
 describe('Seguidores features', () => {
   let userLoggedName = '';
   Before(() => {
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:5001/api/users/2/unfollow',
+      body: {
+        id: '1'
+      },
+      failOnStatusCode: false
+    });
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:5001/api/users/3/follow',
+      body: {
+        id: '1'
+      },
+      failOnStatusCode: false
+    });
+
     cy.visit('/me').then(() => {
       cy.wait(500).then(() => {
         cy.get('.user-info > .username').invoke('text').then((username) => {
           userLoggedName = username;
-          cy.visit('/users/2').wait(1000).get('.Btn > p').invoke('text').then((texto) => {
-            // Check if 'Seguindo' is substring of texto
-            if(texto.includes('Seguindo')) cy.get('.Btn > p').click();
-          }).then(() => {
-            // Pré teste usuário 3
-            cy.visit('/users/3').wait(1000).get('.Btn > p').invoke('text').then((texto) => {
-              if(texto.includes('Seguir')) cy.get('.Btn > p').click();
             });
           });
         });
-      });
-    });
   });
 
 
