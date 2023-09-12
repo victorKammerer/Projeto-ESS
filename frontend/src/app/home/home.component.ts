@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+    constructor(private router: Router){}
 
-    
-
+    public goToRoute(route: string) {
+        this.router.navigate([route]);
+    }
 }

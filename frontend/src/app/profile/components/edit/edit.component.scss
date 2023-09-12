@@ -64,6 +64,10 @@ mat-card {
     background-color: rgb(140, 32, 212);
   }
 
+  .error-message{
+    color: red;
+  }
+
   :disabled {
     cursor: not-allowed;
   }
