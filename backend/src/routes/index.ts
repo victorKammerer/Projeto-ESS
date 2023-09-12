@@ -35,7 +35,7 @@ router.get('/me', async (req,res) => {
 });
 
 router.put('/me', async (req, res) => {
-  const loggedId_ = req.body;
+  const loggedId_ = req.body.id;
 
   try{
     setAuthenticatedUserID(loggedId_);
@@ -171,7 +171,7 @@ router.post('/users', async (req,res) => {
   }catch (err){
     return res.status(400).json({ Error : 'File could not be written' });
   }
-  return res.status(201).json({ message: 'User was successfully registered' });
+  return res.status(201).json(newUser);
 });
 
 //*Delete User
