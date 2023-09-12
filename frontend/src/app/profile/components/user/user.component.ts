@@ -119,7 +119,6 @@ export class UserComponent implements OnInit {
   followUser() {
     const endpoint = '/users/' + this.userId + '/follow';
     this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
-      console.log(data);
       this.isFollowing = true;
       this.followersCount++;
     });

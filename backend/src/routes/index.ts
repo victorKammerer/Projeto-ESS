@@ -22,9 +22,9 @@ setAuthenticatedUserID(loggedID);
 // Return Logged User
 router.get('/me', async (req,res) => {
   const loggedId_ = getAuthenticatedUserID();
-  console.log(loggedId_)
+  // console.log(loggedId_)
   const requestedUser = users.find(user => user.id === loggedId_);
-  console.log(requestedUser)
+  // console.log(requestedUser)
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
@@ -123,7 +123,7 @@ router.put('/posts/:user_id/:post_id', (req: Request, res: Response) => {
 
   Object.assign(posts[postIndex], requestBody);
   status == "edited";
-  console.log(status)
+  // console.log(status)
   return res.status(201).json({ message: 'Post edited' });
 });
 
