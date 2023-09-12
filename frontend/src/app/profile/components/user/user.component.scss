@@ -17,7 +17,7 @@
     }
     // Hover follower
     .follower:hover{
-        color: #3758eb;
+        color: rgb(131,0,0);
         cursor: pointer;
     } 
 
@@ -29,7 +29,7 @@
     }
 
     .following:hover{
-        color: #3758eb;
+        color: rgb(131,0,0);
         cursor: pointer;
     } 
 
@@ -164,7 +164,7 @@
     }
 
     .profile-right {
-        background-color: rgba(105, 105, 105, 0.6); /* Cor de fundo do retângulo vertical */
+        background-color: rgba(211, 211, 211, 0.09); /* Cor de fundo do retângulo vertical */
         color: #ecf0f1; /* Cor do texto */
         border-radius: 10px;
         height: 100%;
