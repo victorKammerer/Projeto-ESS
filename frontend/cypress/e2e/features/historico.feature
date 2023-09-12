@@ -20,3 +20,9 @@ Scenario: Remover filtro de categoria
   When o usuário clica no botão "All"
   Then todos os reviews são exibidos do mais novo para o mais antigo.
 
+Scenario: Ir para o histórico
+  Given o usuário está na página "users/1"
+  When o usuário clica no botão "Histórico"
+  Then o usuário é direcionado para a página "/history".
+
+

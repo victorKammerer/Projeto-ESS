@@ -194,8 +194,13 @@ export class UserComponent implements OnInit {
   }
   
   public goToRoute(route: string) {
-    let route_ = '/users/' + this.userId + '/' + route;
+    let route_ = '/users/' + this.userId + route;
     this.router.navigate([route_]);
   }
+
+  public goToHome() {
+    this.router.navigate(['/']);
+  }
+
 }
  
