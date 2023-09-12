@@ -39,7 +39,6 @@ export class UserComponent implements OnInit {
     this.getUserDetails(this.userId).subscribe(
       (data) => {
         this.user = data as User;
-        console.log(this.user.name);
       },
       (error) => {
         console.error('Error loading user details', error);
@@ -60,11 +59,11 @@ export class UserComponent implements OnInit {
     const prefix = '../../../../'
     return imageUtils.getProfileImage(prefix, this.userId);
   }
-  
+
   _getBackgroundImage() {
     const prefix = '../../../../'
     return imageUtils.getBackgroundImage(prefix, this.userId);
-  } 
+  }
 
   getUserDetails(userId: number) {
     return this.http.get(`/users/${userId}`).pipe(
@@ -87,7 +86,7 @@ export class UserComponent implements OnInit {
       this.followPopUp = false;
     else
       this.followPopUp = true;
-    
+
     this.activeTab = 'followers';
   }
 
@@ -170,7 +169,7 @@ export class UserComponent implements OnInit {
       }
     });
   }
-  
+
   editButton(): void {
     if (this.goToEdit && window.confirm('Tem certeza que deseja editar sua conta?')) {
       this.router.navigate([`/users/${this.userId}/edit`]);
@@ -201,10 +200,10 @@ export class UserComponent implements OnInit {
         (error) => {
           console.error('Error updating user details', error);
         }
-      ); 
+      );
     }
   }
-  
+
   public goToRoute(route: string) {
     let route_ = '/users/' + this.userId + route;
     this.router.navigate([route_]);
@@ -215,4 +214,3 @@ export class UserComponent implements OnInit {
   }
 
 }
- 
