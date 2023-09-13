@@ -3,6 +3,8 @@ import { contains } from 'cypress/types/jquery';
 
 describe('Seguidores features', () => {
   let userLoggedName = '';
+  let followersCountUserLogged = 0;
+  let followingCountUserLogged = 0;
   Before(() => {
     cy.request({
       method: 'POST',
@@ -20,10 +22,23 @@ describe('Seguidores features', () => {
       },
       failOnStatusCode: false
     });
-
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:5001/api/users/2/followers/count'
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      followersCountUserLogged = response.body.followersCount;
+    });
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:5001/api/users/2/following/count'
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      followingCountUserLogged = response.body.followersCount;
+    });
     cy.visit('/me').then(() => {
       cy.wait(500).then(() => {
-        cy.get('.user-info > .username').invoke('text').then((username) => {
+        cy.get('h1.username > .username').invoke('text').then((username) => {
           userLoggedName = username;
             });
           });
@@ -32,7 +47,7 @@ describe('Seguidores features', () => {
 
 
   Given("{string} está visível", (button: string) => {
-    cy.get('.user-info > .username').invoke('text').then((username) => {
+    cy.get('h1.username > .username').invoke('text').then((username) => {
       userName = username;
       cy.get('.Btn > p').should('contain', button);
     });
@@ -105,9 +120,22 @@ describe('Seguidores features', () => {
     });
   });
 
-  When('clico em {string} na barra de {string}', (button : string, bar : string) => {
-    cy.get(bar).contains(button).click();
+  When('clico no texto {string}', (button : string) => {
+    cy.get('.follows').contains(button).click();
   });
+
+  let userToVisit : string = '';
+    When('clico no usuário de ordem {string} do topo de {string}', (child: string, option: string) => {
+      let app: string = '';
+      app = 'app-followers'
+
+      cy.get('.popup > app-followers > .tab > .inside-tab > .mat-mdc-card > :nth-child(1)')
+      .invoke('text').then((name) => {
+        userToVisit = name;
+        cy.get('.popup > ' + app).get('.tab > .inside-tab > .mat-mdc-card > :nth-child(1) > strong').eq(0).click();
+      });
+    });
+
 
   Then('o popup de {string} é aberto', (popup : string) => {
     cy.get('.popup').should('contain', popup);
@@ -117,5 +145,10 @@ describe('Seguidores features', () => {
     cy.get('.popup').should('not.exist');
   });
 
+  Then('sou encaminhado para a página do usuário' , () => {
+    cy.get('.userUser').invoke('text').then((username) => {
+      expect(userToVisit).to.include(username);
+    });
+  });
 
 });
