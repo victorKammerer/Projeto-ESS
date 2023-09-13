@@ -83,7 +83,7 @@ Then('os reviews são exibidos do mais novo para o mais antigo.', () => {
 });
 
 // new scenario
-Then('o usuário é direcionado para a página {string}.', (page: string) => {
+Then('o usuário é direcionado para a página {string}', (page: string) => {
     cy.url().should('include', page);
 });
 

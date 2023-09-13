@@ -25,6 +25,7 @@ Scenario: Remover filtro de categoria
 Scenario: Ir para o histórico
   Given o usuário está na página "users/1"
   When o usuário clica no botão "Histórico"
-  Then o usuário é direcionado para a página "/history".
+  Then o usuário é direcionado para a página "/history"
+  Then os reviews são exibidos do mais novo para o mais antigo.
 
 
