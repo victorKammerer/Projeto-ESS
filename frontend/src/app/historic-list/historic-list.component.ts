@@ -11,6 +11,7 @@ import { Post } from '../../../../backend/src/models/post.model';
 
 export class HistoricListComponent implements OnInit {
   userId: number = 1;
+  postId: number = 1;
   show_posts: Post[] = [];
   all_posts: Post[] = [];
   isDesc: boolean = false;
@@ -20,6 +21,9 @@ export class HistoricListComponent implements OnInit {
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+
+    this.userId = Number(this.route.snapshot.paramMap.get('id'));
+    this.postId = Number(this.route.snapshot.paramMap.get('post_id'));
 
     if (this.route.parent) {
       this.route.parent.params.subscribe(params => {
@@ -55,6 +59,8 @@ export class HistoricListComponent implements OnInit {
     this.availableCategories.sort();
   }
 
+  
+
   // Obter todos os posts do usuário
   getHistoric() {
     const url = `/users/${this.userId}/historic`;
@@ -86,8 +92,8 @@ export class HistoricListComponent implements OnInit {
   }
 
   // Mudar para a rota dos posts
-  public goToPost(): void {
-    this.router.navigate(['/users', this.userId]);
+  openPost(userId: number, postId: number) : void {
+    this.router.navigate([`/users/${userId}/${postId}`]);
   }
 
 }

@@ -55,10 +55,10 @@ export class PostComponent implements OnInit {
     }
 
     // Validação do campo Senha (obrigatório)
-    if (!this.post.rate) {
-      this.formErrors['rate'] = 'Dê uma avaliação ao jogo.';
-      isValid = false;
-    }
+    // if (!this.post.rate) {
+    //   this.formErrors['rate'] = 'Dê uma avaliação ao jogo.';
+    //   isValid = false;
+    // }
 
     // Validação do campo Nome e Sobrenome (obrigatório)
     if (!this.post.title) {

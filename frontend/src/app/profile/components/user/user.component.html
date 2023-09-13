@@ -73,7 +73,7 @@
       <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button>
       <app-button (click)="goToHome()" label="Home" type="btn medium colorred"></app-button>
       <app-button class="postbtn" (click)="deleteAccount()" label="Excluir conta" type="btn small deletebtn" *ngIf="!goToEdit"></app-button> 
-      <app-post-btn class="postbtn" (click)="postButton()" *ngIf="isUserLoggedIn" [goToPost]="!goToPost"></app-post-btn>
+      <app-post-btn class="postbtn" (click)="postButton()" *ngIf="isUserLoggedIn && goToEdit" [goToPost]="!goToPost"></app-post-btn>
     </div>
 
         <!-- Outras informações, como jogos favoritos, conquistas, etc. -->

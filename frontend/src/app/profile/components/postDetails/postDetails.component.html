@@ -1,0 +1,13 @@
+<div class="post-details-container" *ngIf="post">
+    <!-- Display post details using data binding -->
+    <div class="author-info">
+      <!-- Display user information here if available -->
+    </div>
+    <h2>{{ post.title }}</h2>
+    <p>Game: {{ post.game }}</p>
+    <p>Categories: {{ post.category.join(', ') }}</p>
+    <p>Rate: {{ post.rate }}</p>
+    <p>Description: {{ post.description }}</p>
+    <!-- Display other post details as needed -->
+  </div>
+  

@@ -13,6 +13,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { FindComponent } from './find/find.component';
 import { MeComponent } from './me/me.component';
 import { PostComponent } from './profile/components/post/post.component';
+import { PostDetailsComponent } from './profile/components/postDetails/postDetails.component';
 
 const routes: Routes = [
     {path: 'signup', component: SignupComponent},
@@ -21,6 +22,7 @@ const routes: Routes = [
         { path: 'post', component: PostComponent},
         { path: 'edit', component: EditComponent },
         { path: 'history', component: HistoricListComponent },
+        { path: ':post_id', component: PostDetailsComponent},
     ]},
     {path: 'users/:id/followers',component: FollowersComponent},
     {path: 'search',component: FindComponent},

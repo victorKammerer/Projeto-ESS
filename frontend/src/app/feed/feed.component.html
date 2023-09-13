@@ -10,9 +10,8 @@
         <img [src]="_getProfileImage(item.authorId)" alt="Foto de perfil de {{ item.authorName }}" class="profile-picture">
         <a class="author" (click)="openProfile(item.authorId)"><strong class="username">@{{item.authorUsername}}</strong> {{ item.authorName }}</a>
       </div>
-      <h2>Novo post!</h2>
       <p>{{ item.content }}</p>
-      <a class="see-more" (click)="openPost(item.authorId)">Ver mais</a>
+      <a class="see-more" (click)="openPost(item.authorId, item.postId)">Ver mais</a>
       <p class="date">{{ item.date }}</p>
     </div>
   </div>

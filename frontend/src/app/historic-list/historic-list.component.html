@@ -10,10 +10,13 @@
         <button class="categories" *ngFor="let category of availableCategories" (click)="getHistoryByCategory(category)" [class.active]="selectedCategory === category">{{category}}</button>
         <button class="all" [class.active]="selectedCategory === 'all'" (click)="showAll()">All</button>
     </div>
-    <div *ngFor="let post of show_posts" class="post" (click)="goToPost()">
+    <div *ngFor="let post of show_posts" class="post" (click)="openPost(post.user_id, post.post_id)">
         <h2>{{post.title}}</h2>
         <p class="game"><strong>Game:</strong> {{post.game}}</p>
         <p class="categories"><strong>Categories:</strong> {{ post.category.join(', ') }}</p>
+        <div class="star-rating-row">
+            <app-star-rating [rating]="post.rate"></app-star-rating>
+          </div>
         <p class="rate"><strong>Rate:</strong> {{ post.rate }}</p>
         <p class="date"><strong>Date:</strong> {{ post.date }}</p>
     </div>
