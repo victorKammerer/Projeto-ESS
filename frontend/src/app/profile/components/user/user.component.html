@@ -69,6 +69,7 @@
 
     <div class="profile-right">
       <app-edit-btn class="editbtn" (click)="editButton()" *ngIf="isUserLoggedIn" [goToEdit]="!goToEdit"></app-edit-btn>
+      <div class="editbtn" *ngIf="!isUserLoggedIn"></div>
 
       <app-button (click)="goToRoute('/list')" label="Lista de jogos" type="btn medium colorred"></app-button> 
       <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button>
