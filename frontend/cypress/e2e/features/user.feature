@@ -7,7 +7,7 @@ Scenario: Ir para página de edição do usuário
     Given o usuário está na página "users/1"
     And "Editar" está visível
 	When clico em "Editar"
-	Then Aparece uma notificacao com a menssagem ""
+	Then Aparece uma notificação com a menssagem ""
 	When Confirmo a notificação
     Then o usuário está na página "users/1/edit"
 
@@ -15,7 +15,7 @@ Scenario: Excluir minha conta com sucesso
 	Given o usuário está na página "users/1/edit"
 	And "Excluir" está visível
 	When clico em "Excluir"
-	Then Aparece uma notificaçãoo com a menssagem ""
+	Then Aparece uma notificação com a menssagem ""
 	When Confirmo a notificação
 	Then o usuário está na página "/"
 	And Aparece uma notificacao com a menssagem ""
