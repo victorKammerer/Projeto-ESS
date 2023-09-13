@@ -204,6 +204,7 @@ export class UserComponent implements OnInit {
 
   public goToRoute(route: string) {
     let route_ = '/users/' + this.userId + route;
+    this.goToEdit = true;
     this.router.navigate([route_]);
   }
 
