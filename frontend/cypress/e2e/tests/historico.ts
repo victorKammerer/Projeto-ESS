@@ -39,7 +39,7 @@ When('o usuário clica no botão {string}', (button: string) => {
         cy.get('.profile-right').contains(button).click();
 });
 
-Then('os reviews são exibidos de forma contrária.', () => {
+Then('os reviews são exibidos do mais antigo para o mais novo', () => {
     let dates = [];
     //all posts should contain the category
     cy.get('.post').each((post) => {
@@ -63,7 +63,7 @@ Given('a categoria {string} está selecionada', (category: string) => {
     cy.get('.buttons-list').contains(category).click();
 });
 
-Then('todos os reviews são exibidos do mais novo para o mais antigo.', () => {
+Then('os reviews são exibidos do mais novo para o mais antigo.', () => {
     let dates = [];
     //all posts should contain the category
     cy.get('.post').each((post) => {
