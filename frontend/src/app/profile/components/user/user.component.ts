@@ -117,7 +117,6 @@ export class UserComponent implements OnInit {
   followUser() {
     const endpoint = '/users/' + this.userId + '/follow';
     this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
-      console.log(data);
       this.isFollowing = true;
       this.followersCount++;
     });
@@ -126,7 +125,6 @@ export class UserComponent implements OnInit {
   unfollowUser() {
     const endpoint = '/users/' + this.userId + '/unfollow';
     this.http.post(endpoint, {id : this.userLoggedInId}).subscribe(data => {
-      console.log(data);
       this.isFollowing = false;
       this.followersCount--;
     });
@@ -194,6 +192,7 @@ export class UserComponent implements OnInit {
 
   public goToRoute(route: string) {
     let route_ = '/users/' + this.userId + route;
+    this.goToEdit = true;
     this.router.navigate([route_]);
   }
 

@@ -10,8 +10,8 @@ let users: User[] = [
     lastName: "Silva",
     pronouns: "ele/dele",
     bio: "Olá! Sou Fulano Silva e sou apaixonado por games como Batman",
-    followers: [2, 3, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    following: [6, 7, 8, 9, 10, 11, 12],
+    followers: [26, 25, 24, 23, 22, 15, 14, 13, 11, 9, 2, 3],
+    following: [5, 7, 8, 11, 12, 17, 21, 24, 27],
     blocked: []
   },
   {
@@ -23,8 +23,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Viciada em jogos desde a infância! Let's play!",
-    followers: [3],
-    following: [1],
+    followers: [3, 27, 24, 21, 20, 18, 16, 10, 9, 8, 7, 5],
+    following: [1, 4, 6, 7, 12, 15, 19, 21, 22, 27],
     blocked: []
   },
   {
@@ -36,8 +36,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Streamer e entusiasta de eSports. Jogos são minha vida!",
-    followers: [3],
-    following: [2, 1],
+    followers: [27, 24, 23, 18, 17, 16, 12, 7, 5],
+    following: [1, 2, 8, 11, 14, 15, 18, 21, 24, 26],
     blocked: []
   },
   {
@@ -49,8 +49,8 @@ let users: User[] = [
     lastName: "Jogadora",
     pronouns: "ela/dela",
     bio: "Gamer casual e amante de RPGs. Em busca de novos amigos!",
-    followers: [],
-    following: [],
+    followers: [27, 24, 19, 18, 13, 11, 9, 6, 2],
+    following: [6, 8, 10, 15, 17, 23, 25, 27],
     blocked: []
   },
   {
@@ -62,8 +62,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Competitivo e sempre em busca do topo dos rankings.",
-    followers: [],
-    following: [],
+    followers: [26, 24, 23, 14, 13, 10, 9, 6, 1],
+    following: [2, 3, 6, 7, 14, 20, 25, 26, 27],
     blocked: [2]
   },
   {
@@ -75,8 +75,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ela/dela",
     bio: "Fã de jogos indie e narrativas envolventes.",
-    followers: [1, 2, 4, 5],
-    following: [],
+    followers: [27, 22, 18, 13, 8, 7, 5, 4, 2],
+    following: [4, 5, 7, 9, 10, 11, 12, 18, 21, 22, 24, 26, 27],
     blocked: []
   },
   {
@@ -88,8 +88,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Sempre em busca de novos desafios nos jogos!",
-    followers: [2, 8],
-    following: [2, 8],
+    followers: [27, 25, 16, 10, 8, 6, 5, 2, 1],
+    following: [2, 3, 6, 8, 12, 16, 19, 24, 26, 27],
     blocked: []
   },
   {
@@ -101,8 +101,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ele/dele",
     bio: "Amante de jogos clássicos e retro-gaming.",
-    followers: [2, 7],
-    following: [2, 7],
+    followers: [26, 25, 13, 11, 10, 7, 4, 3, 1],
+    following: [2, 6, 7, 11, 12, 15, 18, 20, 21, 22, 23, 24, 26, 27],
     blocked: []
   },
   {
@@ -114,8 +114,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Gamer hardcore e fã de jogos de estratégia.",
-    followers: [10, 11],
-    following: [10, 11, 12],
+    followers: [26, 22, 21, 20, 19, 17, 15, 14, 11, 6],
+    following: [1, 2, 4, 5, 11, 12, 14, 15, 20, 22, 23],
     blocked: []
   },
   {
@@ -127,8 +127,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Aventuras em mundos virtuais são minha paixão!",
-    followers: [9, 11],
-    following: [9, 11],
+    followers: [27, 25, 24, 17, 15, 14, 12, 11, 6, 4],
+    following: [2, 5, 7, 8, 11, 12, 13, 16, 18, 23, 24],
     blocked: []
   },
   {
@@ -140,8 +140,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ela/dela",
     bio: "Jogadora desde criança, sempre pronta para uma nova jornada.",
-    followers: [9, 10],
-    following: [9, 10],
+    followers: [25, 24, 20, 17, 16, 14, 13, 10, 9, 8, 6, 3, 1],
+    following: [1, 4, 8, 9, 10, 15, 18, 23, 24],
     blocked: []
   },
   {
@@ -153,8 +153,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Estratégia e táticas são a chave para a vitória!",
-    followers: [9, 1, 2, 3, 4, 5, 6, 7],
-    following: [9, 2, 3, 4],
+    followers: [24, 22, 18, 13, 10, 9, 8, 7, 6, 2, 1],
+    following: [3, 10, 14, 15, 17, 27],
     blocked: []
   },
   {
@@ -166,8 +166,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Gamer casual e amante de jogos de quebra-cabeça.",
-    followers: [],
-    following: [9, 10, 11],
+    followers: [23, 20, 17, 16, 10],
+    following: [1, 4, 5, 6, 8, 11, 12, 15, 17, 19, 20, 25, 26],
     blocked: []
   },
   {
@@ -192,8 +192,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Aventuras épicas e RPGs são minha paixão!",
-    followers: [15, 16],
-    following: [15],
+    followers: [27, 25, 19, 18, 17, 12, 9, 5, 3],
+    following: [1, 5, 9, 10, 11, 16, 17, 21, 23, 24, 27],
     blocked: []
   },
   {
@@ -205,8 +205,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ela/dela",
     bio: "Exploradora de mundos virtuais e quebra-cabeças desafiadores.",
-    followers: [14],
-    following: [14],
+    followers: [26, 22, 21, 17, 16, 13, 12, 11, 9, 8, 4, 3, 2],
+    following: [1, 9, 10, 16, 18, 19, 20, 21, 22, 26, 27],
     blocked: []
   },
   {
@@ -218,8 +218,8 @@ let users: User[] = [
     lastName: "Jogador",
     pronouns: "ele/dele",
     bio: "Gamer de estratégia e táticas militares. Sempre em busca de vitória!",
-    followers: [14],
-    following: [],
+    followers: [20, 19, 18, 15, 14, 10, 7],
+    following: [2, 3, 7, 11, 13, 15, 17, 21],
     blocked: []
   },
   {
@@ -231,8 +231,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Amante de jogos de simulação e construção de cidades.",
-    followers: [18, 19],
-    following: [18],
+    followers: [21, 20, 16, 14, 13, 12, 4, 1],
+    following: [3, 9, 10, 11, 13, 14, 15, 20, 23],
     blocked: []
   },
   {
@@ -244,8 +244,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ele/dele",
     bio: "Conquistador de mundos virtuais e estratégia em tempo real.",
-    followers: [17],
-    following: [17],
+    followers: [24, 23, 21, 15, 11, 10, 8, 6, 3],
+    following: [2, 3, 4, 6, 12, 14, 16, 20, 21, 25, 26],
     blocked: []
   },
   {
@@ -257,8 +257,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Gamer competitivo e fã de jogos de tiro em primeira pessoa.",
-    followers: [17],
-    following: [],
+    followers: [26, 25, 23, 21, 20, 15, 13, 7, 2],
+    following: [4, 9, 14, 16, 20, 24, 27],
     blocked: []
   },
   {
@@ -270,8 +270,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ela/dela",
     bio: "Aventureira em mundos mágicos e RPGs de fantasia.",
-    followers: [],
-    following: [17, 18],
+    followers: [27, 21, 19, 18, 17, 15, 13, 9, 8, 5],
+    following: [2, 9, 11, 13, 16, 17, 19, 25, 27],
     blocked: []
   },
   {
@@ -283,8 +283,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Estrategista em jogos de guerra e comandante de exércitos virtuais.",
-    followers: [17, 18],
-    following: [17, 18],
+    followers: [26, 24, 23, 22, 18, 16, 15, 14, 8, 6, 3, 2, 1],
+    following: [2, 9, 15, 17, 18, 19, 20, 27],
     blocked: []
   },
   {
@@ -296,8 +296,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ela/dela",
     bio: "Gamer de aventuras e caçadora de tesouros virtuais.",
-    followers: [],
-    following: [17],
+    followers: [15, 9, 8, 6, 2],
+    following: [1, 6, 9, 12, 15, 21, 24, 25, 26],
     blocked: []
   },
   {
@@ -309,8 +309,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Fã de jogos de estratégia e construção de impérios virtuais.",
-    followers: [24],
-    following: [24],
+    followers: [25, 17, 14, 11, 10, 9, 8, 4],
+    following: [1, 3, 5, 13, 18, 19, 21],
     blocked: []
   },
   {
@@ -322,8 +322,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Exploradora de mundos virtuais e amante de jogos de simulação.",
-    followers: [23],
-    following: [23],
+    followers: [25, 22, 19, 14, 11, 10, 8, 7, 6, 3, 1],
+    following: [1, 2, 3, 4, 5, 10, 11, 12, 18, 21],
     blocked: []
   },
   {
@@ -335,8 +335,8 @@ let users: User[] = [
     lastName: "Game",
     pronouns: "ele/dele",
     bio: "Gamer de estratégia e conquista virtual.",
-    followers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 26],
-    following: [26],
+    followers: [22, 20, 18, 13, 5, 4],
+    following: [1, 7, 8, 10, 11, 14, 19, 23, 24, 27],
     blocked: []
   },
   {
@@ -348,8 +348,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ela/dela",
     bio: "Aventureira virtual e fã de jogos de sobrevivência.",
-    followers: [25],
-    following: [25],
+    followers: [22, 18, 15, 13, 8, 7, 6, 5, 3],
+    following: [1, 5, 8, 9, 15, 19, 21],
     blocked: []
   },
   {
@@ -361,8 +361,8 @@ let users: User[] = [
     lastName: "Gamer",
     pronouns: "ele/dele",
     bio: "Gamer casual e fã de jogos de plataforma.",
-    followers: [28],
-    following: [28],
+    followers: [25, 21, 20, 19, 15, 14, 12, 8, 7, 6, 5, 4, 2, 1],
+    following: [2, 3, 4, 6, 7, 10, 14, 20],
     blocked: []
   }
 ]
