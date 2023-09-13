@@ -4,6 +4,10 @@
     z-index: 9999; 
 }
 
+.userUser {
+    font-size: 10px;
+}
+
 .follows{
     display: flex;
     flex-direction: row;
@@ -56,6 +60,8 @@
     align-items: center;
     min-height: 100vh;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .background {
@@ -147,7 +153,7 @@
                 margin: 0 1rem;
             }
             .follows{
-                margin-left: 1rem;
+                margin-left: 0rem;
             }
         }
 
@@ -177,13 +183,12 @@
 
         .editbtn {
             text-align: center;
-            margin-bottom: 100px;
             margin-top: 20px;
         }
 
         .postbtn{
             align-self: center;
-            margin-top: 150%;
+            margin-top: 50%
         }
     }
 }
