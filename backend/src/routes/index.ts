@@ -150,15 +150,13 @@ router.post('/users', async (req,res) => {
   }
 
   //Checking already registered info
-  try{
-    if(users.some((users:any) => users.user === user)){
-      return res.status(409).json({ message: 'Username arealdy exists' });
-    }else if(users.some((users:any) => users.email === email)){
-      return res.status(409).json({ message: 'Email arealdy exists' });
-    }
-  }catch(err){
-    return res.status(400).json({Error : 'Could not find registered logs'});
+  if(users.some((users:any) => users.user === user)){
+    return res.status(409).json({ message: 'Username arealdy exists' });
   }
+  if(users.some((users:any) => users.email === email)){
+    return res.status(409).json({ message: 'Email arealdy exists' });
+  }
+
 
   let userID = await TestUtils.getRandomInt(1,1000);
   while(users.find((users:any) => users.id === userID)){
