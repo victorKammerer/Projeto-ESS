@@ -4,7 +4,7 @@ Given('{string} está visível - user', (button: string) => {
   cy.contains(button).should('be.visible');
 });    
 
-When('clico em {string} - User', (button: string) => {
+When('clico em {string} - user', (button: string) => {
   let confirmMessage: string;
 
   switch (button) {
@@ -57,6 +57,18 @@ When('Confirmo a notificação {string}', (message: string)=>{
 
 Then('o usuário foi para a página {string}', (expectedPage: string) => {
   cy.url().should('include', expectedPage);
+});
+
+When('o campo {string} é editado para a string {string}', (fieldName: string, newValue: string) => {
+  cy.get(`mat-form-field:has(mat-label:contains("${fieldName}")) input`)
+    .clear() 
+    .type(newValue) 
+    .blur(); 
+});
+
+Then('o campo {string} contém a string {string}', (fieldName: string, expectedValue: string) => {
+  cy.get(`mat-form-field:has(mat-label:contains("${fieldName}")) input`)
+    .should('have.value', expectedValue);
 });
 
   
