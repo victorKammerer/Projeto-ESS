@@ -200,4 +200,12 @@ export class UserComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  public goToLoggedProfile() {
+    if(this.userLoggedInId == 0){
+      this.router.navigate(['/']);
+    }else{
+      this.router.navigate(['/me']);
+    }
+  }
+
 }
