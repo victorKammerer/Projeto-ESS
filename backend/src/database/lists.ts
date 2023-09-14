@@ -1169,6 +1169,47 @@ let lists : GameList[] = [
                 "date": new Date("2017-01-13")
             }
         ]
+    },
+    {
+        "userId": 27,
+        "entries": [
+            {
+                "entryId": 1,
+                "gameId": 4,
+                "entryType": EntryType.WISHLIST,
+                "date": new Date("2017-04-21")
+            },
+            {
+                "entryId": 2,
+                "gameId": 8,
+                "entryType": EntryType.WISHLIST,
+                "date": new Date("2022-07-30")
+            },
+            {
+                "entryId": 3,
+                "gameId": 2,
+                "entryType": EntryType.WISHLIST,
+                "date": new Date("2018-11-25")
+            },
+            {
+                "entryId": 4,
+                "gameId": 11,
+                "entryType": EntryType.ABANDONED,
+                "date": new Date("2018-06-09")
+            },
+            {
+                "entryId": 5,
+                "gameId": 7,
+                "entryType": EntryType.PLAYED,
+                "date": new Date("2023-12-14")
+            },
+            {
+                "entryId": 6,
+                "gameId": 10,
+                "entryType": EntryType.WISHLIST,
+                "date": new Date("2017-01-13")
+            }
+        ]
     }
 ];
 
