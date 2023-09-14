@@ -15,7 +15,7 @@ import posts from '../database/posts';
 const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
-let loggedID = 0;
+let loggedID = 1;
 setAuthenticatedUserID(loggedID);
 
 // Rotas comuns para facilitar o desenvolvimento conjunto e dinamica do site
