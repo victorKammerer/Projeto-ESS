@@ -108,7 +108,6 @@ export class FeedComponent implements OnInit{
 
     openPost(userId: number, postId: number) : void {
       this.router.navigate([`/users/${userId}/${postId}`]);
-
     }
 
     checkIsUserLoggedIn() {
