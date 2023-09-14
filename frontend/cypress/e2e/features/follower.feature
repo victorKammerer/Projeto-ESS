@@ -22,43 +22,43 @@ Scenario: Deixar de seguir uma pessoa
   And o usuário de id "3" não está na lista Seguindo do usuário de id "1"
 
 Scenario: Visualizar atualizações de seguindo
-    Given o usuário está na página "me"
-    And "Meu Feed" está visível na seção de conteúdo
-    When clico em "Seguindo" na seção de conteúdo
-    Then o feed "Seguindo" é aberto
-    And o feed "Seguindo" contém as postagens de usuários seguidos
+  Given o usuário está na página "me"
+  And "Meu Feed" está visível na seção de conteúdo
+  When clico em "Seguindo" na seção de conteúdo
+  Then o feed "Seguindo" é aberto
+  And o feed "Seguindo" contém as postagens de usuários seguidos
 
 Scenario: Visualizar minhas atualizações
-    Given o usuário está na página "me"
-    And "Meu Feed" está visível na seção de conteúdo
-    When clico em "Meu Feed" na seção de conteúdo
-    Then o feed "Meu Feed" é aberto
-    And o feed "Meu Feed" contém somente as minhas postagens
+  Given o usuário está na página "me"
+  And "Meu Feed" está visível na seção de conteúdo
+  When clico em "Meu Feed" na seção de conteúdo
+  Then o feed "Meu Feed" é aberto
+  And o feed "Meu Feed" contém somente as minhas postagens
 
 Scenario: Visitar perfil de seguidor pela lista de seguidores
-    Given o usuário está na página "users/2"
-    When clico no texto "Seguidores" na seção de perfil
-    And o popup de "Seguidores" é aberto
-    And clico no usuário de ordem "1" do topo de "Seguidores"
-    Then sou encaminhado para a página do usuário
+  Given o usuário está na página "users/2"
+  When clico no texto "Seguidores" na seção de perfil
+  And o popup de "Seguidores" é aberto
+  And clico no usuário de ordem "1" do topo de "Seguidores"
+  Then sou encaminhado para a página do usuário
 
 Scenario: Visitar perfil de seguindo pela lista de seguindo
-    Given o usuário está na página "users/2"
-    When clico no texto "Seguindo" na seção de perfil
-    And o popup de "Seguindo" é aberto
-    And clico no usuário de ordem "1" do topo de "Seguindo"
-    Then sou encaminhado para a página do usuário
+  Given o usuário está na página "users/2"
+  When clico no texto "Seguindo" na seção de perfil
+  And o popup de "Seguindo" é aberto
+  And clico no usuário de ordem "1" do topo de "Seguindo"
+  Then sou encaminhado para a página do usuário
 
 Scenario: Abrir e fechar popup de Seguidores
-    Given o usuário está na página "users/2"
-    When clico no texto "Seguidores" na seção de perfil
-    Then o popup de "Seguidores" é aberto
-    When clico no texto "Seguidores" na seção de perfil
-    Then o popup de "Seguidores" é fechado
+  Given o usuário está na página "users/2"
+  When clico no texto "Seguidores" na seção de perfil
+  Then o popup de "Seguidores" é aberto
+  When clico no texto "Seguidores" na seção de perfil
+  Then o popup de "Seguidores" é fechado
 
 Scenario: Abrir e fechar popup de Seguindo
-    Given o usuário está na página "users/2"
-    When clico no texto "Seguindo" na seção de perfil
-    Then o popup de "Seguindo" é aberto
-    When clico no texto "Seguindo" na seção de perfil
-    Then o popup de "Seguindo" é fechado
+  Given o usuário está na página "users/2"
+  When clico no texto "Seguindo" na seção de perfil
+  Then o popup de "Seguindo" é aberto
+  When clico no texto "Seguindo" na seção de perfil
+  Then o popup de "Seguindo" é fechado
