@@ -18,7 +18,7 @@ import { GameListComponent } from './game-list/game-list.component';
 import { SignupComponent } from './signup/signup.component';import { DatePipe } from '@angular/common';
 
 @NgModule({
-    declarations: [AppComponent, HistoricListComponent, NotFoundComponent, SignupComponent, GameListComponent],
+    declarations: [AppComponent, HistoricListComponent, NotFoundComponent, SignupComponent],
     imports: [
         CommonModule,
         FormsModule,

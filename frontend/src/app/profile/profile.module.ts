@@ -23,7 +23,7 @@ import { PostComponent } from './components/post/post.component';
     FollowersComponent,
     FeedComponent,
     EditComponent,
-    PostComponent
+    PostComponent,
   ],
   imports: [
     //Necessário importar o módulo de rotas do profile

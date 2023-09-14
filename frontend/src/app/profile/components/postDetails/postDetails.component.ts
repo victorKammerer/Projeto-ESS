@@ -1,29 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { PostDt } from './postmodels';
+import { Post } from '../../../../../../backend/src/models/post.model';
 
 @Component({
-  selector: 'app-post-details',
+  selector: 'app-post-detail',
   templateUrl: './postDetails.component.html',
   styleUrls: ['./postDetails.component.scss'],
 })
-export class PostDetailsComponent implements OnInit {
-  userId!: number;
+
+export class PostDetailComponent implements OnInit {
   postId!: number;
-  post: PostDt = {} as PostDt; // Use the Post interface
+  post: Post = {} as Post;
+  postDate! : Date;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
-
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
   ngOnInit(): void {
+    this.postId = Number(this.route.snapshot.paramMap.get('post_id'));
     this.route.params.subscribe((params) => {
-      this.userId = +params['userId'];
       this.postId = +params['postId'];
-
-      // Fetch post data
-      this.http.get<PostDt>(`/api/posts/${this.postId}`).subscribe((data) => {
-        this.post = data;
-      });
-    });
-  }
+    }
+  );}
 }
