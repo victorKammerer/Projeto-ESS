@@ -104,7 +104,7 @@ export class FeedComponent implements OnInit{
     }
 
     openPost(userId: number) : void {
-      this.router.navigate([`/users/${userId}/historic`]);
+      this.router.navigate([`/users/${userId}/history`]);
     }
 
     checkIsUserLoggedIn() {
