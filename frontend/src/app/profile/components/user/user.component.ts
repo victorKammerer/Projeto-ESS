@@ -51,7 +51,7 @@ export class UserComponent implements OnInit {
     this.route.url.subscribe(urlSegments => {
       const currentUrl = this.router.url;
       this.goToEdit = !currentUrl.includes('edit');
-      this.goToPost = currentUrl.includes('post');
+      this.goToPost = !currentUrl.includes('post');
     });
   }
 

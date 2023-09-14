@@ -68,9 +68,11 @@ export class FeedComponent implements OnInit{
                 map(user => ({
                   authorId: post.user_id,
                   postId: post.post_id,
+                  game: post.game,
                   authorUsername: user.user,
                   authorName: user.name + ' ' + user.lastName,
                   content: post.title,
+                  rate: post.rate,
                   date: post.date,
                   type: 'post'
                 }))
@@ -106,8 +108,22 @@ export class FeedComponent implements OnInit{
         });
     }
 
+    starClass(index: number, rating: number): string {
+      if (index < rating) {
+        return 'yellow';
+      } else {
+        return 'white';
+      }
+    }
+  
+    getStarRange(rating: number): number[] {
+      return Array.from({ length: rating }, (_, i) => i + 1);
+    }
+  
+
     openPost(userId: number, postId: number) : void {
       this.router.navigate([`/users/${userId}/${postId}`]);
+
     }
 
     checkIsUserLoggedIn() {

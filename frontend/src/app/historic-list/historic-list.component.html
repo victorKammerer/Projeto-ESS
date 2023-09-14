@@ -23,7 +23,7 @@
           &#9733;
           </span>
         </div>
-        <p style="font-size: 18px;" class="date"><strong>Data:</strong> {{ post.date }}</p>
+        <p style="font-size: 18px;" class="date"><strong>Data:</strong> {{ post.date | date: 'dd/MMM'  }}</p>
     </div>
 </div>
 
