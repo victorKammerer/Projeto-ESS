@@ -3,6 +3,7 @@ import { contains } from 'cypress/types/jquery';
 
 describe('Seguidores features', () => {
   let userLoggedName = '';
+  let userLoggedUser = '';
   let followersCountUserLogged = 0;
   let followingCountUserLogged = 0;
   Before(() => {
@@ -46,7 +47,7 @@ describe('Seguidores features', () => {
   });
 
 
-  Given("{string} está visível", (button: string) => {
+  Given("{string} está visível na seção de perfil", (button: string) => {
     cy.get('h1.username > .username').invoke('text').then((username) => {
       userName = username;
       cy.get('.Btn > p').should('contain', button);
@@ -56,7 +57,7 @@ describe('Seguidores features', () => {
   let userName : string = '';
   let OldCount : number = 0;
   let newCount : number = 0;
-  When("clico em {string}", (button: string) => {
+  When("clico em {string} na seção de perfil", (button: string) => {
     cy.get('.follower > .follower-counter').invoke('text').then((texto) => {
       OldCount = Number(texto);
       cy.get('.Btn > p').contains(button).click().then(() => {
@@ -120,7 +121,7 @@ describe('Seguidores features', () => {
     });
   });
 
-  When('clico no texto {string}', (button : string) => {
+  When('clico no texto {string} na seção de perfil', (button : string) => {
     cy.get('.follows').contains(button).click();
   });
 
@@ -136,9 +137,20 @@ describe('Seguidores features', () => {
       });
     });
 
+  When('{string} está visível na seção de conteúdo', (button : string) => {
+    cy.get('.feed-container').should('contain', button);
+  });
+
+  When('clico em {string} na seção de conteúdo', (button : string) => {
+    cy.get('.feed-container').contains(button).click();
+  });
 
   Then('o popup de {string} é aberto', (popup : string) => {
     cy.get('.popup').should('contain', popup);
+  });
+
+  Then('o feed {string} é aberto', (feed : string) => {
+    cy.get('.feed-container').get('.active').should('contain', feed)
   });
 
   Then('o popup de {string} é fechado', (popup : string) => {
@@ -148,6 +160,28 @@ describe('Seguidores features', () => {
   Then('sou encaminhado para a página do usuário' , () => {
     cy.get('.userUser').invoke('text').then((username) => {
       expect(userToVisit).to.include(username);
+    });
+  });
+
+  Then('o feed {string} contém as postagens de usuários seguidos', (feed: string) => {
+    let userUser : string = '';
+    cy.get('.userUser').invoke('text').then((useruser) => {
+      userUser = useruser;
+    }).then(() => {
+        cy.get('.feed-container').children().each(($child) => {
+        cy.wrap($child).get('.author-info > .author > .username').should('not.contain', userUser);
+      });
+    });
+  });
+
+  Then('o feed {string} contém somente as minhas postagens', (feed: string) => {
+    let userUser : string = '';
+    cy.get('.userUser').invoke('text').then((useruser) => {
+      userUser = useruser;
+    }).then(() => {
+        cy.get('.feed-container').children().each(($child) => {
+        cy.wrap($child).get('.author-info > .author > .username').should('contain', userUser);
+      });
     });
   });
 
