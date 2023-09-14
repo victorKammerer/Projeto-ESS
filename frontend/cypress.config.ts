@@ -6,6 +6,7 @@ import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 import { createEsbuildPlugin } from "@badeball/cypress-cucumber-preprocessor/esbuild";
 
 export default defineConfig({
+  projectId: 'i81km8',
   video: false,
   viewportWidth: 1280,
   viewportHeight: 720,

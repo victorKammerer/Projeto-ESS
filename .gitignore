@@ -18,3 +18,4 @@ package.json
 frontend/src/index.html
 frontend/src/styles.scss
 frontend/cypress.config.ts
+frontend/cypress.config.ts
