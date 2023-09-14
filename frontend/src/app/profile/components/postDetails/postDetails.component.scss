@@ -1,25 +1,51 @@
-/* Add your styling here */
-.post-details-container {
-  max-width: 600px;
-  margin: 0 auto;
+.detailed-post-container {
+  max-width: 800px;
+  margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+  background-color: #363636;
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
+  .post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+  }
 
-strong {
-  font-weight: bold;
-}
+  .post-info {
+    font-size: 16px;
+    color: #888;
+    margin: 0;
+    margin-bottom: 5px;
 
-p {
-  margin: 10px 0;
-}
+    strong {
+      font-weight: bold;
+    }
+  }
 
-/* Customize the styling to your liking */
+  .post-content {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 20px;
+
+    p {
+      margin: 0;
+      margin-bottom: 15px;
+    }
+  }
+
+  .star-rating {
+    font-size: 24px;
+    display: inline-block;
+  }
+  
+  .star {
+    color: #fff; /* Default star color (black) */
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+  }
+  
+  .star.yellow {
+    color: #FFD700; /* Yellow star color for selected stars */
+  }
+  
+}
