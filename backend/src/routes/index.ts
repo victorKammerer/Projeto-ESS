@@ -501,6 +501,23 @@ router.get('/games', async (req, res) => {
   const games = getGames();
   return res.status(200).json(games);
 });
+
+// POST: Post a game in the database
+router.post('/games', async (req, res) => {
+  const { gameName } = req.body;
+  const games = getGames();
+  if (games.find((game) => game.gameName === gameName)) {
+    return res.status(409).json({ message : 'Game already exists' });
+  }
+  const lastGameId = games.length > 0 ? games[games.length - 1].gameId : 0;
+  const nextGame = {
+    gameId : lastGameId + 1,
+    gameName
+  };
+  setGames([...games, nextGame])
+  return res.status(201).json(nextGame);
+});
+
 // GET : List of games for a user
 router.get('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
@@ -519,7 +536,7 @@ router.get('/users/:id/list', async (req, res) => {
 });
 
 
-// POST : Add a game to a user's list
+// POST : Add a game to a user's list or creates it if it doesn't exist
 router.post('/users/:id/list', async (req, res) => {
   const id : number = parseInt(req.params.id);
   if(id !== loggedInId) {
@@ -530,7 +547,7 @@ router.post('/users/:id/list', async (req, res) => {
   
   const user = utils.getUser(id, users);
   const game = utils.getGame(gameId, games);
-  const list = utils.getUsersList(id, lists);
+  let list = utils.getUsersList(id, lists);
 
   if (!user) {
     return res.status(404).json({ message : 'User not found' });
@@ -539,7 +556,13 @@ router.post('/users/:id/list', async (req, res) => {
     return res.status(404).json({ message : 'Game not found' });
   }
   if (!list) {
-    return res.status(404).json({ message : 'List not found' });
+    const newList = {
+      userId : id,
+      entries : []
+    };
+    setList([...lists, newList]);
+    list = newList;
+    
   }
   if (utils.isGameInList(list, gameId)) {
     return res.status(409).json({ message : 'Game already exists in list' });
