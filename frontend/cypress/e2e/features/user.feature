@@ -17,13 +17,12 @@ Scenario: Excluir minha conta com sucesso
 	When Confirmo a notificação "Tem certeza que deseja excluir sua conta?"
 	Then o usuário foi para a página "/"
 
-# Scenario: Editar minha conta com sucesso
-# 	Given o usuário está na página "users/1/edit"
-#     And o campo "Nome" contém a string "Fulano"
-# 	When O campo "Nome" é editado com para a string "Treloso"
-# 	And clico em "Salvar"
-#     And A página é recarregada
-# 	And O campo "Nome" agora mostra "Treloso"
+Scenario: Editar minha conta com sucesso
+	Given o usuário está na página "users/1/edit"
+    And o campo "Nome" contém a string "Fulano"
+	When o campo "Nome" é editado para a string "Treloso"
+	And clico em "Salvar" - user
+	Then o campo "Nome" contém a string "Treloso"
 
 #     Scenario: Criar uma conta com informações opcionais faltando
 # 	Given o usuário está na página "/signup"
