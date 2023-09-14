@@ -175,14 +175,14 @@ router.post('/users', async (req,res) => {
 //*Delete User
 router.delete('/users/:id', async (req,res) => {
   const id = parseInt(req.params.id);
-  loggedID = loggedID = getAuthenticatedUserID();
+  const adminID = parseInt(req.query.loggedID as string);
+  loggedID = getAuthenticatedUserID();
 
-  if(((loggedID !== 0) && (loggedID !== id))){
+  if(((adminID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
   const userIndex = await users.findIndex(user => user.id === id);
-
   if(userIndex !== -1){
     await users.splice(userIndex,1);
     return res.status(201).json({ message: 'User was successfully deleted' });
