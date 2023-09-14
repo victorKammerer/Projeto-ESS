@@ -3,8 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../../../../../../backend/src/models/post.model';
 import { User } from '../../../../../../backend/src/models/user.model';
+import { StarRatingComponent } from 'src/app/shared/components/star-rating/star-rating.component';
 import { catchError } from 'rxjs/operators';
 import { toast } from 'react-toastify';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-post',
@@ -16,6 +18,7 @@ export class PostComponent implements OnInit {
   userId : User = {} as User;
   post : Post = {} as Post;
   postId : number = 0;
+  selectedRating : number = 0; 
   formErrors: { category: string, 
     game: string, 
     rate: string, 
@@ -28,10 +31,13 @@ export class PostComponent implements OnInit {
   disabled = false;
   goToPost : boolean = true;
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private datePipe: DatePipe) {}
 
   submitForm() {
     if(this.isFormValid()){
+      this.post.date = this.datePipe.transform(new Date(), 'dd/MMM')!;
+      this.post.rate = this.selectedRating;
+      console.log(this.post.rate);
       this.sendRequest();
       console.log("oi");
     }
@@ -55,10 +61,10 @@ export class PostComponent implements OnInit {
     }
 
     // Validação do campo Senha (obrigatório)
-    // if (!this.post.rate) {
-    //   this.formErrors['rate'] = 'Dê uma avaliação ao jogo.';
-    //   isValid = false;
-    // }
+      // if (!this.post.rate) {
+      //   this.formErrors['rate'] = 'Dê uma avaliação ao jogo.';
+      //   isValid = false;
+      // }
 
     // Validação do campo Nome e Sobrenome (obrigatório)
     if (!this.post.title) {
@@ -78,11 +84,15 @@ export class PostComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  onRatingChange(rating: number) {
+    this.selectedRating = rating + 1;
+    console.log(this.selectedRating);
+  }
+
   sendRequest(): void {
     console.log('New Post:', this.post);
     this.http.post('/post', this.post).subscribe(
       (data) => {
-        console.log("funfou");
         window.alert("Post feito com sucesso!");
         this.router.navigate([`/users/${this.userLoggedInId}`])
       },
@@ -121,6 +131,4 @@ export class PostComponent implements OnInit {
     this.checkIsUserLoggedIn();
 
   }
-  
 }
- 

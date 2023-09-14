@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../../../../backend/src/models/post.model';
-
+  
 @Component({
   selector: 'app-historic-list',
   templateUrl: './historic-list.component.html',
@@ -12,6 +12,7 @@ import { Post } from '../../../../backend/src/models/post.model';
 export class HistoricListComponent implements OnInit {
   userId: number = 1;
   postId: number = 1;
+  post: Post = {} as Post;
   show_posts: Post[] = [];
   all_posts: Post[] = [];
   isDesc: boolean = false;
@@ -43,6 +44,14 @@ export class HistoricListComponent implements OnInit {
       this.getHistoryByCategory(this.selectedCategory);
   }
 
+  starClass(index: number, rating: number): string {
+    if (index < rating) {
+      return 'yellow';
+    } else {
+      return 'white';
+    }
+  }
+
   // Obter todas as categorias dos posts do usuário
   collectCategories() {
     const categories: string[] = [];
@@ -58,8 +67,6 @@ export class HistoricListComponent implements OnInit {
     this.availableCategories = categories;
     this.availableCategories.sort();
   }
-
-  
 
   // Obter todos os posts do usuário
   getHistoric() {

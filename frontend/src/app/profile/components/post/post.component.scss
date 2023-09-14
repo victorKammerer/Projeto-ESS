@@ -28,7 +28,7 @@ textarea {
 }
 
 button {
-  background-color: #007bff; /* Cor do botão */
+  background-color: #ea1703; /* Cor do botão */
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -38,7 +38,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Cor do botão ao passar o mouse */
+  background-color: #820303; /* Cor do botão ao passar o mouse */
 }
 
 .back{
@@ -51,7 +51,6 @@ button:hover {
 
 .rating {
   display: inline-block;
-  position: relative;
   height: 10px;
   line-height: 10px;
   font-size: 20px;
@@ -99,7 +98,7 @@ button:hover {
 
 .rating label .icon {
   float: left;
-  color: transparent;
+  color: #fff;
 }
 
 .rating label:last-child .icon {
@@ -112,6 +111,6 @@ button:hover {
 }
 
 .rating label input:focus:not(:checked) ~ .icon:last-child {
-  color: #000;
+  color: #fff;
   text-shadow: 0 0 5px #09f;
 }
