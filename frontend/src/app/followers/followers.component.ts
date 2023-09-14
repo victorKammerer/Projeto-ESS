@@ -3,6 +3,7 @@ import { ActivatedRoute, Event, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../../../backend/src/models/user.model'; // Update this path to the location of your User model
 import { Observable } from 'rxjs';
+import imageUtils from "../../assets/getImages.service";
 @Component({
     selector: 'app-followers',
     templateUrl: './followers.component.html',
@@ -98,4 +99,10 @@ export class FollowersComponent implements OnInit {
             this.router.navigate([`/users/${userId}`]);
         });
     }
+
+    _getProfileImage(userId : number) {
+        const prefix = '../../../../'
+        return imageUtils.getProfileImage(prefix, userId);
+  }
+
 }
