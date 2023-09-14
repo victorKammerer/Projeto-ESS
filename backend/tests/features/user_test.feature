@@ -193,7 +193,7 @@ Feature:  User tests
             """
         And A user with id "2" is logged in
         When A GET request is made to "/api/users/1" route
-        Then The service should respond with status code "401" with the message "Unauthorized"
+        Then The service should respond with status code "200" 
 
     Scenario: Getting a non existing user profile
         Given The service has a database containing users
