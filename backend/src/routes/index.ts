@@ -504,7 +504,10 @@ router.get('/games', async (req, res) => {
 
 // POST: Post a game in the database
 router.post('/games', async (req, res) => {
-  const { gameName } = req.body;
+  const { gameName, passW } = req.body;
+  if (passW != 'teste123'){
+    return res.status(401).json({ message : 'Unauthorized' });
+  }
   const games = getGames();
   if (games.find((game) => game.gameName === gameName)) {
     return res.status(409).json({ message : 'Game already exists' });
