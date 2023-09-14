@@ -10,9 +10,7 @@
   }
   
   .form-container-bg{
-    background-image: url('../../assets/signupTexture.jpg'); 
-    background-repeat: repeat; 
-    background-size: auto; 
+    background-color: rgb(49, 49, 49);
     margin-right: 0px;
     height: 100%;
     width: 450px;
@@ -50,7 +48,7 @@
   }
   
   button {
-    background-color: #007bff; /* Cor do botão */
+    background-color: rgb(131, 0, 0); /* Cor do botão */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -59,13 +57,13 @@
   }
   
   button:hover {
-    background-color: #0056b3; /* Cor do botão ao passar o mouse */
+    background-color: rgb(87, 0, 0); /* Cor do botão ao passar o mouse */
   }
 
   .back{
     margin-left: 176px;
   }
-
+  
   .error-message{
     color: red;
   }
